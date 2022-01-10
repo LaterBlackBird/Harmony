@@ -57,3 +57,27 @@ def delete_server(id):
   except:
     return "There was an error deleting the server!"
 
+
+
+# Get all channels associated with the current server
+@channel_routes.route('/<int:serverId>/channels')
+@login_required
+def get_channels(serverId):
+    channels = Channel.query.filter(Channel.server_id == serverId)
+    return {'channels': [channel.to_dict() for channel in channels]}
+
+
+# Create a new channel
+@channel_routes.route('/<int:serverId>/channels', methods=['POST'])
+@login_required
+def add_channel(serverId):
+    form = ChannelForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        new_channel = Channel(
+            channel_name=form.data['channel_name'],
+            server_id=serverId,
+        )
+        db.session.add(new_channel)
+        db.session.commit()
+    return jsonify("channel created")
