@@ -10,7 +10,6 @@ def servers():
   servers = Server.query.all()
   return {'servers': [server.to_dict() for server in servers]}
 
-
 @server_routes.route('/<int:id>')
 def server_by_id(id):
   server = Server.query.get_or_404(id)
@@ -57,6 +56,4 @@ def delete_server(id):
     return "Successfully deleted the server!"
   except:
     return "There was an error deleting the server!"
-
-
 
