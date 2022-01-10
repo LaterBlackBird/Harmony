@@ -1,14 +1,11 @@
 from flask import Blueprint, jsonify, session, request
-<<<<<<< HEAD
 from app.models import Server, db
 from app.forms import CreateServerForm, UpdateServerForm
-=======
 from app.models import Server, db, Channel
 from app.forms import CreateServerForm, UpdateServerForm
 from app.forms import ChannelForm
 from flask_login import login_required
 
->>>>>>> main
 
 server_routes = Blueprint('servers', __name__)
 
@@ -18,10 +15,6 @@ def servers():
   servers = Server.query.all()
   return {'servers': [server.to_dict() for server in servers]}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 @server_routes.route('/<int:id>')
 def server_by_id(id):
   server = Server.query.get_or_404(id)
@@ -69,10 +62,6 @@ def delete_server(id):
   except:
     return "There was an error deleting the server!"
 
-
-
-<<<<<<< HEAD
-=======
 # Get all channels associated with the current server
 @server_routes.route('/<int:serverId>/channels')
 @login_required
@@ -95,4 +84,3 @@ def add_channel(serverId):
         db.session.add(new_channel)
         db.session.commit()
     return jsonify("channel created")
->>>>>>> main
