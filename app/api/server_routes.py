@@ -1,6 +1,9 @@
 from flask import Blueprint, jsonify, session, request
-from app.models import Server, db
+from app.models import Server, db, Channel
 from app.forms import CreateServerForm, UpdateServerForm
+from app.forms import ChannelForm
+from flask_login import login_required
+
 
 server_routes = Blueprint('servers', __name__)
 
@@ -60,7 +63,7 @@ def delete_server(id):
 
 
 # Get all channels associated with the current server
-@channel_routes.route('/<int:serverId>/channels')
+@server_routes.route('/<int:serverId>/channels')
 @login_required
 def get_channels(serverId):
     channels = Channel.query.filter(Channel.server_id == serverId)
@@ -68,7 +71,7 @@ def get_channels(serverId):
 
 
 # Create a new channel
-@channel_routes.route('/<int:serverId>/channels', methods=['POST'])
+@server_routes.route('/<int:serverId>/channels', methods=['POST'])
 @login_required
 def add_channel(serverId):
     form = ChannelForm()
