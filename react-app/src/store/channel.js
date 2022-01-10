@@ -9,10 +9,10 @@ const GET_CHANNELS = 'channels/GET_CHANNELS'
 
 
 // Actions
-const loadChannels = (channels) => {
+const loadChannels = (allChannels) => {
     return {
         type: GET_CHANNELS,
-        channels
+        allChannels
     }
 }
 
@@ -101,7 +101,7 @@ const channelReducer = (state = { channelsArray: [] }, action) => {
     switch (action.type) {
         case GET_CHANNELS:
             const allChannels = {};
-            action.channels.forEach(channel => {
+            action.channelsArray.allChannels.forEach(channel => {
                 allChannels[channel.id] = channel;
             });
             return {

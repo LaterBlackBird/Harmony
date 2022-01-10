@@ -8,6 +8,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import UsersList from './components/UsersList';
 import ServerPage from './components/ServersPage';
 import User from './components/User';
+import ChannelsList from './components/ChannelsPage';
 import { authenticate } from './store/session';
 
 function App() {
@@ -37,6 +38,9 @@ function App() {
         </Route>
         <Route path='/servers' exact={true}>
           <ServerPage />
+        </Route>
+        <Route path='/servers/:serverId/channels'>
+          <ChannelsList />
         </Route>
         <ProtectedRoute path='/users' exact={true} >
           <UsersList/>
