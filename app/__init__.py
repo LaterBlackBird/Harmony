@@ -8,6 +8,7 @@ from flask_login import LoginManager
 from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
+
 from .api.aws_image import image_routes
 from .api.server_routes import server_routes
 
