@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
+  const history = useHistory(); // so that we can redirect after the image upload is successful
+  const [image, setImage] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false)
   const [errors, setErrors] = useState([]);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -14,11 +18,33 @@ const SignUpForm = () => {
 
   const onSignUp = async (e) => {
     e.preventDefault();
-    if (password === repeatPassword) {
-      const data = await dispatch(signUp(username, email, password));
-      if (data) {
-        setErrors(data)
-      }
+    const formData = new FormData();
+    formData.append("image", image);
+
+    let imageUrl = '';
+
+    setImageLoading(true);
+
+    const res = await fetch('/api/images', {
+      method: "POST",
+      body: formData,
+    });
+    if (res.ok) {
+        imageUrl = await res.json();
+        setImageLoading(false);
+        history.push("/images");
+        if (password === repeatPassword) {
+          const data = await dispatch(signUp(username, email, password, imageUrl));
+          if (data) {
+            setErrors(data)
+          }
+        }
+    }
+    else {
+        setImageLoading(false);
+        // a real app would probably use more advanced
+        // error handling
+        console.log("error");
     }
   };
 
@@ -37,6 +63,11 @@ const SignUpForm = () => {
   const updateRepeatPassword = (e) => {
     setRepeatPassword(e.target.value);
   };
+
+  const updateImage = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  }
 
   if (user) {
     return <Redirect to='/' />;
@@ -86,7 +117,15 @@ const SignUpForm = () => {
           required={true}
         ></input>
       </div>
+      <div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={updateImage}
+        />
+      </div>
       <button type='submit'>Sign Up</button>
+      {(imageLoading)&& <p>Loading...</p>}
     </form>
   );
 };
