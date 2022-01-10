@@ -15,13 +15,11 @@ s3 = boto3.client(
 
 
 def allowed_file(filename):
-    print('hi')
     return "." in filename and \
            filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def get_unique_filename(filename):
-    print('sup')
     ext = filename.rsplit(".", 1)[1].lower()
     unique_filename = uuid.uuid4().hex
     return f"{unique_filename}.{ext}"
@@ -29,7 +27,6 @@ def get_unique_filename(filename):
 
 def upload_file_to_s3(file, acl="public-read"):
     try:
-        print(file)
         s3.upload_fileobj(
             file,
             BUCKET_NAME,
