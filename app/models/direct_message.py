@@ -8,4 +8,5 @@ class Direct_Message(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), nullable=False)
 
+    conversation = db.relationship('Conversation', back_populates='direct_messages')
     user = db.relationship('User', back_populates='direct_messages')
