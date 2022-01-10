@@ -1,4 +1,6 @@
 from .db import db
+from .direct_message import Direct_Message
+
 
 conversations = db.Table(
     'conversations', db.metadata,
@@ -12,6 +14,7 @@ class Conversation(object):
         self.to_user = to_user
         self.from_user = from_user
 
-    direct_messages = db.relationship('Direct_Message', back_populates='conversation')
+db.mapper(Conversation, conversations, properties={
+    'direct_messages' : db.relationship(Direct_Message, backref='conversation')
+})
 
-db.mapper(Conversation, conversations)
