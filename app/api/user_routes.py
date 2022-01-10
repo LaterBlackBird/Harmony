@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 from flask_login import login_required
 from app.models import User
 
+
 user_routes = Blueprint('users', __name__)
 
 
@@ -9,6 +10,7 @@ user_routes = Blueprint('users', __name__)
 @login_required
 def users():
     users = User.query.all()
+    print(users)
     return {'users': [user.to_dict() for user in users]}
 
 

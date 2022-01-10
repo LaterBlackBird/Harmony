@@ -1,7 +1,6 @@
 from .db import db
 from .direct_message import Direct_Message
 
-
 conversations = db.Table(
     'conversations', db.metadata,
     db.Column('id', db.Integer, primary_key=True),

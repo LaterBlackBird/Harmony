@@ -1,6 +1,14 @@
 from flask import Blueprint, jsonify, session, request
+<<<<<<< HEAD
 from app.models import Server, db
 from app.forms import CreateServerForm, UpdateServerForm
+=======
+from app.models import Server, db, Channel
+from app.forms import CreateServerForm, UpdateServerForm
+from app.forms import ChannelForm
+from flask_login import login_required
+
+>>>>>>> main
 
 server_routes = Blueprint('servers', __name__)
 
@@ -10,7 +18,10 @@ def servers():
   servers = Server.query.all()
   return {'servers': [server.to_dict() for server in servers]}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 @server_routes.route('/<int:id>')
 def server_by_id(id):
   server = Server.query.get_or_404(id)
@@ -60,3 +71,28 @@ def delete_server(id):
 
 
 
+<<<<<<< HEAD
+=======
+# Get all channels associated with the current server
+@server_routes.route('/<int:serverId>/channels')
+@login_required
+def get_channels(serverId):
+    channels = Channel.query.filter(Channel.server_id == serverId)
+    return {'channels': [channel.to_dict() for channel in channels]}
+
+
+# Create a new channel
+@server_routes.route('/<int:serverId>/channels', methods=['POST'])
+@login_required
+def add_channel(serverId):
+    form = ChannelForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        new_channel = Channel(
+            channel_name=form.data['channel_name'],
+            server_id=serverId,
+        )
+        db.session.add(new_channel)
+        db.session.commit()
+    return jsonify("channel created")
+>>>>>>> main
