@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request
 from flask_login import login_required
-from app.models import db, Channel
+from app.models import db, Channel, Message
 from app.forms import ChannelForm
 
 channel_routes = Blueprint('channels', __name__)
@@ -12,7 +12,6 @@ channel_routes = Blueprint('channels', __name__)
 #     channels = Channel.query.all()
 #     print(channels)
 #     return {'channels': [channel.to_dict() for channel in channels]}
-
 
 
 @channel_routes.route('/<int:id>', methods=['PUT'])
@@ -35,3 +34,14 @@ def delete_channel(id):
     db.session.delete(channel)
     db.session.commit()
     return jsonify(f"successfully deleted channel {channel.channel_name}")
+
+
+
+@channel_routes.route('/<int:id>/messages')
+def messages(id):
+    messages = Channel.query.get_or_404(id)
+    return jsonify(dict(messages))
+
+@channel_routes.route('/<int:id>/messages', methods=['POST'])
+def messages_post():
+    pass
