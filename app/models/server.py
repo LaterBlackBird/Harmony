@@ -1,4 +1,3 @@
-from enum import unique
 from .db import db
 from .server_member import server_members
 

@@ -12,10 +12,10 @@ function UsersList() {
     }
     fetchData();
   }, []);
-
   const userComponents = users.map((user) => {
     return (
       <li key={user.id}>
+        <img src={user.profile_image}></img>
         <NavLink to={`/users/${user.id}`}>{user.username}</NavLink>
       </li>
     );
