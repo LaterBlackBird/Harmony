@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, session, request
 from flask_login import login_required
 from app.models import db, Channel
-# from app.forms import CreateChannel, EditChannel
+from app.forms import ChannelForm
 
 channel_routes = Blueprint('channels', __name__)
 
@@ -26,7 +26,7 @@ def get_channels(serverId):
 @channel_routes.route('/<int:serverId>/channel', methods=['POST'])
 @login_required
 def add_channel(serverId):
-    form = EditChannel()
+    form = ChannelForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         new_channel = Channel(
@@ -42,7 +42,7 @@ def add_channel(serverId):
 @login_required
 def edit_channel(id):
     channel = Channel.query.get(id)
-    form = EditChannel()
+    form = ChannelForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         channel.channel_name = form.data['channel_name'],
@@ -58,10 +58,3 @@ def delete_channel(id):
     db.session.delete(channel)
     db.session.commit()
     return jsonify(f"successfully deleted channel {channel.channel_name}")
-
-
-# @user_routes.route('/<int:id>')
-# @login_required
-# def user(id):
-#     user = User.query.get(id)
-#     return user.to_dict()
