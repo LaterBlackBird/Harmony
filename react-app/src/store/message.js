@@ -32,7 +32,6 @@ export const getAllMessages = channelId => async dispatch => {
 
 export const addToMessages = (data) => async dispatch => {
     const [ channelId, message ] = data
-    console.log('hello again')
     const res = await fetch(`/api/channels/${channelId}/messages`, {
         method: "POST",
         headers: {
@@ -49,6 +48,37 @@ export const addToMessages = (data) => async dispatch => {
     }
 }
 
+export const editAMessage = (data) => async dispatch => {
+    const [messageId, content] = data;
+    const res = await fetch(`/api/messages/${messageId}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            content
+        }),
+    })
+    if(res.ok){
+        let response = await res.json()
+
+        dispatch(addMessage(response))
+    }
+}
+
+export const removeAMessage = id => async dispatch => {
+    console.log('sup')
+    const res = await fetch(`/api/messages/${id}`, {
+        method: 'DELETE'
+    })
+    console.log(res.ok)
+    if(res.ok){
+        console.log('hello again')
+        dispatch(deleteMessage(id))
+    }
+}
+
+
 //reducer
 const messageReducer = (state = null, action) => {
     let newState = {};
@@ -60,14 +90,16 @@ const messageReducer = (state = null, action) => {
             })
             return newState;
         case ADD_MESSAGE:
-            console.log(action)
             newState = {...state};
             newState[action.message.id] = action.message;
             return newState
         case EDIT_MESSAGE:
 
         case DELETE_MESSAGE:
-        
+            console.log(action.messageId)
+            newState = {...state};
+            delete newState[action.messageId];
+            return newState;
         default:
             return state;
     }

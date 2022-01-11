@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import * as messageActions from '../../store/message'
 
 function Message() {
     const [content, setMessage] = useState([]);
     const { messageId } = useParams();
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`/api/messages/${messageId}`);
@@ -14,16 +18,8 @@ function Message() {
     }, [messageId])
 
     const editMessage = async () => {
-        console.log(JSON.stringify({ content }))
-        const res = await fetch(`/api/messages/${messageId}`, {
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content
-            }),
-        })
+        let data = [messageId, content]
+        await dispatch(messageActions.editAMessage(data))
     }
     return (
         <>

@@ -28,16 +28,14 @@ function Messages() {
 
     const addMessage = async (e) => {
         e.preventDefault()
-        console.log('hello')
         let message = content;
         let data = [channelId, message]
         await dispatch(messageActions.addToMessages(data))
     }
 
     const deleteMessage = async (id) => {
-        fetch(`/api/messages/${id}`, {
-            method: 'DELETE'
-        })
+        console.log('hello')
+        await dispatch(messageActions.removeAMessage(id))
     }
 
     const buttons = (message) => {
