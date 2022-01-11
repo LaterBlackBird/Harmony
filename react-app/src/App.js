@@ -9,6 +9,7 @@ import UsersList from './components/UsersList';
 import ServerPage from './components/ServersPage';
 import ServerByIdPage from './components/ServerByIdPage';
 import CreateServerPage from './components/CreateServerPage';
+import EditServerPage from './components/EditServerPage';
 import User from './components/User';
 import { authenticate } from './store/session';
 
@@ -42,6 +43,9 @@ function App() {
         </Route>
         <Route path='/servers/new' exact={true}>
           <CreateServerPage />
+        </Route>
+        <Route path='/servers/edit/:id' exact={true}>
+          <EditServerPage />
         </Route>
         <Route path='/servers/:id' exact={true}>
           <ServerByIdPage />
