@@ -1,49 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import * as messageActions from '../../store/message'
 
 function Messages() {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
-    const [displayEdit, setDisplayEdit] = useState(false);
+    const dispatch = useDispatch();
     const { channelId } = useParams();
     const session = useSelector(state => state.session);
+    const messageState = useSelector(state => state.message)
     const currentUser = session.user;
     useEffect(() => {
         async function fetchData() {
-            const response = await fetch(`/api/channels/${channelId}/messages`);
-            const responseData = await response.json();
-            setMessages(responseData.messages)
+            await dispatch(messageActions.getAllMessages(channelId));
         }
         fetchData();
-    }, [channelId]);
+        
+        
+    }, [dispatch, channelId]);
+    
+    useEffect(() => {
+        if(messageState){
+            setMessages(Object.values(messageState))
+        }
+    }, [messageState])
 
-    const addMessage = async () => {
-        console.log(JSON.stringify({ content }))
-        const res = await fetch(`/api/channels/${channelId}/messages`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content
-            }),
-        })
+    const addMessage = async (e) => {
+        e.preventDefault()
+        console.log('hello')
+        let message = content;
+        let data = [channelId, message]
+        await dispatch(messageActions.addToMessages(data))
     }
 
-    // const submitEditMessage = async () => {
-        
-    // }
-
-    // const build = async () => {
-    //     return (
-    //         // <>
-    //         //     <input type='text'></input>
-    //         //     <button>Submit</button>
-    //         // </>
-    //         <p>Hello</p>
-    //     )
-    // }
     const deleteMessage = async (id) => {
         fetch(`/api/messages/${id}`, {
             method: 'DELETE'
