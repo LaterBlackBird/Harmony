@@ -26,14 +26,12 @@ const createServer = (server) => {
   }
 }
 
-
 const setServer = (server) => {
   return{
     type: SET_SERVER,
     payload:server
   }
 }
-
 
 const getServer = (server) => {
   return{

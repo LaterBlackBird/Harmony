@@ -29,6 +29,9 @@ def create_server():
   server_name = form.data['server_name']
   server_image = form.data['server_image']
 
+  print(server_name)
+  print(server_image)
+
   new_server = Server(server_name=server_name, server_image=server_image)
 
   try:
