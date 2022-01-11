@@ -8,9 +8,9 @@ function ChannelsList() {
     const { serverId } = useParams();
     const dispatch = useDispatch();
     const channels = useSelector(state => {
-        return state.channel.channels;
+        return Object.values(state.channel);
     })
-    
+
 
     useEffect(() => {
         dispatch(getAllChannels(serverId))
@@ -21,8 +21,9 @@ function ChannelsList() {
         <div>
             <h1>Channels:</h1>
             {channels?.map(channel =>
-                <h2 key={channel.id}><Link to={`/servers/${serverId}/channels/${channel.id}`}>{channel.channel_name}</Link></h2>
+                <h2 key={channel.id}><Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>{channel.channel_name}</Link></h2>
             )}
+            <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>
         </div>
     )
 }

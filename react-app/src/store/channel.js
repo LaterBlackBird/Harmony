@@ -10,7 +10,7 @@ const EDIT_CHANNEL = 'channels/EDIT_CHANNEL'
 const loadChannels = (channels) => {
     return {
         type: GET_CHANNELS,
-        payload: channels
+        channels
     }
 }
 
@@ -42,7 +42,7 @@ export const getAllChannels = serverId => async (dispatch) => {
     const response = await fetch(`/api/servers/${serverId}/channels`);
     if (response.ok) {
         const allChannels = await response.json();
-        dispatch(loadChannels(allChannels));
+        dispatch(loadChannels(allChannels.channels));
     }
 }
 
@@ -94,8 +94,17 @@ export const editThisChannel = channelInfo => async (dispatch) => {
 const channelReducer = (state = {}, action) => {
     switch (action.type) {
         case GET_CHANNELS:
-            const newState = { ...action.payload };
-            return newState;
+            const allChannels = {};
+            console.log(action)
+            action.channels.forEach(channel => {
+                allChannels[channel.id] = channel;
+            });
+            return {
+                ...allChannels,
+                ...state,
+            };
+            // const newState = { ...action.payload };
+            // return newState;
         case ADD_CHANNEL:
             const addState = {...state};
             addState[action.newChannel.id]=action.newChannel;

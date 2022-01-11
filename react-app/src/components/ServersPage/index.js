@@ -17,7 +17,7 @@ function ServerPage() {
     <div>
       <h1>Servers:</h1>
       {serversArr?.map(server =>
-        <h2 key={server.id}><Link to={`/servers/${server.id}`}>{server.server_name}</Link></h2>
+        <h2 key={server.id}><Link to={`/servers/${server.id}/channels`}>{server.server_name}</Link></h2>
         )}
     </div>
   )

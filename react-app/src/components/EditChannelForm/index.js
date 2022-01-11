@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { editThisChannel } from '../../store/channel';
+import { editThisChannel, deleteThisChannel } from '../../store/channel';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom'
 
@@ -11,6 +11,12 @@ function EditChannel() {
     const [channel_name, setChannelName] = useState("")
     const [errors, setErrors] = useState([]);
     let history = useHistory()
+
+
+    const deleteChannel = () => {
+        dispatch(deleteThisChannel(channelId))
+        history.push(`/servers/${serverId}/channels`)
+    }
 
 
     const handleSubmit = (e) => {
@@ -49,6 +55,7 @@ function EditChannel() {
                 </label>
                 <button type="submit">Edit Channel</button>
             </form>
+            <button onClick={deleteChannel}>Delete Channel</button>
         </div>
     )
 }
