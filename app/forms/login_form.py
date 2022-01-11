@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired, ValidationError
-from app.models import Channel
+from app.models import Channel, User
 
 
 def user_exists(form, field):

@@ -1,8 +1,23 @@
-import { csrfFetch } from './csrf'
-
 const SET_SERVER = 'server/SET_SERVER'
 const GET_SERVER = 'server/GET_SERVER'
 const CREATE_SERVER = 'server/CREATE_SERVER'
+const EDIT_SERVER = 'server/EDIT_SERVER'
+const DELETE_SERVER = 'server/DELETE_SERVER'
+
+
+const deleteServer = () => {
+  return{
+    type: DELETE_SERVER
+  }
+}
+
+
+const editServer = (server) => {
+  return{
+    type: EDIT_SERVER,
+    payload: server
+  }
+}
 
 const createServer = (server) => {
   return{
@@ -22,6 +37,40 @@ const getServer = (server) => {
   return{
     type: GET_SERVER,
     payload: server
+  }
+}
+
+export const deleteAServer = (serverId) => async (dispatch) => {
+  const res = await fetch(`/api/servers/${serverId}`, {
+    method: 'DELETE'
+  })
+  dispatch(deleteServer())
+}
+
+export const editOneServer = (server) => async (dispatch) => {
+  const { serverId, server_name, server_image } = server;
+  const res = await fetch(`/api/servers/${serverId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      server_name,
+      server_image
+    })
+  })
+
+  if(res.ok){
+    const data = await res.json()
+    dispatch(editServer(data))
+    return data
+  }
+  else if (res.status < 500){
+    const data = await res.json()
+    if(data.errors) return data.errors
+  }
+  else {
+    return ['An error occurred. Please try again']
   }
 }
 
