@@ -35,7 +35,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
       <Switch>
         <Route path='/login' exact={true}>
           <LoginForm />
@@ -45,7 +44,9 @@ function App() {
         </Route>
         <div id='main_page'>
           <Route path='/servers' exact={true}>
+            <NavBar />
             <ServerPage />
+            <ChannelsList />
           </Route>
           <Route path='/servers/new' exact={true}>
             <CreateServerPage />
@@ -57,6 +58,7 @@ function App() {
             <ServerByIdPage />
           </Route>
           <Route exact path='/servers/:serverId/channels'>
+            <NavBar />
             <ServerPage />
             <ChannelsList />
           </Route>
