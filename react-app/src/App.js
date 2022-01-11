@@ -75,6 +75,9 @@ function App() {
             <User />
           </ProtectedRoute>
           <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
+            <NavBar />
+            <ServerPage />
+            <ChannelsList />
             <Messages />
           </ProtectedRoute>
           <ProtectedRoute path='/messages/:messageId' exact={true} >

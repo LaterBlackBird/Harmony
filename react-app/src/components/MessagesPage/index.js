@@ -59,14 +59,14 @@ function Messages() {
     });
 
     return (
-        <>
+        <div id='message_container'>
             <h1>Messages: </h1>
             <ul>{messageComponents}</ul>
             <form onSubmit={addMessage}>
                 <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
                 <button>Submit</button>
             </form>
-        </>
+        </div>
     )
 };
 

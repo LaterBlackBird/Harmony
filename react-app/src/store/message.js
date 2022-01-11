@@ -1,8 +1,6 @@
 //actions
-const GET_MESSAGE = 'messages/GET_MESSAGE';
 const GET_MESSAGES = 'messages/GET_MESSAGES';
 const ADD_MESSAGE = 'messages/ADD_MESSAGE';
-const EDIT_MESSAGE = 'messages/EDIT_MESSAGE';
 const DELETE_MESSAGE = 'messages/DELETE_MESSAGE'
 
 //action creators
@@ -12,10 +10,6 @@ const getMessages = (messages) => ({
 });
 const addMessage = (message) => ({
     type: ADD_MESSAGE,
-    message
-});
-const editMessage = (message) => ({
-    type: EDIT_MESSAGE,
     message
 });
 const deleteMessage = (messageId) => ({
@@ -93,8 +87,6 @@ const messageReducer = (state = null, action) => {
             newState = {...state};
             newState[action.message.id] = action.message;
             return newState
-        case EDIT_MESSAGE:
-
         case DELETE_MESSAGE:
             console.log(action.messageId)
             newState = {...state};

@@ -33,7 +33,10 @@ function ChannelsList() {
         <div id='channels_container'>
             <h1>Channels:</h1>
             {channels?.map(channel =>
-                <h2 key={channel.id}><Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>{channel.channel_name}</Link></h2>
+            <>
+                <h2 key={channel.id}><Link to={`/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
+            </>
             )}
             <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>
         </div>
