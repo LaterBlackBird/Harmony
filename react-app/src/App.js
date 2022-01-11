@@ -9,6 +9,7 @@ import UsersList from './components/UsersList';
 import ServerPage from './components/ServersPage';
 import ServerByIdPage from './components/ServerByIdPage';
 import CreateServerPage from './components/CreateServerPage';
+import EditServerPage from './components/EditServerPage';
 import User from './components/User';
 import Messages from './components/Messages';
 import Message from './components/Message';
@@ -44,14 +45,11 @@ function App() {
         <Route path='/servers' exact={true}>
           <ServerPage />
         </Route>
-        <Route exact path='/servers/:serverId/channels'>
-          <ChannelsList />
-        </Route>
-        <Route path='/servers/:serverId/channels/new'>
-          <CreateChannel />
-        </Route>
         <Route path='/servers/new' exact={true}>
           <CreateServerPage />
+        </Route>
+        <Route path='/servers/edit/:id' exact={true}>
+          <EditServerPage />
         </Route>
         <Route path='/servers/:id' exact={true}>
           <ServerByIdPage />
