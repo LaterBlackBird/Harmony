@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify, session, request
+from app.models import Server, db
+from app.forms import CreateServerForm, UpdateServerForm
 from app.models import Server, db, Channel
 from app.forms import CreateServerForm, UpdateServerForm
 from app.forms import ChannelForm
@@ -32,6 +34,7 @@ def create_server():
   try:
     db.session.add(new_server)
     db.session.commit()
+    return new_server.to_dict()
   except:
     return "There was an error creating that server"
 
@@ -59,8 +62,6 @@ def delete_server(id):
     return "Successfully deleted the server!"
   except:
     return "There was an error deleting the server!"
-
-
 
 # Get all channels associated with the current server
 @server_routes.route('/<int:serverId>/channels')
