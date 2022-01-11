@@ -27,6 +27,7 @@ function ServerPage() {
       {serversArr?.map(server =>
         <>
           <h2 key={server.id}><Link to={`/servers/${server.id}`}>{server.server_name}</Link></h2>
+          <Link to={`/servers/${server.id}/channels`}>Channels</Link>
           <Link to={`/servers/edit/${server.id}`}><button onClick={() => refresh()}>Edit Server</button></Link>
           <button onClick={() => sendId(server)}>Delete Server</button>
         </>
