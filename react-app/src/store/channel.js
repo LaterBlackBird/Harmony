@@ -2,7 +2,7 @@
 const GET_CHANNELS = 'channels/GET_CHANNELS'
 const ADD_CHANNEL = 'channels/ADD_CHANNEL'
 const DELETE_CHANNEL = 'channels/DELETE_CHANNEL'
-// const EDIT_CHANNEL = 'channels/EDIT_CHANNEL'
+const EDIT_CHANNEL = 'channels/EDIT_CHANNEL'
 
 
 
@@ -28,12 +28,12 @@ const deleteChannel = (channelId) => {
     }
 }
 
-// const editChannel = (editedChannel) => {
-//     return {
-//         type: EDIT_CHANNEL,
-//         editedChannel
-//     }
-// }
+const editChannel = (editedChannel) => {
+    return {
+        type: EDIT_CHANNEL,
+        editedChannel
+    }
+}
 
 
 // Thunk action creators
@@ -71,20 +71,21 @@ export const deleteThisChannel = channelId => async (dispatch) => {
     }
 }
 
-// export const editThisComment = editedComment => async (dispatch) => {
-//     const response = await fetch(`/api/comments/${editedComment.commentId}`, {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(editedComment)
-//     });
-//     if (response.ok) {
-//         const updatedComment = await response.json();
-//         dispatch(editComment(updatedComment));
-//         return updatedComment;
-//     }
-// }
+export const editThisChannel = channelInfo => async (dispatch) => {
+    const { channelId, channel_name } = channelInfo
+    const response = await fetch(`/api/channels/${channelId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({channel_name})
+    });
+    if (response.ok) {
+        const updatedChannel = await response.json();
+        dispatch(editChannel(updatedChannel));
+        return updatedChannel;
+    }
+}
 
 
 
@@ -103,15 +104,10 @@ const channelReducer = (state = {}, action) => {
             const deleteState = { ...state };
             delete deleteState[action.channelId];
             return deleteState;
-        // case EDIT_COMMENT:
-        //     const editState = {...state};
-        //     editState[action.editedComment.id] = action.editedComment;
-        //     editState.commentArray = editState.commentArray.filter(
-        //         comment => comment.id !== action.editedComment.id
-        //     );
-        //     editState.commentArray.push(action.editedComment);
-        //     editState.commentArray = sortList(editState.commentArray)
-        //     return editState;
+        case EDIT_CHANNEL:
+            const editState = {...state};
+            editState[action.editedChannel.id] = action.editedChannel;
+            return editState;
         default:
             return state;
     }

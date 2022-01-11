@@ -12,6 +12,7 @@ import CreateServerPage from './components/CreateServerPage';
 import User from './components/User';
 import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
+import EditChannel from './components/EditChannelForm';
 import { authenticate } from './store/session';
 
 function App() {
@@ -44,6 +45,9 @@ function App() {
         </Route>
         <Route exact path='/servers/:serverId/channels'>
           <ChannelsList />
+        </Route>
+        <Route path='/servers/:serverId/channels/:channelId/edit'>
+          <EditChannel />
         </Route>
         <Route path='/servers/:serverId/channels/new'>
           <CreateChannel />
