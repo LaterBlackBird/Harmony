@@ -10,6 +10,8 @@ import ServerPage from './components/ServersPage';
 import ServerByIdPage from './components/ServerByIdPage';
 import CreateServerPage from './components/CreateServerPage';
 import User from './components/User';
+import Messages from './components/Messages';
+import Message from './components/Message';
 import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
 import { authenticate } from './store/session';
@@ -59,6 +61,12 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path='/users/:userId' exact={true} >
           <User />
+        </ProtectedRoute>
+        <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
+          <Messages />
+        </ProtectedRoute>
+        <ProtectedRoute path='/messages/:messageId' exact={true} >
+          <Message />
         </ProtectedRoute>
         <ProtectedRoute path='/' exact={true} >
           <h1>My Home Page</h1>
