@@ -23,7 +23,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       await dispatch(authenticate());
       setLoaded(true);
     })();
@@ -35,7 +35,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
       <Switch>
         <Route path='/login' exact={true}>
           <LoginForm />
@@ -43,43 +42,51 @@ function App() {
         <Route path='/sign-up' exact={true}>
           <SignUpForm />
         </Route>
-        <Route path='/servers' exact={true}>
-          <ServerPage />
-        </Route>
-        <Route path='/servers/new' exact={true}>
-          <CreateServerPage />
-        </Route>
-        <Route path='/servers/edit/:id' exact={true}>
-          <EditServerPage />
-        </Route>
-        <Route path='/servers/:id' exact={true}>
-          <ServerByIdPage />
-        </Route>
-        <Route exact path='/servers/:serverId/channels'>
-          <ChannelsList />
-        </Route>
-        <Route path='/servers/:serverId/channels/:channelId/edit'>
-          <EditChannel />
-        </Route>
-        <Route path='/servers/:serverId/channels/new'>
-          <CreateChannel />
-        </Route>
-        <ProtectedRoute path='/users' exact={true} >
-          <UsersList/>
-        </ProtectedRoute>
-        <ProtectedRoute path='/users/:userId' exact={true} >
-          <User />
-        </ProtectedRoute>
-        <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
-          <Messages />
-        </ProtectedRoute>
-        <ProtectedRoute path='/messages/:messageId' exact={true} >
-          <Message />
-        </ProtectedRoute>
-        <ProtectedRoute path='/' exact={true} >
-          <h1>My Home Page</h1>
-        </ProtectedRoute>
       </Switch>
+
+      <div id='nav_bar'>
+        <NavBar />
+      </div>
+      <div className='server_list'>
+        <ServerPage />
+      </div>
+      <div className='channel_list'>
+        <ChannelsList />
+      </div>
+      <Route path='/servers' exact={true}>
+      </Route>
+      <Route path='/servers/new' exact={true}>
+        <CreateServerPage />
+      </Route>
+      <Route path='/servers/edit/:id' exact={true}>
+        <EditServerPage />
+      </Route>
+      <Route path='/servers/:id' exact={true}>
+        <ServerByIdPage />
+      </Route>
+      <Route exact path='/servers/:serverId/channels'>
+      </Route>
+      <Route path='/servers/:serverId/channels/:channelId/edit'>
+        <EditChannel />
+      </Route>
+      <Route path='/servers/:serverId/channels/new'>
+        <CreateChannel />
+      </Route>
+      <ProtectedRoute path='/users' exact={true} >
+        <UsersList />
+      </ProtectedRoute>
+      <ProtectedRoute path='/users/:userId' exact={true} >
+        <User />
+      </ProtectedRoute>
+      <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
+        <Messages />
+      </ProtectedRoute>
+      <ProtectedRoute path='/messages/:messageId' exact={true} >
+        <Message />
+      </ProtectedRoute>
+      <ProtectedRoute path='/' exact={true} >
+        <h1>My Home Page</h1>
+      </ProtectedRoute>
     </BrowserRouter>
   );
 }

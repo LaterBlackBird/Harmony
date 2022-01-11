@@ -20,12 +20,10 @@ function ChannelsList() {
 
     useEffect(() => {
         dispatch(getAllChannels(serverId))
-
         //if user has entered a url without clicking through the site, return them to the servers page
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
         }
-
     }, [dispatch])
 
 
