@@ -10,3 +10,11 @@ class Message(db.Model):
 
     channel = db.relationship('Channel', back_populates='messages')
     user = db.relationship('User', back_populates='messages')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'user_id': self.user_id,
+            'channel_id': self.channel_id,
+        }

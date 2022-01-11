@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, session, request
-from flask_login import login_required
-from app.models import db, Channel
-from app.forms import ChannelForm
+from flask_login import login_required, current_user
+from app.models import db, Channel, Message
+from app.forms import ChannelForm, channel_form
+from app.forms import MessageForm
 
 channel_routes = Blueprint('channels', __name__)
 
@@ -12,7 +13,6 @@ channel_routes = Blueprint('channels', __name__)
 #     channels = Channel.query.all()
 #     print(channels)
 #     return {'channels': [channel.to_dict() for channel in channels]}
-
 
 
 @channel_routes.route('/<int:id>', methods=['PUT'])
@@ -35,3 +35,26 @@ def delete_channel(id):
     db.session.delete(channel)
     db.session.commit()
     return jsonify(f"successfully deleted channel {channel.channel_name}")
+
+
+
+@channel_routes.route('/<int:id>/messages')
+@login_required
+def messages(id):
+    messages = Message.query.filter(Message.channel_id == id)
+    return {'messages': [message.to_dict() for message in messages]}
+
+@channel_routes.route('/<int:channel_id>/messages', methods=['POST'])
+@login_required
+def add_message(channel_id):
+    form = MessageForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        new_message = Message(
+            content=form.data['content'],
+            user_id=current_user.id,
+            channel_id=channel_id,
+        )
+        db.session.add(new_message)
+        db.session.commit()
+    return new_message.to_dict()
