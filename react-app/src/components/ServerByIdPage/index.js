@@ -15,6 +15,7 @@ function ServerByIdPage() {
 
   return(
     <div>
+      <img src={server[0]?.server_image}></img>
       <h1>{server[0]?.server_name}</h1>
       <h2>This is my server</h2>
       <h2>I am just typing to see if this works!</h2>

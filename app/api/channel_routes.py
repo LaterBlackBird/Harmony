@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from app.models import db, Channel, Message
 from app.forms import ChannelForm, channel_form
 from app.forms import MessageForm
+import logging, traceback
 
 channel_routes = Blueprint('channels', __name__)
 
@@ -49,12 +50,16 @@ def messages(id):
 def add_message(channel_id):
     form = MessageForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-    if form.validate_on_submit():
-        new_message = Message(
-            content=form.data['content'],
-            user_id=current_user.id,
-            channel_id=channel_id,
-        )
-        db.session.add(new_message)
-        db.session.commit()
-    return new_message.to_dict()
+    try:
+        if form.validate_on_submit():
+            new_message = Message(
+                content=form.data['content'],
+                user_id=current_user.id,
+                channel_id=channel_id,
+            )
+            db.session.add(new_message)
+            db.session.commit()
+            return new_message.to_dict()
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        return e
