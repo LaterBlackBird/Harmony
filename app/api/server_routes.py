@@ -84,4 +84,4 @@ def add_channel(serverId):
         )
         db.session.add(new_channel)
         db.session.commit()
-    return jsonify("channel created")
+    return new_channel.to_dict()
