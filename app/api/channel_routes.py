@@ -39,26 +39,22 @@ def delete_channel(id):
 
 
 @channel_routes.route('/<int:id>/messages')
+@login_required
 def messages(id):
     messages = Message.query.filter(Message.channel_id == id)
-    print({'messages': [message.to_dict() for message in messages]})
     return {'messages': [message.to_dict() for message in messages]}
 
-@channel_routes.route('/<int:id>/messages', methods=['POST'])
-def messages_post(id):
+@channel_routes.route('/<int:channel_id>/messages', methods=['POST'])
+@login_required
+def add_message(channel_id):
     form = MessageForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-    if not form.validate_on_submit():
-        print('inside')
-        print(form.data['content'])
-        message = Message(
-            content = form.data['content'],
-            channel_id = id,
-            user_id = current_user.id
+    if form.validate_on_submit():
+        new_message = Message(
+            content=form.data['content'],
+            user_id=current_user.id,
+            channel_id=channel_id,
         )
-
-        db.session.add(message)
+        db.session.add(new_message)
         db.session.commit()
-        return message.to_dict()
-    print('failed')
-    return {"error": "failed"}
+    return new_message.to_dict()

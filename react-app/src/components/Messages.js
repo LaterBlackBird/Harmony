@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+import { useParams, NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Messages() {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
+    const [displayEdit, setDisplayEdit] = useState(false);
     const { channelId } = useParams();
-
+    const session = useSelector(state => state.session);
+    const currentUser = session.user;
     useEffect(() => {
         async function fetchData() {
             const response = await fetch(`/api/channels/${channelId}/messages`);
@@ -17,6 +19,7 @@ function Messages() {
     }, [channelId]);
 
     const addMessage = async () => {
+        console.log(JSON.stringify({ content }))
         const res = await fetch(`/api/channels/${channelId}/messages`, {
             method: "POST",
             headers: {
@@ -28,10 +31,36 @@ function Messages() {
         })
     }
 
+    // const submitEditMessage = async () => {
+        
+    // }
+
+    // const build = async () => {
+    //     return (
+    //         // <>
+    //         //     <input type='text'></input>
+    //         //     <button>Submit</button>
+    //         // </>
+    //         <p>Hello</p>
+    //     )
+    // }
+
+    const buttons = (message) => {
+        return (
+            <>
+                <NavLink to={`/messages/${message.id}`} exact={true} activeClassName='active'>
+                    Edit
+                </NavLink>
+                <button>Delete</button>
+            </>
+        )
+    }
+
     const messageComponents = messages.map((message) => {
         return (
             <li key={message.id}>
                 <p>{message.content}</p>
+                {currentUser.id == message.user_id && buttons(message)}
             </li>
         )
     });
@@ -41,7 +70,7 @@ function Messages() {
             <h1>Messages: </h1>
             <ul>{messageComponents}</ul>
             <form onSubmit={addMessage}>
-                <input type='text' name='content' onChange={e => setMessage(e.value)} value={content}></input>
+                <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
                 <button>Submit</button>
             </form>
         </>
