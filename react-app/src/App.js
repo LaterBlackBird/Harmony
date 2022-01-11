@@ -15,6 +15,7 @@ import Messages from './components/Messages';
 import Message from './components/Message';
 import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
+import EditChannel from './components/EditChannelForm';
 import { authenticate } from './store/session';
 
 function App() {
@@ -53,6 +54,15 @@ function App() {
         </Route>
         <Route path='/servers/:id' exact={true}>
           <ServerByIdPage />
+        </Route>
+        <Route exact path='/servers/:serverId/channels'>
+          <ChannelsList />
+        </Route>
+        <Route path='/servers/:serverId/channels/:channelId/edit'>
+          <EditChannel />
+        </Route>
+        <Route path='/servers/:serverId/channels/new'>
+          <CreateChannel />
         </Route>
         <ProtectedRoute path='/users' exact={true} >
           <UsersList/>
