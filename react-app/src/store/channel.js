@@ -9,10 +9,10 @@ const GET_CHANNELS = 'channels/GET_CHANNELS'
 
 
 // Actions
-const loadChannels = (allChannels) => {
+const loadChannels = (channels) => {
     return {
         type: GET_CHANNELS,
-        allChannels
+        payload: channels
     }
 }
 
@@ -89,26 +89,19 @@ export const getAllChannels = serverId => async (dispatch) => {
 
 
 
-const sortList = (list) => {
-    return list.sort((commentA, commentB) => {
-      return commentA.id - commentB.id;
-    });
-  };
+// const sortList = (list) => {
+//     return list.sort((commentA, commentB) => {
+//       return commentA.id - commentB.id;
+//     });
+//   };
 
 // Reducer
 // Replace state with database information from thunk
-const channelReducer = (state = { channelsArray: [] }, action) => {
+const channelReducer = (state = {}, action) => {
     switch (action.type) {
         case GET_CHANNELS:
-            const allChannels = {};
-            action.channelsArray.allChannels.forEach(channel => {
-                allChannels[channel.id] = channel;
-            });
-            return {
-                ...allChannels,
-                ...state,
-                channelsArray: sortList(action.channels)
-            };
+            const newState = {...action.payload};
+            return newState;
         // case ADD_COMMENT:
         //     const prevState = {...state};
         //     prevState[action.newComment.id]=action.newComment;
