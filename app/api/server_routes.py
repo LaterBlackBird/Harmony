@@ -34,6 +34,7 @@ def create_server():
   try:
     db.session.add(new_server)
     db.session.commit()
+    return new_server.to_dict()
   except:
     return "There was an error creating that server"
 
