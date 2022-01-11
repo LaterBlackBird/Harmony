@@ -14,6 +14,6 @@ class Channel(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'channel name': self.channel_name,
-            'server id': self.server_id
+            'channel_name': self.channel_name,
+            'server_id': self.server_id
         }
