@@ -5,6 +5,12 @@ from app.forms import MessageForm
 
 message_routes = Blueprint('messages', __name__)
 
+@message_routes.route('/<int:id>')
+@login_required
+def message(id):
+    message = Message.query.get(id)
+    return {'content': message.to_dict()}
+
 @message_routes.route('/<int:id>', methods=['PATCH'])
 @login_required
 def message_patch(id):
@@ -19,5 +25,8 @@ def message_patch(id):
     return old_message.to_dict()
 
 @message_routes.route('/<int:id>', methods=['DELETE'])
-def messages_delete():
-    pass
+def messages_delete(id):
+    message = Message.query.get(id)
+    db.session.delete(message)
+    db.session.commit()
+    return { "message": "success" }

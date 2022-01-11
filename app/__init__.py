@@ -38,6 +38,7 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(channel_routes, url_prefix='/api/channels')
 app.register_blueprint(image_routes, url_prefix='/api/images')
 app.register_blueprint(server_routes,url_prefix='/api/servers')
+app.register_blueprint(message_routes, url_prefix='/api/messages')
 db.init_app(app)
 Migrate(app, db)
 

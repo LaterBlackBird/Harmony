@@ -44,6 +44,11 @@ function Messages() {
     //         <p>Hello</p>
     //     )
     // }
+    const deleteMessage = async (id) => {
+        fetch(`/api/messages/${id}`, {
+            method: 'DELETE'
+        })
+    }
 
     const buttons = (message) => {
         return (
@@ -51,7 +56,7 @@ function Messages() {
                 <NavLink to={`/messages/${message.id}`} exact={true} activeClassName='active'>
                     Edit
                 </NavLink>
-                <button>Delete</button>
+                <button onClick={e => deleteMessage(message.id)}>Delete</button>
             </>
         )
     }

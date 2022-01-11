@@ -8,14 +8,15 @@ function Message() {
         const fetchData = async () => {
             const response = await fetch(`/api/messages/${messageId}`);
             const responseData = await response.json();
-            setMessage(responseData.content)
+            setMessage(responseData.content.content)
         }
+        fetchData()
     }, [messageId])
 
     const editMessage = async () => {
         console.log(JSON.stringify({ content }))
-        const res = await fetch(`/messages/${messageId}`, {
-            method: "POST",
+        const res = await fetch(`/api/messages/${messageId}`, {
+            method: "PATCH",
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -25,10 +26,12 @@ function Message() {
         })
     }
     return (
-        <form onSubmit={editMessage}>
-            <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
-            <button>Submit</button>
-        </form>
+        <>
+            <form onSubmit={editMessage}>
+                <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
+                <button>Submit</button>
+            </form>
+        </>
     )
 }
 
