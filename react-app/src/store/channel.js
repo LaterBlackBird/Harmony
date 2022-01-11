@@ -1,6 +1,6 @@
 // Action types
 const GET_CHANNELS = 'channels/GET_CHANNELS'
-// const ADD_CHANNEL = 'channels/ADD_CHANNEL'
+const ADD_CHANNEL = 'channels/ADD_CHANNEL'
 const DELETE_CHANNEL = 'channels/DELETE_CHANNEL'
 // const EDIT_CHANNEL = 'channels/EDIT_CHANNEL'
 
@@ -14,12 +14,12 @@ const loadChannels = (channels) => {
     }
 }
 
-// const addChannel = (newChannel) => {
-//     return {
-//         type: ADD_CHANNEL,
-//         newChannel
-//     }
-// }
+const addChannel = (newChannel) => {
+    return {
+        type: ADD_CHANNEL,
+        newChannel
+    }
+}
 
 const deleteChannel = (channelId) => {
     return {
@@ -39,27 +39,28 @@ const deleteChannel = (channelId) => {
 // Thunk action creators
 // Retrieve information from the database
 export const getAllChannels = serverId => async (dispatch) => {
-    const response = await fetch(`/api/servers/${serverId}/channels/`);
+    const response = await fetch(`/api/servers/${serverId}/channels`);
     if (response.ok) {
         const allChannels = await response.json();
         dispatch(loadChannels(allChannels));
     }
 }
 
-// export const addNewComment = newComment => async (dispatch) => {
-//     const response = await fetch('/api/comments', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(newComment)
-//     });
-//     if (response.ok) {
-//         const comment = await response.json();
-//         dispatch(addComment(comment));
-//         return comment;
-//     }
-// }
+export const addNewChannel = channelInfo => async (dispatch) => {
+    const { serverId, channel_name } = channelInfo
+    const response = await fetch(`/api/servers/${serverId}/channels`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({channel_name})
+    });
+    if (response.ok) {
+        const channel = await response.json();
+        dispatch(addChannel(channel));
+        return channel;
+    }
+}
 
 export const deleteThisChannel = channelId => async (dispatch) => {
     const response = await fetch(`/api/channels/${channelId}`, {
@@ -87,12 +88,6 @@ export const deleteThisChannel = channelId => async (dispatch) => {
 
 
 
-// const sortList = (list) => {
-//     return list.sort((commentA, commentB) => {
-//       return commentA.id - commentB.id;
-//     });
-//   };
-
 // Reducer
 // Replace state with database information from thunk
 const channelReducer = (state = {}, action) => {
@@ -100,12 +95,10 @@ const channelReducer = (state = {}, action) => {
         case GET_CHANNELS:
             const newState = { ...action.payload };
             return newState;
-        // case ADD_COMMENT:
-        //     const prevState = {...state};
-        //     prevState[action.newComment.id]=action.newComment;
-        //     prevState.commentArray.push(action.newComment);
-        //     prevState.commentArray = sortList(prevState.commentArray)
-        //     return prevState;
+        case ADD_CHANNEL:
+            const addState = {...state};
+            addState[action.newChannel.id]=action.newChannel;
+            return addState;
         case DELETE_CHANNEL:
             const deleteState = { ...state };
             delete deleteState[action.channelId];

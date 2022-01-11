@@ -10,8 +10,7 @@ function ChannelsList() {
     const channels = useSelector(state => {
         return state.channel.channels;
     })
-
-    console.log(channels)
+    
 
     useEffect(() => {
         dispatch(getAllChannels(serverId))
