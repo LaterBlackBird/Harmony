@@ -1,9 +1,7 @@
-import { csrfFetch } from './csrf';
-
 // Action types
 const GET_CHANNELS = 'channels/GET_CHANNELS'
 // const ADD_CHANNEL = 'channels/ADD_CHANNEL'
-// const DELETE_CHANNEL = 'channels/DELETE_CHANNEL'
+const DELETE_CHANNEL = 'channels/DELETE_CHANNEL'
 // const EDIT_CHANNEL = 'channels/EDIT_CHANNEL'
 
 
@@ -23,12 +21,12 @@ const loadChannels = (channels) => {
 //     }
 // }
 
-// const deleteChannel = (channelId) => {
-//     return {
-//         type: DELETE_CHANNEL,
-//         channelId
-//     }
-// }
+const deleteChannel = (channelId) => {
+    return {
+        type: DELETE_CHANNEL,
+        channelId
+    }
+}
 
 // const editChannel = (editedChannel) => {
 //     return {
@@ -41,7 +39,7 @@ const loadChannels = (channels) => {
 // Thunk action creators
 // Retrieve information from the database
 export const getAllChannels = serverId => async (dispatch) => {
-    const response = await csrfFetch(`/api/servers/${serverId}/channels`);
+    const response = await fetch(`/api/servers/${serverId}/channels/`);
     if (response.ok) {
         const allChannels = await response.json();
         dispatch(loadChannels(allChannels));
@@ -49,7 +47,7 @@ export const getAllChannels = serverId => async (dispatch) => {
 }
 
 // export const addNewComment = newComment => async (dispatch) => {
-//     const response = await csrfFetch('/api/comments', {
+//     const response = await fetch('/api/comments', {
 //         method: 'POST',
 //         headers: {
 //             'Content-Type': 'application/json'
@@ -63,17 +61,17 @@ export const getAllChannels = serverId => async (dispatch) => {
 //     }
 // }
 
-// export const deleteThisComment = commentId => async (dispatch) => {
-//     const response = await csrfFetch(`/api/comments/${commentId}`, {
-//         method: 'DELETE',
-//     });
-//     if (response.ok) {
-//         dispatch(deleteComment(commentId));
-//     }
-// }
+export const deleteThisChannel = channelId => async (dispatch) => {
+    const response = await fetch(`/api/channels/${channelId}`, {
+        method: 'DELETE',
+    });
+    if (response.ok) {
+        dispatch(deleteChannel(channelId));
+    }
+}
 
 // export const editThisComment = editedComment => async (dispatch) => {
-//     const response = await csrfFetch(`/api/comments/${editedComment.commentId}`, {
+//     const response = await fetch(`/api/comments/${editedComment.commentId}`, {
 //         method: 'PUT',
 //         headers: {
 //             'Content-Type': 'application/json'
@@ -100,7 +98,7 @@ export const getAllChannels = serverId => async (dispatch) => {
 const channelReducer = (state = {}, action) => {
     switch (action.type) {
         case GET_CHANNELS:
-            const newState = {...action.payload};
+            const newState = { ...action.payload };
             return newState;
         // case ADD_COMMENT:
         //     const prevState = {...state};
@@ -108,13 +106,10 @@ const channelReducer = (state = {}, action) => {
         //     prevState.commentArray.push(action.newComment);
         //     prevState.commentArray = sortList(prevState.commentArray)
         //     return prevState;
-        // case DELETE_COMMENT:
-        //     const newState = { ...state };
-        //     delete newState[action.commentId];
-        //     newState.commentArray = newState.commentArray.filter(
-        //         comment => comment.id !== action.commentId
-        //         )
-        //     return newState;
+        case DELETE_CHANNEL:
+            const deleteState = { ...state };
+            delete deleteState[action.channelId];
+            return deleteState;
         // case EDIT_COMMENT:
         //     const editState = {...state};
         //     editState[action.editedComment.id] = action.editedComment;
