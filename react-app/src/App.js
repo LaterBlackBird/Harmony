@@ -45,12 +45,6 @@ function App() {
         <Route path='/servers' exact={true}>
           <ServerPage />
         </Route>
-        <Route exact path='/servers/:serverId/channels'>
-          <ChannelsList />
-        </Route>
-        <Route path='/servers/:serverId/channels/new'>
-          <CreateChannel />
-        </Route>
         <Route path='/servers/new' exact={true}>
           <CreateServerPage />
         </Route>
