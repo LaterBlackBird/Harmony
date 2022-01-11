@@ -28,6 +28,11 @@ const NavBar = () => {
           </NavLink>
         </li>
         <li>
+          <NavLink to='/channels/1/messages' exact={true} activeClassName='active'>
+            Messages
+          </NavLink>
+        </li>
+        <li>
           <LogoutButton />
         </li>
       </ul>
