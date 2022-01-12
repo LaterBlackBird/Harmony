@@ -22,7 +22,7 @@ function ChannelsList() {
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
         }
-    }, [dispatch, serverId])
+    }, [dispatch, serverId, history])
 
     //if user is not logged in and reaches this page, return them to the login page
     if (!user) {
