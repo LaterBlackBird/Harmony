@@ -70,6 +70,8 @@ function App() {
         <ProtectedRoute path='/users/:userId' exact={true} >
           <User />
         </ProtectedRoute>
+
+
         <div id='main_page'>
           <ProtectedRoute path='/servers' exact={true}>
             <NavBar />

@@ -64,6 +64,7 @@ function ChannelsList() {
             {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
             {!serverSelected && <h3>Select A Server</h3>}
 
+
             <div className="serverOptions">
                 {serverSelected &&
                     <>
@@ -73,6 +74,7 @@ function ChannelsList() {
                     </>
                 }
             </div>
+
         </div>
     )
 }
