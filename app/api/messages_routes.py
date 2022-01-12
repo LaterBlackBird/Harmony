@@ -14,6 +14,7 @@ def message(id):
 @message_routes.route('/<int:id>', methods=['PATCH'])
 @login_required
 def message_patch(id):
+    print('..............................................')
     form = MessageForm()
     old_message = Message.query.get_or_404(id)
     form['csrf_token'].data = request.cookies['csrf_token']
