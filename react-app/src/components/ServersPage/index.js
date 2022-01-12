@@ -6,7 +6,9 @@ import { Link } from 'react-router-dom'
 function ServerPage() {
   const dispatch = useDispatch()
   const server = useSelector(state => state.server)
+  const session = useSelector(state => state.session);
   const serversArr = Object.values(server)
+  const user = session.user
 
   useEffect(() => {
     dispatch(serverActions.setServers())
@@ -32,6 +34,11 @@ function ServerPage() {
           <button onClick={() => sendId(server)}>Delete Server</button>
         </>
         )}
+        <br/>
+        {session.user &&
+          <Link to={`/servers/new`}><button>Create a Server</button></Link>
+        }
+
     </div>
   )
 }

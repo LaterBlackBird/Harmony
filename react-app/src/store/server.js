@@ -3,6 +3,14 @@ const GET_SERVER = 'server/GET_SERVER'
 const CREATE_SERVER = 'server/CREATE_SERVER'
 const EDIT_SERVER = 'server/EDIT_SERVER'
 const DELETE_SERVER = 'server/DELETE_SERVER'
+const JOIN_SERVER = 'server/JOIN_SERVER'
+
+const joinServer = (server) => {
+  return{
+    type: JOIN_SERVER,
+    payload:server
+  }
+}
 
 
 const deleteServer = () => {
@@ -37,6 +45,31 @@ const getServer = (server) => {
   return{
     type: GET_SERVER,
     payload: server
+  }
+}
+
+export const joinAServer = ( { userId, serverId } ) => async (dispatch) => {
+  const res = await fetch(`/api/servers/${serverId}/join`, {
+    method: 'POST',
+    headers: {
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      userId
+    })
+  })
+
+  if(res.ok){
+    const data = await res.json()
+    dispatch(joinServer(data))
+    return data
+  }
+  else if (res.status < 500){
+    const data = await res.json()
+    if(data.errors) return data.errors
+  }
+  else {
+    return ['An error occurred. Please try again']
   }
 }
 
@@ -75,7 +108,7 @@ export const editOneServer = (server) => async (dispatch) => {
 }
 
 export const createAServer = (server) => async (dispatch) => {
-  const { server_name, server_image } = server;
+  const { server_name, server_image, currentUser } = server;
   const res = await fetch('/api/servers/', {
     method: 'POST',
     headers: {
@@ -90,6 +123,7 @@ export const createAServer = (server) => async (dispatch) => {
   if(res.ok){
     const data = await res.json()
     dispatch(createServer(data))
+    console.log(data.id)
     return data
   }
   else if (res.status < 500){
@@ -131,6 +165,9 @@ const serverReducer = (state = {}, action) => {
       return newState
     case CREATE_SERVER:
       newState = {...state, ...action.payload}
+      return newState
+    case JOIN_SERVER:
+      newState = {...action.payload}
       return newState
     default:
       return state;
