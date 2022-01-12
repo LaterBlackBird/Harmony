@@ -18,6 +18,14 @@ const LoginForm = () => {
     }
   };
 
+  const demoLogin = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(login('demo@aa.io', 'password'));
+    if (data) {
+      setErrors(data);
+    }
+  };
+
   const updateEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -33,36 +41,41 @@ const LoginForm = () => {
   return (
     <div id='login_page'>
       <form id='login_form' onSubmit={onLogin}>
-        <p>Welcome back!</p>
-        <p>We're so excited to see you again!</p>
-        <div>
-          {errors.map((error, ind) => (
-            <div key={ind}>{error}</div>
-          ))}
-        </div>
-        <div class='login_input'>
-          <label htmlFor='email'>Email</label>
-          <input
-            name='email'
-            type='text'
-            placeholder='Email'
-            value={email}
-            onChange={updateEmail}
-          />
-        </div>
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            name='password'
-            type='password'
-            placeholder='Password'
-            value={password}
-            onChange={updatePassword}
-          />
-        </div>
+        <div id="login_main_section">
+          <h2 id='login_welcome'>Welcome back!</h2>
+          <h5 id='login_exited'>We're so excited to see you again!</h5>
+          <div>
+            {errors.map((error, ind) => (
+              <div key={ind}>{error}</div>
+            ))}
+          </div>
+          <div className='login_input'>
+            <label htmlFor='email'>Email</label>
+            <input
+              name='email'
+              type='text'
+              placeholder='Email'
+              value={email}
+              onChange={updateEmail}
+            />
+          </div>
+          <div className='login_input'>
+            <label htmlFor='password'>Password</label>
+            <input
+              name='password'
+              type='password'
+              placeholder='Password'
+              value={password}
+              onChange={updatePassword}
+            />
+          </div>
           <button type='submit'>Login</button>
+          <button onClick={demoLogin}>Login with Demo</button>
 
-          <p>Need an account? <Link to='/signup'>Register</Link></p>
+
+          <p className='login_signup_switch_text'>Need an account? <Link to='/sign-up'>Register</Link></p>
+        </div>
+        <img id='login_logo' src="https://media.discordapp.net/attachments/927725788231520256/928025179735613511/logo.png" alt="harmony logo" />
       </form>
     </div>
   );
