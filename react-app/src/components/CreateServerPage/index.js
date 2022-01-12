@@ -11,7 +11,10 @@ function CreateServerPage(){
   const [errors, setErrors] = useState([]);
   const [image, setImage] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const session = useSelector(state => state.session);
   // const [server_image, setServer_image] = useState("")
+  const currentUser = session.user.id
+
 
   const handleSubmit = async (e) => {
     let server_image;
@@ -41,7 +44,7 @@ function CreateServerPage(){
       }
       setErrors([])
       history.push('/servers')
-      return dispatch(serverActions.createAServer({ server_name, server_image }))
+      return dispatch(serverActions.createAServer({ server_name, server_image, currentUser }))
         .catch(async (res) => {
           const data = await res.json();
           if(data && data.errors.length > 0) setErrors(data.errors)

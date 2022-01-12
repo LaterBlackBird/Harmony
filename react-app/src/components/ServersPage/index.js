@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as serverActions from '../../store/server'
 import { Link, useParams } from 'react-router-dom'
@@ -8,7 +8,8 @@ function ServerPage() {
   const server = useSelector(state => state.server)
   const { serverId } = useParams();
   const serversArr = Object.values(server)
-  const [showServerName, setShowServerName] = useState();
+  const session = useSelector(state => state.session);
+  const user = session.user
 
   useEffect(() => {
     dispatch(serverActions.setServers())
@@ -39,7 +40,7 @@ function ServerPage() {
       )}
       <div id>
         <Link to={`/servers/new`} id='server_add_icon'><i className="fas fa-plus"></i></Link>
-        <p className='ide'>Add A Server</p>
+        <p className='hide'>Add A Server</p>
       </div>
     </div>
   )

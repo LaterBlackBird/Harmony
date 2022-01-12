@@ -1,11 +1,11 @@
 import os
 from flask import Flask, render_template, request, session, redirect
+from flask.helpers import url_for
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-
-from .models import db, User, Channel
+from .models import db, User, Channel, server_members, Server
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.channel_routes import channel_routes, socketio

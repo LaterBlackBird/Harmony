@@ -19,4 +19,5 @@ server_members = db.Table(
         db.Boolean,
         server_default='false'
     )
+
 )
