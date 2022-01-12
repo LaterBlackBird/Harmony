@@ -22,7 +22,7 @@ def message_patch(id):
         old_message.content = form.data['content']
         db.session.add(old_message)
         db.session.commit()
-    return old_message.to_dict()
+        return old_message.to_dict()
 
 @message_routes.route('/<int:id>', methods=['DELETE'])
 def messages_delete(id):
