@@ -13,8 +13,6 @@ function ChannelsList() {
     const channels = useSelector(state => Object.values(state.channel));
     const servers = useSelector(state => Object.values(state.server));
 
-
-
     useEffect(() => {
         dispatch(getAllChannels(serverId))
         //if server state is empty, return them to the servers page
@@ -26,19 +24,25 @@ function ChannelsList() {
     //if user is not logged in and reaches this page, return them to the login page
     if (!user) {
         return <Redirect to='/login' />;
-      }
+    }
 
+    let serverSelected;
+    if (channels.length === 0) {
+        serverSelected = false;
+    } else serverSelected = true;
 
     return (
         <div id='channels_container'>
             <h1>Channels:</h1>
-            {channels?.map(channel =>
-            <>
-                <h2 key={channel.id}><Link to={`/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
-                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
-            </>
-            )}
-            <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>
+            {serverSelected &&
+                channels.map(channel =>
+                    <>
+                        <h2 key={channel.id}><Link to={`/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+                        <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
+                    </>
+                )}
+            {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link> }
+            {!serverSelected && <h3>Select A Server</h3>}
         </div>
     )
 }
