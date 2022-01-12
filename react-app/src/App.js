@@ -49,37 +49,37 @@ function App() {
         <Route path='/sign-up' exact={true}>
           <SignUpForm />
         </Route>
+        <ProtectedRoute path='/servers/new' exact={true}>
+          <CreateServerPage />
+        </ProtectedRoute>
+        <ProtectedRoute path='/servers/edit/:id' exact={true}>
+          <EditServerPage />
+        </ProtectedRoute>
+        <ProtectedRoute path='/servers/:id' exact={true}>
+          <ServerByIdPage />
+        </ProtectedRoute>
+        <ProtectedRoute path='/servers/:serverId/channels/:channelId/edit'>
+          <EditChannel />
+        </ProtectedRoute>
+        <ProtectedRoute path='/servers/:serverId/channels/new'>
+          <CreateChannel />
+        </ProtectedRoute>
+        <ProtectedRoute path='/users' exact={true} >
+          <UsersList />
+        </ProtectedRoute>
+        <ProtectedRoute path='/users/:userId' exact={true} >
+          <User />
+        </ProtectedRoute>
         <div id='main_page'>
           <ProtectedRoute path='/servers' exact={true}>
             <NavBar />
             <ServerPage />
             <ChannelsList />
           </ProtectedRoute>
-          <ProtectedRoute path='/servers/new' exact={true}>
-            <CreateServerPage />
-          </ProtectedRoute>
-          <ProtectedRoute path='/servers/edit/:id' exact={true}>
-            <EditServerPage />
-          </ProtectedRoute>
-          <ProtectedRoute path='/servers/:id' exact={true}>
-            <ServerByIdPage />
-          </ProtectedRoute>
           <ProtectedRoute exact path='/servers/:serverId/channels'>
             <NavBar />
             <ServerPage />
             <ChannelsList />
-          </ProtectedRoute>
-          <ProtectedRoute path='/servers/:serverId/channels/:channelId/edit'>
-            <EditChannel />
-          </ProtectedRoute>
-          <ProtectedRoute path='/servers/:serverId/channels/new'>
-            <CreateChannel />
-          </ProtectedRoute>
-          <ProtectedRoute path='/users' exact={true} >
-            <UsersList />
-          </ProtectedRoute>
-          <ProtectedRoute path='/users/:userId' exact={true} >
-            <User />
           </ProtectedRoute>
           <ProtectedRoute path='/servers/:serverId/channels/:channelId/messages' exact={true} >
             <NavBar />
