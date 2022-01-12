@@ -47,13 +47,13 @@ export const getAllConversations = userId => async (dispatch) => {
 }
 
 export const addNewConversation = conversationInfo => async (dispatch) => {
-    const { serverId, conversation_name } = conversationInfo
-    const response = await fetch(`/api/servers/${serverId}/conversations`, {
+    const { from_user, to_user } = conversationInfo
+    const response = await fetch(`/api/conversations/${from_user}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({conversation_name})
+        body: JSON.stringify({to_user})
     });
     if (response.ok) {
         const conversation = await response.json();

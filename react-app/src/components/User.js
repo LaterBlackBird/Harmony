@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import * as conversationActions from '../store/conversation'
 
 function User() {
   const [user, setUser] = useState({});
   const { userId }  = useParams();
+  const sessionUser = useSelector(state => state.session.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     if (!userId) {
@@ -19,6 +24,18 @@ function User() {
     return null;
   }
 
+  const startConversation = async () => {
+    let res = await dispatch(conversationActions.addNewConversation({from_user:sessionUser.id, to_user:userId}))
+    console.log(res)
+    history.push(`/conversations/${res.id}/messages`)
+  }
+
+  const button = (
+    <li>
+      <button onClick={startConversation}>Start Conversation</button>
+    </li>
+  )
+
   return (
     <ul>
       <li>
@@ -30,6 +47,8 @@ function User() {
       <li>
         <strong>Email</strong> {user.email}
       </li>
+      {sessionUser.id !== userId && button}
+      
     </ul>
   );
 }

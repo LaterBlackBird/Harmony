@@ -17,6 +17,7 @@ import logging, traceback, os
 
 conversation_routes = Blueprint('conversations', __name__)
 
+
 @conversation_routes.route('/<int:user_id>')
 @login_required
 def conversations(user_id):
@@ -39,8 +40,24 @@ def conversations(user_id):
     # print(conversations)
     return {'conversations': [conversation.to_dict() for conversation in conversations]}
 
+@conversation_routes.route('/<int:user_id>', methods=['POST'])
+@login_required
+def conversations_post(user_id):
+    data = request.json
+    print(data)
+    print(user_id)
+    conversations = db.session.query(Conversation).filter(Conversation.from_user == user_id and Conversation.to_user == data['to_user']).all()
+    print(f'............{conversations}')
+    if conversations[0]:
+        return conversations[0].to_dict()
+    else:
+        conversation = Conversation(from_user=user_id,
+                                    to_user=data['to_user'])
+        db.session.add(conversation)
+        db.session.commit()
+        return conversation.to_dict()
 
-@conversation_routes.route('/<int:user_id>', methods=['PUT'])
+@conversation_routes.route('/<int:conversation_id>', methods=['PUT'])
 @login_required
 def edit_conversation(id):
     pass
@@ -51,7 +68,7 @@ def edit_conversation(id):
     # return conversation.to_dict()
 
 
-@conversation_routes.route('/<int:id>', methods=['DELETE'])
+@conversation_routes.route('/<int:conversation_id>', methods=['DELETE'])
 @login_required
 def delete_conversation(id):
     # conversation = Conversation.query.get(id)
