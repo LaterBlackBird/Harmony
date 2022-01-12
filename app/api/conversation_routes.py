@@ -64,8 +64,9 @@ def delete_conversation(id):
 @conversation_routes.route('/<int:conversation_id>/messages')
 @login_required
 def messages(conversation_id):
+    conversation = db.session.query(Conversation).get_or_404(conversation_id)
     messages = Direct_Message.query.filter(Direct_Message.conversation_id == conversation_id)
-    return {'messages': [message.to_dict() for message in messages]}
+    return {'messages': [message.to_dict() for message in messages if message.user_id == conversation.from_user or message.user_id == conversation.to_user]}
 
 # @socketio.event
 # def message(data):
