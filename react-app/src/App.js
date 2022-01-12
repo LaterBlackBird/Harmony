@@ -17,6 +17,10 @@ import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
 import EditChannel from './components/EditChannelForm';
 import { authenticate } from './store/session';
+import { io } from 'socket.io-client';
+
+let socket;
+socket = io();
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -78,16 +82,17 @@ function App() {
             <NavBar />
             <ServerPage />
             <ChannelsList />
-            <Messages />
+            <Messages socket={socket} />
           </ProtectedRoute>
           <ProtectedRoute path='/messages/:messageId' exact={true} >
-            <Message />
+            <Message socket={socket}/>
           </ProtectedRoute>
         </div>
         <ProtectedRoute path='/' exact={true} >
           <h1>My Home Page</h1>
         </ProtectedRoute>
       </Switch>
+      {() => {socket.disconnect()}}
     </BrowserRouter >
   );
 }

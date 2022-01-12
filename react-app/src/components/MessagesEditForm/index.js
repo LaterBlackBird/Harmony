@@ -2,29 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message'
+import { useHistory, Redirect } from 'react-router-dom';
 
-function Message() {
-    const [content, setMessage] = useState([]);
+function Message({socket}) {
+    const [content, setContent] = useState([]);
+    const [messageData, setMessageData] = useState([]);
     const { messageId } = useParams();
     const dispatch = useDispatch();
-
+    const messages = useSelector(state => state.message)
+    const history = useHistory()
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(`/api/messages/${messageId}`);
-            const responseData = await response.json();
-            setMessage(responseData.content.content)
+        if(messages) {
+            setContent(messages[messageId].content)
+            setMessageData(messages[messageId])
         }
-        fetchData()
     }, [messageId])
+    
+    useEffect(() => {
+        
 
-    const editMessage = async () => {
+    }, [])
+
+    const editMessage = async (e) => {
+        e.preventDefault()
         let data = [messageId, content]
-        await dispatch(messageActions.editAMessage(data))
+        let res = await dispatch(messageActions.editAMessage(data))
+        let messageRes = res;
+        socket.emit('message_edit', { ...messageRes })
+        history.push(`/channels/${messageData.channel_id}/messages`)
+        
     }
     return (
         <>
             <form onSubmit={editMessage}>
-                <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
+                <input type='text' name='content' onChange={e => setContent(e.target.value)} value={content}></input>
                 <button>Submit</button>
             </form>
         </>
