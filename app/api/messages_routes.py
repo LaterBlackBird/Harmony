@@ -14,15 +14,15 @@ def message(id):
 @message_routes.route('/<int:id>', methods=['PATCH'])
 @login_required
 def message_patch(id):
+    print('..............................................')
     form = MessageForm()
-
     old_message = Message.query.get_or_404(id)
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         old_message.content = form.data['content']
         db.session.add(old_message)
         db.session.commit()
-    return old_message.to_dict()
+        return old_message.to_dict()
 
 @message_routes.route('/<int:id>', methods=['DELETE'])
 def messages_delete(id):

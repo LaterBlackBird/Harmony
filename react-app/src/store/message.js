@@ -39,6 +39,8 @@ export const addToMessages = (data) => async dispatch => {
         let response = await res.json()
 
         dispatch(addMessage(response))
+
+        return response;
     }
 }
 
@@ -55,21 +57,29 @@ export const editAMessage = (data) => async dispatch => {
     })
     if(res.ok){
         let response = await res.json()
-
-        dispatch(addMessage(response))
+        // dispatch(addMessage(response))
+        console.log(response)
+        return response;
     }
 }
 
+export const updateMessages = (message) => async dispatch => {
+    dispatch(addMessage(message))
+}
+
 export const removeAMessage = id => async dispatch => {
-    console.log('sup')
     const res = await fetch(`/api/messages/${id}`, {
         method: 'DELETE'
     })
     console.log(res.ok)
     if(res.ok){
-        console.log('hello again')
         dispatch(deleteMessage(id))
     }
+}
+
+export const removeTheMessage = (id) => async dispatch => {
+    console.log(id)
+    dispatch(deleteMessage(id.id))
 }
 
 
@@ -84,11 +94,11 @@ const messageReducer = (state = null, action) => {
             })
             return newState;
         case ADD_MESSAGE:
+            console.log(action)
             newState = {...state};
             newState[action.message.id] = action.message;
             return newState
         case DELETE_MESSAGE:
-            console.log(action.messageId)
             newState = {...state};
             delete newState[action.messageId];
             return newState;
