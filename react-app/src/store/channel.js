@@ -101,7 +101,6 @@ const channelReducer = (state = {}, action) => {
             });
             return {
                 ...allChannels,
-                ...state,
             };
         case ADD_CHANNEL:
             const addState = {...state};

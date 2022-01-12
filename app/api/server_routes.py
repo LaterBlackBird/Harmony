@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, session, request
-from app.models import Server, db
+from app.models import Server, db, User
 from app.forms import CreateServerForm, UpdateServerForm
 from app.models import Server, db, Channel
 from app.forms import CreateServerForm, UpdateServerForm
@@ -18,6 +18,9 @@ def servers():
 @server_routes.route('/<int:id>')
 def server_by_id(id):
   server = Server.query.get_or_404(id)
+  users = server.users
+  for user in users:
+    print(user.to_dict())
 
   return {'server':[server.to_dict()]}
 
@@ -28,9 +31,6 @@ def create_server():
 
   server_name = form.data['server_name']
   server_image = form.data['server_image']
-
-  print(server_name)
-  print(server_image)
 
   new_server = Server(server_name=server_name, server_image=server_image)
 
@@ -88,3 +88,18 @@ def add_channel(serverId):
         db.session.add(new_channel)
         db.session.commit()
     return new_channel.to_dict()
+
+
+@server_routes.route('/<int:serverId>/join', methods=['POST'])
+@login_required
+def join_server(serverId):
+
+  userId = request.json['userId']
+
+  user_object = User.query.filter(User.id == userId).first()
+
+  server_object = Server.query.get_or_404(serverId)
+
+  server_object.add_user(user_object)
+
+  return {"message": "Success"}
