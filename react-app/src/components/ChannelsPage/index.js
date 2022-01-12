@@ -19,7 +19,7 @@ function ChannelsList() {
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
         }
-    }, [dispatch])
+    }, [dispatch, serverId])
 
     //if user is not logged in and reaches this page, return them to the login page
     if (!user) {
@@ -27,7 +27,7 @@ function ChannelsList() {
     }
 
     let serverSelected;
-    if (channels.length === 0) {
+    if (window.location.href.endsWith === '/servers') {
         serverSelected = false;
     } else serverSelected = true;
 
@@ -37,7 +37,7 @@ function ChannelsList() {
             {serverSelected &&
                 channels.map(channel =>
                     <>
-                        <h2 key={channel.id}><Link to={`/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+                        <h2 key={channel.id}><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
                         <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
                     </>
                 )}
