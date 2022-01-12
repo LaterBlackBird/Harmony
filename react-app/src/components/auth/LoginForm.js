@@ -39,17 +39,17 @@ const LoginForm = () => {
   }
 
   return (
-    <div id='login_page'>
-      <form id='login_form' onSubmit={onLogin}>
-        <div id="login_main_section">
-          <h2 id='login_welcome'>Welcome back!</h2>
+    <div className='user_auth_page'>
+      <form className='user_auth_form' id='login_form' onSubmit={onLogin}>
+        <div className='user_auth_main_section'>
+          <h2 className='user_auth_welcome'>Welcome back!</h2>
           <h5 id='login_exited'>We're so excited to see you again!</h5>
           <div>
             {errors.map((error, ind) => (
               <div key={ind}>{error}</div>
             ))}
           </div>
-          <div className='login_input'>
+          <div className='user_auth_input'>
             <label htmlFor='email'>Email</label>
             <input
               name='email'
@@ -59,7 +59,7 @@ const LoginForm = () => {
               onChange={updateEmail}
             />
           </div>
-          <div className='login_input'>
+          <div className='user_auth_input'>
             <label htmlFor='password'>Password</label>
             <input
               name='password'
