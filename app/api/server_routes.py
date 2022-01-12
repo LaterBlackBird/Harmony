@@ -102,4 +102,4 @@ def join_server(serverId):
 
   server_object.add_user(user_object)
 
-  return {"message": "Success"}
+  return server_object.to_dict()

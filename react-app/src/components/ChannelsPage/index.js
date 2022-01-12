@@ -19,7 +19,6 @@ function ChannelsList() {
 
 
     const joinServerButton = () => {
-        const serverId = servers[0]?.id
         const userId = currentUser
         return dispatch(serverActions.joinAServer({ userId, serverId }))
     }
