@@ -11,19 +11,23 @@ import ServerByIdPage from './components/ServerByIdPage';
 import CreateServerPage from './components/CreateServerPage';
 import EditServerPage from './components/EditServerPage';
 import User from './components/User';
-import Messages from './components/Messages';
-import Message from './components/Message';
+import Messages from './components/MessagesPage';
+import Message from './components/MessagesEditForm';
 import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
 import EditChannel from './components/EditChannelForm';
 import { authenticate } from './store/session';
+import { io } from 'socket.io-client';
+
+let socket;
+socket = io();
 
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       await dispatch(authenticate());
       setLoaded(true);
     })();
@@ -35,7 +39,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
       <Switch>
         <Route path='/login' exact={true}>
           <LoginForm />
@@ -43,44 +46,54 @@ function App() {
         <Route path='/sign-up' exact={true}>
           <SignUpForm />
         </Route>
-        <Route path='/servers' exact={true}>
-          <ServerPage />
-        </Route>
-        <Route path='/servers/new' exact={true}>
-          <CreateServerPage />
-        </Route>
-        <Route path='/servers/edit/:id' exact={true}>
-          <EditServerPage />
-        </Route>
-        <Route path='/servers/:id' exact={true}>
-          <ServerByIdPage />
-        </Route>
-        <Route exact path='/servers/:serverId/channels'>
-          <ChannelsList />
-        </Route>
-        <Route path='/servers/:serverId/channels/:channelId/edit'>
-          <EditChannel />
-        </Route>
-        <Route path='/servers/:serverId/channels/new'>
-          <CreateChannel />
-        </Route>
-        <ProtectedRoute path='/users' exact={true} >
-          <UsersList/>
-        </ProtectedRoute>
-        <ProtectedRoute path='/users/:userId' exact={true} >
-          <User />
-        </ProtectedRoute>
-        <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
-          <Messages />
-        </ProtectedRoute>
-        <ProtectedRoute path='/messages/:messageId' exact={true} >
-          <Message />
-        </ProtectedRoute>
+        <div id='main_page'>
+          <Route path='/servers' exact={true}>
+            <NavBar />
+            <ServerPage />
+            <ChannelsList />
+          </Route>
+          <Route path='/servers/new' exact={true}>
+            <CreateServerPage />
+          </Route>
+          <Route path='/servers/edit/:id' exact={true}>
+            <EditServerPage />
+          </Route>
+          <Route path='/servers/:id' exact={true}>
+            <ServerByIdPage />
+          </Route>
+          <Route exact path='/servers/:serverId/channels'>
+            <NavBar />
+            <ServerPage />
+            <ChannelsList />
+          </Route>
+          <Route path='/servers/:serverId/channels/:channelId/edit'>
+            <EditChannel />
+          </Route>
+          <Route path='/servers/:serverId/channels/new'>
+            <CreateChannel />
+          </Route>
+          <ProtectedRoute path='/users' exact={true} >
+            <UsersList />
+          </ProtectedRoute>
+          <ProtectedRoute path='/users/:userId' exact={true} >
+            <User />
+          </ProtectedRoute>
+          <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
+            <NavBar />
+            <ServerPage />
+            <ChannelsList />
+            <Messages socket={socket} />
+          </ProtectedRoute>
+          <ProtectedRoute path='/messages/:messageId' exact={true} >
+            <Message socket={socket}/>
+          </ProtectedRoute>
+        </div>
         <ProtectedRoute path='/' exact={true} >
           <h1>My Home Page</h1>
         </ProtectedRoute>
       </Switch>
-    </BrowserRouter>
+      {() => {socket.disconnect()}}
+    </BrowserRouter >
   );
 }
 
