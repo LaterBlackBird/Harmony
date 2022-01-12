@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
@@ -30,21 +30,21 @@ const SignUpForm = () => {
       body: formData,
     });
     if (res.ok) {
-        imageUrl = await res.json();
-        setImageLoading(false);
-        history.push("/images");
-        if (password === repeatPassword) {
-          const data = await dispatch(signUp(username, email, password, imageUrl));
-          if (data) {
-            setErrors(data)
-          }
+      imageUrl = await res.json();
+      setImageLoading(false);
+      history.push("/images");
+      if (password === repeatPassword) {
+        const data = await dispatch(signUp(username, email, password, imageUrl));
+        if (data) {
+          setErrors(data)
         }
+      }
     }
     else {
-        setImageLoading(false);
-        // a real app would probably use more advanced
-        // error handling
-        console.log("error");
+      setImageLoading(false);
+      // a real app would probably use more advanced
+      // error handling
+      console.log("error");
     }
   };
 
@@ -74,59 +74,67 @@ const SignUpForm = () => {
   }
 
   return (
-    <form onSubmit={onSignUp}>
-      <div>
-        {errors.map((error, ind) => (
-          <div key={ind}>{error}</div>
-        ))}
-      </div>
-      <div>
-        <label>User Name</label>
-        <input
-          type='text'
-          name='username'
-          onChange={updateUsername}
-          value={username}
-        ></input>
-      </div>
-      <div>
-        <label>Email</label>
-        <input
-          type='text'
-          name='email'
-          onChange={updateEmail}
-          value={email}
-        ></input>
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type='password'
-          name='password'
-          onChange={updatePassword}
-          value={password}
-        ></input>
-      </div>
-      <div>
-        <label>Repeat Password</label>
-        <input
-          type='password'
-          name='repeat_password'
-          onChange={updateRepeatPassword}
-          value={repeatPassword}
-          required={true}
-        ></input>
-      </div>
-      <div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={updateImage}
-        />
-      </div>
-      <button type='submit'>Sign Up</button>
-      {(imageLoading)&& <p>Loading...</p>}
-    </form>
+    <div className='user_auth_page'>
+      <form className='user_auth_form' id='signup_form' onSubmit={onSignUp}>
+        <div className='user_auth_main_section' id='signup_form_layout'>
+          <h2 className='user_auth_welcome'>Create An Account</h2>
+          <div>
+            {errors.map((error, ind) => (
+              <div key={ind}>{error}</div>
+            ))}
+          </div>
+          <div className='user_auth_input'>
+            <label>User Name</label>
+            <input
+              type='text'
+              name='username'
+              onChange={updateUsername}
+              value={username}
+            ></input>
+          </div>
+          <div className='user_auth_input'>
+            <label>Email</label>
+            <input
+              type='text'
+              name='email'
+              onChange={updateEmail}
+              value={email}
+            ></input>
+          </div>
+          <div className='user_auth_input'>
+            <label>Password</label>
+            <input
+              type='password'
+              name='password'
+              onChange={updatePassword}
+              value={password}
+            ></input>
+          </div>
+          <div className='user_auth_input'>
+            <label>Repeat Password</label>
+            <input
+              type='password'
+              name='repeat_password'
+              onChange={updateRepeatPassword}
+              value={repeatPassword}
+              required={true}
+            ></input>
+          </div>
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={updateImage}
+              id='profile_pic_picker'
+            />
+          </div>
+          <button type='submit'>Sign Up</button>
+          {(imageLoading) && <p>Loading...</p>}
+          <p className='login_signup_switch_text'><Link to='/login'>Already have an account?</Link></p>
+
+        </div>
+      </form>
+    </div>
   );
 };
 
