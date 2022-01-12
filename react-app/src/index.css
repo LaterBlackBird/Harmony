@@ -194,17 +194,36 @@ button {
 
 .server_image {
   object-fit: cover;
+  box-sizing: border-box;
   height: 3rem;
   width: 3rem;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
   border-radius: 50%;
   margin: 1em 1em 0.25em 1em;
 }
 
-.server_image:hover {
-  border: 2px solid white;
-}
 
 .selected {
-  border: 2px solid white;
+  border: 3px solid white;
+}
+
+#server_add_icon {
+  background-color: #36393F;
+  box-sizing: border-box;
+  height: 3rem;
+  width: 3rem;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  margin: 1em 1em 0.25em 1em;
+  display: flex;
+  text-decoration: none;
+}
+
+#server_add_icon i{
+  margin: auto;
+}
+
+.server_image:hover,
+#server_add_icon:hover {
+  border: 3px solid white;
 }

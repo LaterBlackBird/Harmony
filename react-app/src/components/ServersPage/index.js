@@ -27,13 +27,13 @@ function ServerPage() {
       {/* <h1>Servers:</h1> */}
       {serversArr?.map(server =>
         <>
-          <Link to={`/servers/${server.id}/channels`}><img className={`server_image ${server.id === serverId ? 'selected' : ''}`} src={server.server_image} alt={server.server_name} /></Link>
+          <Link to={`/servers/${server.id}/channels`}><img className={`server_image ${server.id === parseInt(serverId) ? 'selected' : ''}`} src={server.server_image} alt={server.server_name} /></Link>
           {/* <h2 key={server.id}><Link to={`/servers/${server.id}/channels`}>{server.server_name}</Link></h2>
           <Link to={`/servers/edit/${server.id}`}><button onClick={() => refresh()}>Edit Server</button></Link>
           <button onClick={() => sendId(server)}>Delete Server</button> */}
         </>
         )}
-      <Link to={`/servers/new`}>Add a Server</Link>
+      <Link to={`/servers/new`} id='server_add_icon'><i className="fas fa-plus"></i></Link>
     </div>
   )
 }

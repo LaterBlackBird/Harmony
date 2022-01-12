@@ -14,7 +14,10 @@ function ChannelsList() {
     const servers = useSelector(state => Object.values(state.server));
 
     useEffect(() => {
-        dispatch(getAllChannels(serverId))
+        if (serverId) {
+            dispatch(getAllChannels(serverId))
+        }
+
         //if server state is empty, return them to the servers page
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
@@ -27,7 +30,7 @@ function ChannelsList() {
     }
 
     let serverSelected;
-    if (window.location.href.endsWith === '/servers') {
+    if (window.location.href.endsWith('/servers')) {
         serverSelected = false;
     } else serverSelected = true;
 
@@ -41,7 +44,7 @@ function ChannelsList() {
                         <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
                     </>
                 )}
-            {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link> }
+            {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
             {!serverSelected && <h3>Select A Server</h3>}
         </div>
     )
