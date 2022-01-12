@@ -5,11 +5,14 @@ import * as serverActions from '../../store/server'
 import { useHistory } from 'react-router';
 
 function EditServerPage() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [server_name, setServer_name] = useState("")
-  const [server_image, setServer_image] = useState("")
+  // const [server_image, setServer_image] = useState("")
   const [errors, setErrors] = useState([]);
   const [serverId, setServerId] = useState(0)
+  const [image, setImage] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const { id } = useParams()
   useEffect(() => {
@@ -17,17 +20,32 @@ function EditServerPage() {
   })
 
 
-  let history = useHistory()
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    let server_image;
     e.preventDefault();
     if(server_name.length < 5 || server_name.length > 100){
       setErrors(['Server name must be between 5 and 100 characters'])
     }
-    else if(server_image.length < 5 || server_image.length > 250)
-    {
-      setErrors(['The server image url must be between 5 and 100 characters'])
-    }
     else{
+      const formData = new FormData();
+      formData.append("image", image);
+      setImageLoading(true);
+      const res = await fetch('/api/images', {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        let response = await res.json();
+        server_image = response.url
+        setImageLoading(false);
+      }
+      else {
+        setImageLoading(false);
+        // a real app would probably use more advanced
+        // error handling
+        console.log("error");
+      }
       setErrors([])
       history.push('/servers')
       return dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
@@ -38,6 +56,12 @@ function EditServerPage() {
 
     }
   }
+
+  const updateImage = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  }
+
 
   return(
     <div>
@@ -63,10 +87,10 @@ function EditServerPage() {
         <label>
           Server Image
           <input
-            type="text"
+            type="file"
+            accept="image/*"
             name='server_image'
-            value={server_image}
-            onChange={(e) => setServer_image(e.target.value)}
+            onChange={updateImage}
             required
           />
         </label>

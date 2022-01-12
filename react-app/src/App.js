@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import LoginForm from './components/auth/LoginForm';
 import SignUpForm from './components/auth/SignUpForm';
@@ -43,6 +43,9 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <ProtectedRoute exact path='/' >
+          <Redirect to='/servers' />
+        </ProtectedRoute>
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>
@@ -50,45 +53,45 @@ function App() {
           <SignUpForm />
         </Route>
         <div id='main_page'>
-          <Route path='/servers' exact={true}>
+          <ProtectedRoute path='/servers' exact={true}>
             <NavBar />
             <ServerPage />
             <ChannelsList />
-          </Route>
-          <Route path='/servers/new' exact={true}>
+          </ProtectedRoute>
+          <ProtectedRoute path='/servers/new' exact={true}>
             <CreateServerPage />
-          </Route>
-          <Route path='/servers/edit/:id' exact={true}>
+          </ProtectedRoute>
+          <ProtectedRoute path='/servers/edit/:id' exact={true}>
             <EditServerPage />
-          </Route>
-          <Route path='/servers/:id' exact={true}>
+          </ProtectedRoute>
+          <ProtectedRoute path='/servers/:id' exact={true}>
             <ServerByIdPage />
-          </Route>
-          <Route exact path='/servers/:serverId/channels'>
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/servers/:serverId/channels'>
             <NavBar />
             <ServerPage />
             <ChannelsList />
-          </Route>
-          <Route path='/servers/:serverId/channels/:channelId/edit'>
+          </ProtectedRoute>
+          <ProtectedRoute path='/servers/:serverId/channels/:channelId/edit'>
             <EditChannel />
-          </Route>
-          <Route path='/servers/:serverId/channels/new'>
+          </ProtectedRoute>
+          <ProtectedRoute path='/servers/:serverId/channels/new'>
             <CreateChannel />
-          </Route>
+          </ProtectedRoute>
           <ProtectedRoute path='/users' exact={true} >
             <UsersList />
           </ProtectedRoute>
           <ProtectedRoute path='/users/:userId' exact={true} >
             <User />
           </ProtectedRoute>
-          <ProtectedRoute path='/channels/:channelId/messages' exact={true} >
+          <ProtectedRoute path='/servers/:serverId/channels/:channelId/messages' exact={true} >
             <NavBar />
             <ServerPage />
             <ChannelsList />
             <Messages socket={socket} />
           </ProtectedRoute>
           <ProtectedRoute path='/messages/:messageId' exact={true} >
-            <Message socket={socket}/>
+            <Message socket={socket} />
           </ProtectedRoute>
           <ProtectedRoute path='/conversations' exact={true} >
             <ConversationsList />
@@ -100,11 +103,9 @@ function App() {
             <DirectMessage socket={socket} />
           </ProtectedRoute>
         </div>
-        <ProtectedRoute path='/' exact={true} >
-          <h1>My Home Page</h1>
-        </ProtectedRoute>
+
       </Switch>
-      {() => {socket.disconnect()}}
+      {() => { socket.disconnect() }}
     </BrowserRouter >
   );
 }
