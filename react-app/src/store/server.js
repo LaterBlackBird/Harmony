@@ -167,7 +167,7 @@ const serverReducer = (state = {}, action) => {
       newState = {...state, ...action.payload}
       return newState
     case JOIN_SERVER:
-      newState = {...action.payload}
+      newState = {...state, ...action.payload}
       return newState
     default:
       return state;
