@@ -9,3 +9,11 @@ class Direct_Message(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), nullable=False)
 
     user = db.relationship('User', back_populates='direct_messages')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'user_id': self.user_id,
+            'conversation_id': self.conversation_id,
+        }

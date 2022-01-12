@@ -12,10 +12,13 @@ import CreateServerPage from './components/CreateServerPage';
 import EditServerPage from './components/EditServerPage';
 import User from './components/User';
 import Messages from './components/MessagesPage';
+import DirectMessages from './components/DirectMessagesPage';
+import DirectMessage from './components/DirectMessagesEditForm';
 import Message from './components/MessagesEditForm';
 import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
 import EditChannel from './components/EditChannelForm';
+import ConversationsList from './components/ConversationPage';
 import { authenticate } from './store/session';
 import { io } from 'socket.io-client';
 
@@ -86,6 +89,15 @@ function App() {
           </ProtectedRoute>
           <ProtectedRoute path='/messages/:messageId' exact={true} >
             <Message socket={socket}/>
+          </ProtectedRoute>
+          <ProtectedRoute path='/conversations' exact={true} >
+            <ConversationsList />
+          </ProtectedRoute>
+          <ProtectedRoute path='/conversations/:conversationId/messages' exact={true} >
+            <DirectMessages socket={socket} />
+          </ProtectedRoute>
+          <ProtectedRoute path='/direct_messages/:directMessageId' exact={true} >
+            <DirectMessage socket={socket} />
           </ProtectedRoute>
         </div>
         <ProtectedRoute path='/' exact={true} >
