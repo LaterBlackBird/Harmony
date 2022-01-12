@@ -3,7 +3,18 @@ from flask_login import login_required, current_user
 from app.models import db, Channel, Message
 from app.forms import ChannelForm, channel_form
 from app.forms import MessageForm
-import logging, traceback
+import logging, traceback, os
+from flask_socketio import SocketIO, emit
+
+if os.environ.get("FLASK_ENV") == "production":
+    origins = [
+        "http://harmony-aug21.herokuapp.com",
+        "https://harmony-aug21.herokuapp.com"
+    ]
+else:
+    origins = "*"
+
+socketio = SocketIO(cors_allowed_origins=origins)
 
 channel_routes = Blueprint('channels', __name__)
 
@@ -44,6 +55,19 @@ def delete_channel(id):
 def messages(id):
     messages = Message.query.filter(Message.channel_id == id)
     return {'messages': [message.to_dict() for message in messages]}
+
+@socketio.event
+def message(data):
+    print(data)
+    emit("message", data, broadcast=True)
+
+@socketio.event
+def message_edit(data):
+    emit("message_edit", data, broadcast=True)
+
+@socketio.event
+def message_delete(data):
+    emit("message_delete", data, broadcast=True)
 
 @channel_routes.route('/<int:channel_id>/messages', methods=['POST'])
 @login_required
