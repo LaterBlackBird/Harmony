@@ -17,8 +17,8 @@ input {
 #main_page {
   display: grid;
   grid-template-areas:
-    'servers channels navbar'
-    'servers channels messages';
+    'servers selections navbar'
+    'servers selections messages';
   grid-template-columns: 80px 25vw 50vw;
 }
 
@@ -48,10 +48,15 @@ nav ul a {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 }
 
-#channels_container {
-  grid-area: channels;
+#servers_container::-webkit-scrollbar {
+  display: none;
+}
+
+#channels_container, #conversations_container {
+  grid-area: selections;
   background-color: #36393f;
 }
 #message_container {

@@ -10,10 +10,11 @@ function ServerPage() {
   const serversArr = Object.values(server)
   const session = useSelector(state => state.session);
   const user = session.user
+  const server_members = server.users
 
   useEffect(() => {
     dispatch(serverActions.setServers())
-  }, [dispatch])
+  }, [dispatch, server_members])
 
   const sendId = async (server) => {
     await dispatch(serverActions.deleteAServer(server.id))
@@ -38,7 +39,7 @@ function ServerPage() {
         <p className='hide'>Add A Server</p>
       </div>
       <div>
-        <NavLink to={`/conversations/${user.id}`} exact={true} activeClassName='active'>
+        <NavLink to={`/servers/0/conversations/${user.id}`} exact={true} activeClassName='active'>
             Conversations
         </NavLink>
       </div>
