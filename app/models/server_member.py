@@ -21,3 +21,11 @@ server_members = db.Table(
     )
 
 )
+
+class Server_Members(object):
+    def __init__(self,server_id, user_id, admin):
+        self.server_id = server_id
+        self.user_id = user_id
+        self.admin = admin
+
+db.mapper(Server_Members, server_members)

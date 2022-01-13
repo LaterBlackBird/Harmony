@@ -86,7 +86,7 @@ function CreateServerPage(){
             required
           />
         </label>
-        <button type="submit">Create Event</button>
+        <button type="submit">Create Server</button>
         {(imageLoading)&& <p>Loading...</p>}
       </form>
     </div>

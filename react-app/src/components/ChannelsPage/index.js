@@ -23,6 +23,11 @@ function ChannelsList() {
         return dispatch(serverActions.joinAServer({ userId, serverId }))
     }
 
+    const joinServerAdminButton = () => {
+        const userId = currentUser
+        return dispatch(serverActions.joinAsAdmin({ userId, serverId }))
+    }
+
     const sendId = async (serverId) => {
         await dispatch(serverActions.deleteAServer(serverId))
         dispatch(serverActions.setServers())
@@ -68,6 +73,7 @@ function ChannelsList() {
                 {serverSelected &&
                     <>
                         <button onClick={joinServerButton}>Join this Server!</button>
+                        <button onClick={joinServerAdminButton}>Join as Admin!</button>
                         <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
                         <button onClick={() => sendId(serverId)}>Delete Server</button>
                     </>
