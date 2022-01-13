@@ -1,5 +1,5 @@
 from .db import db
-from .server_member import server_members
+from .server_member import server_members, Server_Members
 
 class Server(db.Model):
     __tablename__ = 'servers'
@@ -15,8 +15,9 @@ class Server(db.Model):
     users = db.relationship(
         'User',
         secondary=server_members,
-        back_populates='servers'
+       back_populates='servers'
     )
+
 
     def to_dict(self):
             return {
@@ -35,6 +36,15 @@ class Server(db.Model):
     def remove_user(self, user):
         if user in self.users:
             self.users.remove(user)
+            db.session.commit()
+            return self
+
+    def add_admin(self, user):
+        if user in self.users:
+            server_member = db.session.query(Server_Members).filter(user.id == Server_Members.user_id, self.id == Server_Members.server_id).first()
+            server_member.admin = True
+            print(server_member)
+            db.session.add(server_member)
             db.session.commit()
             return self
 
