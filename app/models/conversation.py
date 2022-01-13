@@ -22,6 +22,6 @@ class Conversation(object):
 
     
 db.mapper(Conversation, conversations, properties={
-    'direct_messages' : db.relationship(Direct_Message, backref='conversation')
+    'direct_messages' : db.relationship(Direct_Message, backref=db.backref('conversation'), cascade="all, delete")
 })
 
