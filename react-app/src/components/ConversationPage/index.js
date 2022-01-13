@@ -32,7 +32,7 @@ function ConversationsList() {
         dispatch(deleteThisConversation({conversationId, userId}))
     }
     return (
-        <div id='channels_container'>
+        <div id='conversations_container'>
             <h1>Conversations:</h1>
             {conversations?.map(conversation =>
             <>
