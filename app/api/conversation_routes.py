@@ -50,11 +50,12 @@ def conversations_post(user_id):
     conversations = db.session.query(Conversation).filter(Conversation.from_user == user_id, Conversation.to_user == data['to_user']).all()
     conversations2 = db.session.query(Conversation).filter(Conversation.from_user == data['to_user'], Conversation.to_user == user_id).all()
 
-    for conversation in conversations2:
-        if conversation.id < conversations[0].id:
-            conversations.insert(0,conversation)
-        else:
-            conversations.append(conversation)
+    if len(conversations2):
+        for conversation in conversations2:
+            if len(conversations) and conversation.id < conversations[0].id:
+                conversations.insert(0,conversation)
+            else:
+                conversations.append(conversation)
 
     if len(conversations):
         return conversations[0].to_dict()
@@ -65,15 +66,15 @@ def conversations_post(user_id):
         db.session.commit()
         return conversation.to_dict()
 
-@conversation_routes.route('/<int:conversation_id>', methods=['PUT'])
-@login_required
-def edit_conversation(id):
-    pass
-    # conversation = Conversation.query.get(id)
-    # conversation.conversation_name = form.data['conversation_name'],
-    # db.session.commit()
+# @conversation_routes.route('/<int:conversation_id>', methods=['PUT'])
+# @login_required
+# def edit_conversation(id):
+#     pass
+#     # conversation = Conversation.query.get(id)
+#     # conversation.conversation_name = form.data['conversation_name'],
+#     # db.session.commit()
 
-    # return conversation.to_dict()
+#     # return conversation.to_dict()
 
 
 @conversation_routes.route('/<int:conversation_id>', methods=['DELETE'])
