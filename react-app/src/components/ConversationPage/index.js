@@ -6,7 +6,7 @@ import { useHistory, Redirect } from 'react-router';
 
 
 function ConversationsList() {
-    const { userId } = useParams();
+    const { serverId, userId } = useParams();
     const dispatch = useDispatch();
     let history = useHistory()
     const user = useSelector(state => state.session.user);
@@ -32,11 +32,11 @@ function ConversationsList() {
         dispatch(deleteThisConversation({conversationId, userId}))
     }
     return (
-        <div id='conversations_container'>
+        <div id='channels_container'>
             <h1>Conversations:</h1>
             {conversations?.map(conversation =>
             <>
-                <h2 key={conversation.id}><Link to={`/conversations/${conversation.id}/messages`}>{`Conversation ${conversation.id}`}</Link></h2>
+                <h2 key={conversation.id}><Link to={`/servers/${serverId}/conversations/${conversation.id}/messages`}>{`Conversation ${conversation.id}`}</Link></h2>
                 <button onClick={() => deleteConversation(conversation.id)}>Delete</button>
                 {/* <Link to={`/servers/${serverId}/conversations/${conversation.id}/edit`}>Edit</Link> */}
             </>
