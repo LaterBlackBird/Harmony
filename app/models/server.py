@@ -40,11 +40,19 @@ class Server(db.Model):
             return self
 
     def add_admin(self, user):
-        if user in self.users:
+        if user not in self.users:
+            self.users.append(user)
+            db.session.commit()
             server_member = db.session.query(Server_Members).filter(user.id == Server_Members.user_id, self.id == Server_Members.server_id).first()
             server_member.admin = True
-            print(server_member)
             db.session.add(server_member)
             db.session.commit()
             return self
+        else:
+            server_member = db.session.query(Server_Members).filter(user.id == Server_Members.user_id, self.id == Server_Members.server_id).first()
+            server_member.admin = True
+            db.session.add(server_member)
+            db.session.commit()
+            return self
+
 
