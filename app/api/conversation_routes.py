@@ -76,12 +76,34 @@ def conversations_post(user_id):
 
 @conversation_routes.route('/<int:conversation_id>', methods=['DELETE'])
 @login_required
-def delete_conversation(id):
-    # conversation = Conversation.query.get(id)
-    # db.session.delete(conversation)
-    db.session.commit()
-    # return jsonify(f"successfully deleted conversation {conversation.conversation_name}")
-
+def delete_conversation(conversation_id):
+    data = request.json
+    conversation = db.session.query(Conversation).get_or_404(conversation_id)
+    print(data)
+    print(conversation.id)
+    print(conversation.from_user == None)
+    print(conversation.to_user == None)
+    if conversation.from_user == int(data['userId']):
+        print('in from')
+        if conversation.to_user == None:
+            db.session.delete(conversation)
+            db.session.commit()
+        else:
+            conversation.from_user = None
+            db.session.add(conversation)
+            db.session.commit()
+        return { "conversation": "success" }
+    if conversation.to_user == int(data['userId']):
+        print('in to')
+        if conversation.from_user == None:
+            print('in to again')
+            db.session.delete(conversation)
+            db.session.commit()
+        else:
+            conversation.to_user = None
+            db.session.add(conversation)
+            db.session.commit()
+        return { "conversation": "success" }
 
 
 @conversation_routes.route('/<int:conversation_id>/messages')

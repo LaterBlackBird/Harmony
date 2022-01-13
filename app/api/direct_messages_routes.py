@@ -27,7 +27,8 @@ def message_patch(id):
 @direct_message_routes.route('/<int:id>', methods=['DELETE'])
 @login_required
 def messages_delete(id):
+    
     message = Direct_Message.query.get_or_404(id)
-    db.session.delete(message)
-    db.session.commit()
+    db.session.add(message)
+    db.session.commit()       
     return { "message": "success" }

@@ -62,9 +62,13 @@ export const addNewConversation = conversationInfo => async (dispatch) => {
     }
 }
 
-export const deleteThisConversation = conversationId => async (dispatch) => {
+export const deleteThisConversation = ({conversationId, userId}) => async (dispatch) => {
     const response = await fetch(`/api/conversations/${conversationId}`, {
         method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({userId})
     });
     if (response.ok) {
         dispatch(deleteConversation(conversationId));
