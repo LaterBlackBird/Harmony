@@ -17,8 +17,8 @@ input {
 #main_page {
   display: grid;
   grid-template-areas:
-    'servers channels navbar'
-    'servers channels messages';
+    'servers selections navbar'
+    'servers selections messages';
   grid-template-columns: 80px 25vw 50vw;
 }
 
@@ -48,15 +48,17 @@ nav ul a {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  position: relative;
+  z-index: 6;
+  overflow: auto;
 }
 
 #servers_container::-webkit-scrollbar {
   display: none;
 }
 
-#channels_container {
-  grid-area: channels;
+#channels_container, #conversations_container {
+  grid-area: selections;
   background-color: #36393f;
 }
 #message_container {
@@ -200,13 +202,14 @@ button {
 .server_info_block {
   display: inline;
   height: 4.5rem;
+  position: relative;
 }
 
 .server_info_block p,
 #server_add_icon p {
-  position: relative;
-  top: -72%;
-  right: -95%;
+  position: absolute;
+  top: 28px;
+  right: -65%;
   background-color: #202225;
   line-height: 2em;
   text-align: center;
