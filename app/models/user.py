@@ -18,10 +18,9 @@ class User(db.Model, UserMixin):
     conversations = db.relationship(
         "User", 
         secondary=conversations,
-        primaryjoin=(conversations.c.to_user == id),
-        secondaryjoin=(conversations.c.from_user == id),
-        backref=db.backref("conversing", lazy="dynamic"),
-        lazy="dynamic"
+        primaryjoin=id==conversations.c.to_user,
+        secondaryjoin=id==conversations.c.from_user,
+        backref=db.backref("conversing"),
     )
     direct_messages = db.relationship('Direct_Message', back_populates='user')
     messages = db.relationship('Message', back_populates='user')
@@ -43,10 +42,14 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def get_conversations(self):
+        return self.conversations
+
     def to_dict(self):
         return {
             'id': self.id,
             'username': self.username,
             'email': self.email,
             'profile_image': self.profile_image,
+            # 'conversations': self.conversations,
         }

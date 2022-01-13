@@ -12,10 +12,13 @@ import CreateServerPage from './components/CreateServerPage';
 import EditServerPage from './components/EditServerPage';
 import User from './components/User';
 import Messages from './components/MessagesPage';
+import DirectMessages from './components/DirectMessagesPage';
+import DirectMessage from './components/DirectMessagesEditForm';
 import Message from './components/MessagesEditForm';
 import ChannelsList from './components/ChannelsPage';
 import CreateChannel from './components/CreateChannelForm';
 import EditChannel from './components/EditChannelForm';
+import ConversationsList from './components/ConversationPage';
 import { authenticate } from './store/session';
 import { io } from 'socket.io-client';
 
@@ -25,7 +28,7 @@ socket = io();
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     (async () => {
       await dispatch(authenticate());
@@ -34,15 +37,13 @@ function App() {
   }, [dispatch]);
 
   if (!loaded) {
+    // socket.disconnect()
     return null;
   }
 
   return (
     <BrowserRouter>
       <Switch>
-        <ProtectedRoute exact path='/' >
-          <Redirect to='/servers' />
-        </ProtectedRoute>
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>
@@ -72,30 +73,46 @@ function App() {
         </ProtectedRoute>
 
 
-        <div id='main_page'>
-          <ProtectedRoute path='/servers' exact={true}>
-            <NavBar />
+        <ProtectedRoute path='/servers' exact={true}>
+          <div id='main_page'>
+            <NavBar socket={socket} />
             <ServerPage />
             <ChannelsList />
-          </ProtectedRoute>
-          <ProtectedRoute exact path='/servers/:serverId/channels'>
-            <NavBar />
+          </div>
+        </ProtectedRoute>
+        <ProtectedRoute exact path='/servers/:serverId/channels'>
+          <div id='main_page'>
+            <NavBar socket={socket} />
             <ServerPage />
             <ChannelsList />
-          </ProtectedRoute>
-          <ProtectedRoute path='/servers/:serverId/channels/:channelId/messages' exact={true} >
-            <NavBar />
+          </div>
+        </ProtectedRoute>
+        <ProtectedRoute path='/servers/:serverId/channels/:channelId/messages' exact={true} >
+          <div id='main_page'>
+            <NavBar socket={socket} />
             <ServerPage />
             <ChannelsList />
             <Messages socket={socket} />
-          </ProtectedRoute>
-          <ProtectedRoute path='/messages/:messageId' exact={true} >
-            <Message socket={socket} />
-          </ProtectedRoute>
-        </div>
+          </div>
+        </ProtectedRoute>
+        <ProtectedRoute path='/messages/:messageId' exact={true} >
+          <Message socket={socket} />
+        </ProtectedRoute>
+        <ProtectedRoute path='/conversations/:userId' exact={true} >
+          <ConversationsList />
+        </ProtectedRoute>
+        <ProtectedRoute path='/conversations/:conversationId/messages' exact={true} >
+          <DirectMessages socket={socket} />
+        </ProtectedRoute>
+        <ProtectedRoute path='/direct_messages/:directMessageId' exact={true} >
+          <DirectMessage socket={socket} />
+        </ProtectedRoute>
+        <ProtectedRoute path='/' >
+          <Redirect to='/servers' />
+        </ProtectedRoute>
 
       </Switch>
-      {() => { socket.disconnect() }}
+      {/* {() => { socket.disconnect() }} */}
     </BrowserRouter >
   );
 }

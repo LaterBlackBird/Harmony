@@ -12,6 +12,8 @@ from .api.channel_routes import channel_routes, socketio
 from .api.aws_image import image_routes
 from .api.server_routes import server_routes
 from .api.messages_routes import message_routes
+from .api.conversation_routes import conversation_routes
+from .api.direct_messages_routes import direct_message_routes
 
 from .seeds import seed_commands
 
@@ -38,7 +40,9 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(channel_routes, url_prefix='/api/channels')
 app.register_blueprint(image_routes, url_prefix='/api/images')
 app.register_blueprint(server_routes,url_prefix='/api/servers')
+app.register_blueprint(conversation_routes, url_prefix='/api/conversations')
 app.register_blueprint(message_routes, url_prefix='/api/messages')
+app.register_blueprint(direct_message_routes, url_prefix='/api/direct_messages')
 db.init_app(app)
 Migrate(app, db)
 socketio.init_app(app)

@@ -60,10 +60,10 @@ function ChannelsList() {
             <h1>Channels:</h1>
             {serverSelected &&
                 channels.map(channel =>
-                    <>
-                        <h2 key={channel.id}><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+                    <div key={channel.id}>
+                        <h2><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
                         <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
-                    </>
+                    </div>
                 )}
             {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
             {!serverSelected && <h3>Select A Server</h3>}
