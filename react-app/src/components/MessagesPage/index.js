@@ -3,9 +3,10 @@ import { useParams, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
 
-function Messages({socket}) {
+function Messages({ socket }) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
+    const [userInfo, setUserInfo] = useState({});
     const dispatch = useDispatch();
     const { channelId } = useParams();
     const session = useSelector(state => state.session);
@@ -17,12 +18,12 @@ function Messages({socket}) {
             await dispatch(messageActions.getAllMessages(channelId));
         }
         fetchData();
-        
-        
+
+
     }, [dispatch, channelId]);
-    
+
     useEffect(() => {
-        if(messageState){
+        if (messageState) {
             setMessages(Object.values(messageState))
         }
     }, [messageState])
@@ -50,8 +51,6 @@ function Messages({socket}) {
         let data = [channelId, message]
         let res = await dispatch(messageActions.addToMessages(data))
         let messageRes = res;
-        console.log(res)
-        console.log(socket)
         socket.emit('message', { ...messageRes })
     }
 
@@ -72,19 +71,29 @@ function Messages({socket}) {
         )
     }
 
-    const messageComponents = messages.map((message) => {
-        return (
-            <li key={message.id}>
-                <p>{message.content}</p>
-                {currentUser.id == message.user_id && buttons(message)}
-            </li>
-        )
-    });
+    // const getUserInfo = async (message) => {
+    //     const res = await fetch(`/api/users/${message.user_id}`)
+    //     const data = await res.json();
+    //     // setUserInfo(data)
+    //     console.log(data)
+    // }
 
     return (
         <div id='message_container'>
             <h1>Messages: </h1>
-            <ul>{messageComponents}</ul>
+            {messages?.map(message =>
+                <div key={message.id}>
+                    {/* {getUserInfo(message)} */}
+                    <div>
+                        <p>{userInfo.profile_image}</p>
+                    </div>
+                    <div>
+                        <p>{userInfo.username}</p>
+                        <p>{message.content}</p>
+                        {currentUser.id === message.user_id && buttons(message)}
+                    </div>
+                </div>
+            )}
             <form onSubmit={addMessage}>
                 <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
                 <button>Submit</button>

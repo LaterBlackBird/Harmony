@@ -94,8 +94,9 @@ const messageReducer = (state = null, action) => {
     let newState = {};
     switch (action.type) {
         case GET_MESSAGES:
+            console.log(action.messages)
             action.messages.forEach(message => {
-                const key = message.id;
+                const key = message[0].id;
                 newState[key] = message;
             })
             return newState;

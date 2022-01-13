@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request
 from flask_login import login_required, current_user
-from app.models import db, Channel, Message
+from app.models import db, Channel, Message, User
 from app.forms import ChannelForm, channel_form
 from app.forms import MessageForm
 import logging, traceback, os
@@ -54,7 +54,11 @@ def delete_channel(id):
 @login_required
 def messages(id):
     messages = Message.query.filter(Message.channel_id == id)
-    return {'messages': [message.to_dict() for message in messages]}
+    messages_and_users = []
+    for message in messages:
+        user = User.query.get_or_404(message.user_id)
+        messages_and_users.append([message.to_dict(), user.username, user.profile_image])
+    return {'messages': messages_and_users}
 
 @socketio.event
 def message(data):
