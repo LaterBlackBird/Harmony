@@ -103,3 +103,17 @@ def join_server(serverId):
   server_object.add_user(user_object)
 
   return server_object.to_dict()
+
+@server_routes.route('/<int:serverId>/joinAsAdmin', methods=['POST'])
+@login_required
+def join_server_as_admin(serverId):
+  userId = request.json['userId']
+
+
+  user_object = User.query.filter(User.id == userId).first()
+
+  server_object = Server.query.get_or_404(serverId)
+
+  server_object.add_admin(user_object)
+
+  return server_object.to_dict()
