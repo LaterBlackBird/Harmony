@@ -31,7 +31,7 @@ export const getAllDirectMessages = conversationId => async dispatch => {
 }
 
 export const addToMessages = (data) => async dispatch => {
-    const [ channelId, message ] = data
+    const [ channelId, message, username, image ] = data
     const res = await fetch(`/api/channels/${channelId}/messages`, {
         method: "POST",
         headers: {
@@ -43,8 +43,8 @@ export const addToMessages = (data) => async dispatch => {
     })
     if(res.ok){
         let response = await res.json()
-
-        dispatch(addMessage(response))
+        const messageAndUserInfo = [response, username, image]
+        dispatch(addMessage(messageAndUserInfo))
 
         return response;
     }
@@ -94,16 +94,14 @@ const messageReducer = (state = null, action) => {
     let newState = {};
     switch (action.type) {
         case GET_MESSAGES:
-            console.log(action.messages)
             action.messages.forEach(message => {
                 const key = message[0].id;
                 newState[key] = message;
             })
             return newState;
         case ADD_MESSAGE:
-            console.log(action)
             newState = {...state};
-            newState[action.message.id] = action.message;
+            newState[action.message[0].id] = action.message;
             return newState
         case DELETE_MESSAGE:
             newState = {...state};

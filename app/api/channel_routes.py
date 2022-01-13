@@ -62,12 +62,15 @@ def messages(id):
 
 @socketio.event
 def message(data):
-    print(data)
-    emit("message", data, broadcast=True)
+    sending_User = (User.query.get_or_404(data["user_id"])).to_dict()
+    updated_Info = [data, sending_User["username"], sending_User["profile_image"]]
+    emit("message", updated_Info, broadcast=True)
 
 @socketio.event
 def message_edit(data):
-    emit("message_edit", data, broadcast=True)
+    sending_User = (User.query.get_or_404(data["user_id"])).to_dict()
+    updated_Info = [data, sending_User["username"], sending_User["profile_image"]]
+    emit("message_edit", updated_Info, broadcast=True)
 
 @socketio.event
 def message_delete(data):
