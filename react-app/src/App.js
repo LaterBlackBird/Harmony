@@ -43,9 +43,6 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <ProtectedRoute exact path='/' >
-          <Redirect to='/servers' />
-        </ProtectedRoute>
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>
@@ -103,6 +100,9 @@ function App() {
           </ProtectedRoute>
           <ProtectedRoute path='/direct_messages/:directMessageId' exact={true} >
             <DirectMessage socket={socket} />
+          </ProtectedRoute>
+          <ProtectedRoute path='/' >
+            <Redirect to='/servers' />
           </ProtectedRoute>
         </div>
 
