@@ -98,11 +98,20 @@ function App() {
         <ProtectedRoute path='/messages/:messageId' exact={true} >
           <Message socket={socket} />
         </ProtectedRoute>
-        <ProtectedRoute path='/conversations/:userId' exact={true} >
-          <ConversationsList />
+        <ProtectedRoute path='/servers/:serverId/conversations/:userId' exact={true} >
+          <div id='main_page'>
+            <NavBar socket={socket} />
+            <ServerPage />
+            <ConversationsList />
+          </div>
         </ProtectedRoute>
-        <ProtectedRoute path='/conversations/:conversationId/messages' exact={true} >
-          <DirectMessages socket={socket} />
+        <ProtectedRoute path='/servers/:serverId/conversations/:conversationId/messages' exact={true} >
+          <div id='main_page'>
+            <NavBar socket={socket} />
+            <ServerPage />
+            <ConversationsList />
+            <DirectMessages socket={socket} />
+          </div>
         </ProtectedRoute>
         <ProtectedRoute path='/direct_messages/:directMessageId' exact={true} >
           <DirectMessage socket={socket} />
