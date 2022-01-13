@@ -18,8 +18,8 @@ const deleteMessage = (messageId) => ({
 });
 
 //thunks
-export const getAllMessages = channelId => async dispatch => {
-    const response = await fetch(`/api/channels/${channelId}/messages`);
+export const getAllMessages = conversationId => async dispatch => {
+    const response = await fetch(`/api/conversations/${conversationId}/messages`);
     const responseData = await response.json();
     dispatch(getMessages(responseData.messages))
 }
@@ -31,8 +31,8 @@ export const getAllDirectMessages = conversationId => async dispatch => {
 }
 
 export const addToMessages = (data) => async dispatch => {
-    const [ channelId, message ] = data
-    const res = await fetch(`/api/channels/${channelId}/messages`, {
+    const [ conversationId, message ] = data
+    const res = await fetch(`/api/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export const addToMessages = (data) => async dispatch => {
 
 export const editAMessage = (data) => async dispatch => {
     const [messageId, content] = data;
-    const res = await fetch(`/api/messages/${messageId}`, {
+    const res = await fetch(`/api/direct_messages/${messageId}`, {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export const updateMessages = (message) => async dispatch => {
 }
 
 export const removeAMessage = id => async dispatch => {
-    const res = await fetch(`/api/messages/${id}`, {
+    const res = await fetch(`/api/direct_messages/${id}`, {
         method: 'DELETE'
     })
     console.log(res.ok)
@@ -90,7 +90,7 @@ export const removeTheMessage = (id) => async dispatch => {
 
 
 //reducer
-const messageReducer = (state = null, action) => {
+const directMessageReducer = (state = null, action) => {
     let newState = {};
     switch (action.type) {
         case GET_MESSAGES:
@@ -113,4 +113,4 @@ const messageReducer = (state = null, action) => {
     }
 }
 
-export default messageReducer;
+export default directMessageReducer;

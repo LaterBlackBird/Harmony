@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import * as directMessageActions from '../../store/direct_message';
 import * as messageActions from '../../store/message';
+// import { io } from 'socket.io-client';
+
+// let socket;
 
 function Messages({socket}) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
     const dispatch = useDispatch();
-    const { channelId } = useParams();
+    const { conversationId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
     const currentUser = session.user;
 
     useEffect(() => {
         async function fetchData() {
-            await dispatch(messageActions.getAllMessages(channelId));
+            await dispatch(directMessageActions.getAllMessages(conversationId));
         }
         fetchData();
         
         
-    }, [dispatch, channelId]);
+    }, [dispatch, conversationId]);
     
     useEffect(() => {
         if(messageState){
@@ -28,6 +32,7 @@ function Messages({socket}) {
     }, [messageState])
 
     useEffect(() => {
+        // socket = io();
 
         socket.on('message', async (message) => {
             await dispatch(messageActions.updateMessages(message));
@@ -42,13 +47,16 @@ function Messages({socket}) {
             await dispatch(messageActions.updateMessages(message));
         })
 
+        // return (() => {
+        //     socket.disconnect();
+        // });
     }, [])
 
     const addMessage = async (e) => {
         e.preventDefault()
         let message = content;
-        let data = [channelId, message]
-        let res = await dispatch(messageActions.addToMessages(data))
+        let data = [conversationId, message]
+        let res = await dispatch(directMessageActions.addToMessages(data))
         let messageRes = res;
         console.log(res)
         console.log(socket)
@@ -57,14 +65,14 @@ function Messages({socket}) {
 
     const deleteMessage = async (id) => {
         console.log('hello')
-        await dispatch(messageActions.removeAMessage(id))
+        await dispatch(directMessageActions.removeAMessage(id))
         socket.emit('message_delete', { id })
     }
 
     const buttons = (message) => {
         return (
             <>
-                <NavLink to={`/messages/${message.id}`} exact={true} activeClassName='active'>
+                <NavLink to={`/direct_messages/${message.id}`} exact={true} activeClassName='active'>
                     Edit
                 </NavLink>
                 <button onClick={e => deleteMessage(message.id)}>Delete</button>

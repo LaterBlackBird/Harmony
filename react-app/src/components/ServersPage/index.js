@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as serverActions from '../../store/server'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, NavLink } from 'react-router-dom'
 
 function ServerPage() {
   const dispatch = useDispatch()
@@ -41,6 +41,11 @@ function ServerPage() {
       <div id>
         <Link to={`/servers/new`} id='server_add_icon'><i className="fas fa-plus"></i></Link>
         <p className='hide'>Add A Server</p>
+      </div>
+      <div>
+        <NavLink to={`/conversations/${user.id}`} exact={true} activeClassName='active'>
+            Conversations
+        </NavLink>
       </div>
     </div>
   )
