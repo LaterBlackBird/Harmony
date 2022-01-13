@@ -28,7 +28,7 @@ socket = io();
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     (async () => {
       await dispatch(authenticate());
@@ -37,6 +37,7 @@ function App() {
   }, [dispatch]);
 
   if (!loaded) {
+    socket.disconnect()
     return null;
   }
 
@@ -74,17 +75,17 @@ function App() {
 
         <div id='main_page'>
           <ProtectedRoute path='/servers' exact={true}>
-            <NavBar />
+            <NavBar socket={socket} />
             <ServerPage />
             <ChannelsList />
           </ProtectedRoute>
           <ProtectedRoute exact path='/servers/:serverId/channels'>
-            <NavBar />
+            <NavBar socket={socket} />
             <ServerPage />
             <ChannelsList />
           </ProtectedRoute>
           <ProtectedRoute path='/servers/:serverId/channels/:channelId/messages' exact={true} >
-            <NavBar />
+            <NavBar socket={socket} />
             <ServerPage />
             <ChannelsList />
             <Messages socket={socket} />
@@ -107,7 +108,7 @@ function App() {
         </div>
 
       </Switch>
-      {() => { socket.disconnect() }}
+      {/* {() => { socket.disconnect() }} */}
     </BrowserRouter >
   );
 }
