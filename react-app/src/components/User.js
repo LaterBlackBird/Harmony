@@ -27,7 +27,7 @@ function User() {
   const startConversation = async () => {
     let res = await dispatch(conversationActions.addNewConversation({from_user:sessionUser.id, to_user:userId}))
     console.log(res)
-    history.push(`/conversations/${res.id}/messages`)
+    history.push(`/servers/0/conversations/${res.id}/messages`)
   }
 
   const button = (

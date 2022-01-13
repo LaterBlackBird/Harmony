@@ -11,7 +11,7 @@ function Messages({socket}) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
     const dispatch = useDispatch();
-    const { conversationId } = useParams();
+    const { serverId, conversationId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
     const currentUser = session.user;
