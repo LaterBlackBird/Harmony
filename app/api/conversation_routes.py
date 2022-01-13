@@ -31,11 +31,8 @@ def conversations(user_id):
     # user = User()
     # from_users = User.query.join(Conversation, User.id == Conversation.from_user).filter(Conversation.from_user == user_id).all()
     # print(from_users)
-    print(user_id)
-    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user != user_id))
-    for conversation in conversations:
-        print(conversation.from_user)
-        print(conversation.to_user)
+    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user == user_id))
+    
     # print(convos[0].id)
     # from_user = user.users
     # print(f'....  {user.__dict__} {type(user)}')

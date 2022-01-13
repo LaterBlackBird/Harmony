@@ -6,7 +6,7 @@ import { useHistory, Redirect } from 'react-router';
 
 
 function ConversationsList() {
-    const { serverId } = useParams();
+    const { userId } = useParams();
     const dispatch = useDispatch();
     let history = useHistory()
     const user = useSelector(state => state.session.user);
@@ -16,7 +16,7 @@ function ConversationsList() {
 
 
     useEffect(() => {
-        dispatch(getAllConversations(2))
+        dispatch(getAllConversations(userId))
         //if server state is empty, return them to the servers page
         // if (Object.keys(servers).length < 1) {
         //     history.push(`/servers`)

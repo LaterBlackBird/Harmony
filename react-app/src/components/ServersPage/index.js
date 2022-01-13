@@ -43,7 +43,7 @@ function ServerPage() {
         <p className='hide'>Add A Server</p>
       </div>
       <div>
-        <NavLink to={`/conversations`} exact={true} activeClassName='active'>
+        <NavLink to={`/conversations/${user.id}`} exact={true} activeClassName='active'>
             Conversations
         </NavLink>
       </div>

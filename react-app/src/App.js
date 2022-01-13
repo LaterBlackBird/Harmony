@@ -95,7 +95,7 @@ function App() {
           <ProtectedRoute path='/messages/:messageId' exact={true} >
             <Message socket={socket} />
           </ProtectedRoute>
-          <ProtectedRoute path='/conversations' exact={true} >
+          <ProtectedRoute path='/conversations/:userId' exact={true} >
             <ConversationsList />
           </ProtectedRoute>
           <ProtectedRoute path='/conversations/:conversationId/messages' exact={true} >
