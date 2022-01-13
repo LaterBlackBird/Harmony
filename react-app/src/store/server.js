@@ -4,6 +4,14 @@ const CREATE_SERVER = 'server/CREATE_SERVER'
 const EDIT_SERVER = 'server/EDIT_SERVER'
 const DELETE_SERVER = 'server/DELETE_SERVER'
 const JOIN_SERVER = 'server/JOIN_SERVER'
+const JOIN_ADMIN = 'server/JOIN_ADMIN'
+
+const joinAdmin = (server) => {
+  return{
+    type: JOIN_ADMIN,
+    payload:server
+  }
+}
 
 const joinServer = (server) => {
   return{
@@ -45,6 +53,31 @@ const getServer = (server) => {
   return{
     type: GET_SERVER,
     payload: server
+  }
+}
+
+export const joinAsAdmin = ({ userId, serverId }) => async (dispatch) => {
+  const res = await fetch(`/api/servers/${serverId}/joinAsAdmin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      userId
+    })
+  })
+
+  if(res.ok){
+    const data = await res.json()
+    dispatch(joinAdmin(data))
+    return data
+  }
+  else if (res.status < 500){
+    const data = await res.json()
+    if(data.errors) return data.errors
+  }
+  else {
+    return ['An error occurred. Please try again']
   }
 }
 
@@ -167,6 +200,9 @@ const serverReducer = (state = {}, action) => {
       newState = {...state, ...action.payload}
       return newState
     case JOIN_SERVER:
+      newState = {...state, ...action.payload}
+      return newState
+    case JOIN_ADMIN:
       newState = {...state, ...action.payload}
       return newState
     default:

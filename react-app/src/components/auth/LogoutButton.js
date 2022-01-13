@@ -3,12 +3,13 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../store/session';
 import { useHistory } from 'react-router-dom';
 
-const LogoutButton = () => {
+const LogoutButton = ({socket}) => {
   const dispatch = useDispatch()
   const history = useHistory();
   const onLogout = async (e) => {
     await dispatch(logout());
-    history.push('/login')
+    socket.disconnect();
+    history.push('/login');
 
   };
 

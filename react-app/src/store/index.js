@@ -3,13 +3,17 @@ import thunk from 'redux-thunk';
 import session from './session'
 import server from './server'
 import channelReducer from './channel';
-import messageReducer from './message'
+import messageReducer from './message';
+import conversationReducer from './conversation';
+import directMessageReducer from './direct_message';
 
 const rootReducer = combineReducers({
   session,
   server,
   channel: channelReducer,
   message: messageReducer,
+  conversation: conversationReducer,
+  direct_message: directMessageReducer,
 });
 
 
