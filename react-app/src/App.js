@@ -37,7 +37,7 @@ function App() {
   }, [dispatch]);
 
   if (!loaded) {
-    socket.disconnect()
+    // socket.disconnect()
     return null;
   }
 
