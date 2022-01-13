@@ -31,8 +31,11 @@ def conversations(user_id):
     # user = User()
     # from_users = User.query.join(Conversation, User.id == Conversation.from_user).filter(Conversation.from_user == user_id).all()
     # print(from_users)
-    
-    conversations = db.session.query(Conversation).filter(Conversation.from_user == user_id)
+    print(user_id)
+    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user != user_id))
+    for conversation in conversations:
+        print(conversation.from_user)
+        print(conversation.to_user)
     # print(convos[0].id)
     # from_user = user.users
     # print(f'....  {user.__dict__} {type(user)}')
@@ -44,11 +47,16 @@ def conversations(user_id):
 @login_required
 def conversations_post(user_id):
     data = request.json
-    print(data)
-    print(user_id)
-    conversations = db.session.query(Conversation).filter(Conversation.from_user == user_id and Conversation.to_user == data['to_user']).all()
-    print(f'............{conversations}')
-    if conversations[0]:
+    conversations = db.session.query(Conversation).filter(Conversation.from_user == user_id, Conversation.to_user == data['to_user']).all()
+    conversations2 = db.session.query(Conversation).filter(Conversation.from_user == data['to_user'], Conversation.to_user == user_id).all()
+
+    for conversation in conversations2:
+        if conversation.id < conversations[0].id:
+            conversations.insert(0,conversation)
+        else:
+            conversations.append(conversation)
+
+    if len(conversations):
         return conversations[0].to_dict()
     else:
         conversation = Conversation(from_user=user_id,
