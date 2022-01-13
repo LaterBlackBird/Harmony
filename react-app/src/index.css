@@ -48,6 +48,11 @@ nav ul a {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+}
+
+#servers_container::-webkit-scrollbar {
+  display: none;
 }
 
 #channels_container {
