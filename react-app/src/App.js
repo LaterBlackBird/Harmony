@@ -28,7 +28,7 @@ socket = io();
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     (async () => {
       await dispatch(authenticate());
@@ -37,7 +37,7 @@ function App() {
   }, [dispatch]);
 
   if (!loaded) {
-    socket.disconnect()
+    // socket.disconnect()
     return null;
   }
 
