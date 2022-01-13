@@ -17,7 +17,7 @@ function EditServerPage() {
   const { id } = useParams()
   useEffect(() => {
     setServerId(id)
-  })
+  }, [])
 
 
   const handleSubmit = async (e) => {

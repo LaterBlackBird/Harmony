@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
 import Message from '../MessagesEditForm';
 
-function Messages({socket}) {
+function Messages({ socket }) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
     const [editMessageForm, setEditMessageForm] = useState(false);
@@ -21,12 +21,12 @@ function Messages({socket}) {
             await dispatch(messageActions.getAllMessages(channelId));
         }
         fetchData();
-        
-        
+
+
     }, [dispatch, channelId]);
-    
+
     useEffect(() => {
-        if(messageState){
+        if (messageState) {
             setMessages(Object.values(messageState))
         }
     }, [messageState])
@@ -34,7 +34,9 @@ function Messages({socket}) {
     useEffect(() => {
 
         socket.on('message', async (message) => {
-            await dispatch(messageActions.updateMessages(message));
+            if (currentUser.id !== message.user_id) {
+                await dispatch(messageActions.updateMessages(message));
+            }
         })
 
         socket.on('message_delete', async (messageId) => {
@@ -42,8 +44,9 @@ function Messages({socket}) {
         })
 
         socket.on('message_edit', async (message) => {
-            console.log(message)
-            await dispatch(messageActions.updateMessages(message));
+            if (currentUser.id !== message.user_id) {
+                await dispatch(messageActions.updateMessages(message));
+            }
         })
 
     }, [])
@@ -51,11 +54,9 @@ function Messages({socket}) {
     const addMessage = async (e) => {
         e.preventDefault()
         let message = content;
-        let data = [channelId, message]
+        let data = [channelId, message, currentUser.username, currentUser.profile_image]
         let res = await dispatch(messageActions.addToMessages(data))
         let messageRes = res;
-        console.log(res)
-        console.log(socket)
         socket.emit('message', { ...messageRes })
     }
 
@@ -87,10 +88,15 @@ function Messages({socket}) {
 
     const messageComponents = messages.map((message) => {
         return (
-            <li key={message.id}>
-                <p>{message.content}</p>
-                {message.id == editId && showForm(message)}
-                {currentUser.id == message.user_id && buttons(message)}
+            <li key={message[0].id}>
+                <div>
+                    <img src={message[2]} alt="" />
+                </div>
+                <div>
+                    <p>{message[1]}</p>
+                    <p>{message[0].content}</p>
+                    {currentUser.id === message[0].user_id && buttons(message)}
+                </div>
             </li>
         )
     });

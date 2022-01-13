@@ -7,50 +7,50 @@ const JOIN_SERVER = 'server/JOIN_SERVER'
 const JOIN_ADMIN = 'server/JOIN_ADMIN'
 
 const joinAdmin = (server) => {
-  return{
+  return {
     type: JOIN_ADMIN,
-    payload:server
+    payload: server
   }
 }
 
 const joinServer = (server) => {
-  return{
+  return {
     type: JOIN_SERVER,
-    payload:server
+    payload: server
   }
 }
 
 
 const deleteServer = () => {
-  return{
+  return {
     type: DELETE_SERVER
   }
 }
 
 
 const editServer = (server) => {
-  return{
+  return {
     type: EDIT_SERVER,
     payload: server
   }
 }
 
 const createServer = (server) => {
-  return{
+  return {
     type: CREATE_SERVER,
     payload: server
   }
 }
 
 const setServer = (server) => {
-  return{
+  return {
     type: SET_SERVER,
-    payload:server
+    payload: server
   }
 }
 
 const getServer = (server) => {
-  return{
+  return {
     type: GET_SERVER,
     payload: server
   }
@@ -60,46 +60,46 @@ export const joinAsAdmin = ({ userId, serverId }) => async (dispatch) => {
   const res = await fetch(`/api/servers/${serverId}/joinAsAdmin`, {
     method: 'POST',
     headers: {
-      'Content-Type':'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       userId
     })
   })
 
-  if(res.ok){
+  if (res.ok) {
     const data = await res.json()
     dispatch(joinAdmin(data))
     return data
   }
-  else if (res.status < 500){
+  else if (res.status < 500) {
     const data = await res.json()
-    if(data.errors) return data.errors
+    if (data.errors) return data.errors
   }
   else {
     return ['An error occurred. Please try again']
   }
 }
 
-export const joinAServer = ( { userId, serverId } ) => async (dispatch) => {
+export const joinAServer = ({ userId, serverId }) => async (dispatch) => {
   const res = await fetch(`/api/servers/${serverId}/join`, {
     method: 'POST',
     headers: {
-      'Content-Type':'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       userId
     })
   })
 
-  if(res.ok){
+  if (res.ok) {
     const data = await res.json()
     dispatch(joinServer(data))
     return data
   }
-  else if (res.status < 500){
+  else if (res.status < 500) {
     const data = await res.json()
-    if(data.errors) return data.errors
+    if (data.errors) return data.errors
   }
   else {
     return ['An error occurred. Please try again']
@@ -118,7 +118,7 @@ export const editOneServer = (server) => async (dispatch) => {
   const res = await fetch(`/api/servers/${serverId}`, {
     method: 'PUT',
     headers: {
-      'Content-Type':'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       server_name,
@@ -126,14 +126,14 @@ export const editOneServer = (server) => async (dispatch) => {
     })
   })
 
-  if(res.ok){
+  if (res.ok) {
     const data = await res.json()
     dispatch(editServer(data))
     return data
   }
-  else if (res.status < 500){
+  else if (res.status < 500) {
     const data = await res.json()
-    if(data.errors) return data.errors
+    if (data.errors) return data.errors
   }
   else {
     return ['An error occurred. Please try again']
@@ -145,7 +145,7 @@ export const createAServer = (server) => async (dispatch) => {
   const res = await fetch('/api/servers/', {
     method: 'POST',
     headers: {
-      'Content-Type':'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       server_name,
@@ -153,15 +153,15 @@ export const createAServer = (server) => async (dispatch) => {
     })
   })
 
-  if(res.ok){
+  if (res.ok) {
     const data = await res.json()
     dispatch(createServer(data))
     console.log(data.id)
     return data
   }
-  else if (res.status < 500){
+  else if (res.status < 500) {
     const data = await res.json()
-    if(data.errors) return data.errors
+    if (data.errors) return data.errors
   }
   else {
     return ['An error occurred. Please try again']
@@ -189,26 +189,27 @@ export const setServers = () => async (dispatch) => {
 
 const serverReducer = (state = {}, action) => {
   let newState;
-  switch(action.type) {
+  switch (action.type) {
     case SET_SERVER:
-      newState = {...action.payload};
+      newState = { ...action.payload };
       return newState;
     case GET_SERVER:
-      newState = {...state, ...action.payload}
+      newState = { ...state, ...action.payload }
       return newState
     case CREATE_SERVER:
-      newState = {...state, ...action.payload}
+      console.log('Action Payload', action.payload)
+      newState = { ...state }
+      newState[action.payload.id]=action.payload
       return newState
     case JOIN_SERVER:
-      newState = {...state, ...action.payload}
+      newState = { ...state, ...action.payload }
       return newState
     case JOIN_ADMIN:
-      newState = {...state, ...action.payload}
+      newState = { ...state, ...action.payload }
       return newState
     default:
       return state;
-    }
+  }
 }
 
 export default serverReducer;
-
