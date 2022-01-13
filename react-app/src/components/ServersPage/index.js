@@ -10,10 +10,11 @@ function ServerPage() {
   const serversArr = Object.values(server)
   const session = useSelector(state => state.session);
   const user = session.user
+  const server_members = server.users
 
   useEffect(() => {
     dispatch(serverActions.setServers())
-  }, [dispatch])
+  }, [dispatch, server_members])
 
   const sendId = async (server) => {
     await dispatch(serverActions.deleteAServer(server.id))

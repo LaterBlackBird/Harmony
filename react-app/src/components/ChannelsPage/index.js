@@ -13,7 +13,7 @@ function ChannelsList() {
     let history = useHistory()
     const user = useSelector(state => state.session.user);
     const channels = useSelector(state => Object.values(state.channel));
-    const servers = useSelector(state => Object.values(state.server));
+    const servers = useSelector(state => Object.values(state.server))
     const session = useSelector(state => state.session);
     const currentUser = session?.user.id
 
@@ -55,6 +55,17 @@ function ChannelsList() {
         serverSelected = false;
     } else serverSelected = true;
 
+    const hideButton = () => {
+        const server = servers.filter(server => server.id === parseInt(serverId))
+
+        if(server[0]?.users.length > 0){
+            return false
+        }
+        else{
+            return true
+        }
+    }
+
     return (
         <div id='channels_container'>
             <h1>Channels:</h1>
@@ -73,7 +84,9 @@ function ChannelsList() {
                 {serverSelected &&
                     <>
                         <button onClick={joinServerButton}>Join this Server!</button>
-                        <button onClick={joinServerAdminButton}>Join as Admin!</button>
+                        {hideButton() === true &&
+                            <button onClick={joinServerAdminButton}>Join as Admin!</button>
+                        }
                         <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
                         <button onClick={() => sendId(serverId)}>Delete Server</button>
                     </>
