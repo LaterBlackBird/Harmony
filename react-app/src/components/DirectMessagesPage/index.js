@@ -3,6 +3,7 @@ import { useParams, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as directMessageActions from '../../store/direct_message';
 import * as messageActions from '../../store/message';
+import DirectMessage from '../DirectMessagesEditForm';
 // import { io } from 'socket.io-client';
 
 // let socket;
@@ -10,6 +11,8 @@ import * as messageActions from '../../store/message';
 function Messages({socket}) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
+    const [editMessageForm, setEditMessageForm] = useState(false);
+    const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
     const { serverId, conversationId } = useParams();
     const session = useSelector(state => state.session);
@@ -72,18 +75,28 @@ function Messages({socket}) {
     const buttons = (message) => {
         return (
             <>
-                <NavLink to={`/direct_messages/${message.id}`} exact={true} activeClassName='active'>
-                    Edit
-                </NavLink>
+                <button id={message.id} onClick={e => {
+                    setEditMessageForm(true)
+                    setEditId(message.id)
+                }}>Edit</button>
                 <button onClick={e => deleteMessage(message.id)}>Delete</button>
             </>
         )
     }
 
+    const showForm = (message) => {
+        return (
+            <>
+                {editMessageForm && <DirectMessage socket={socket} directMessageId={message.id} />}
+            </>
+        )
+    } 
+
     const messageComponents = messages.map((message) => {
         return (
             <li key={message.id}>
                 <p>{message.content}</p>
+                {message.id == editId && showForm(message)}
                 {currentUser.id == message.user_id && buttons(message)}
             </li>
         )
