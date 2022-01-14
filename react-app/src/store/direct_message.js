@@ -1,13 +1,17 @@
 //actions
-const GET_MESSAGES = 'messages/GET_MESSAGES';
-const ADD_MESSAGE = 'messages/ADD_MESSAGE';
-const DELETE_MESSAGE = 'messages/DELETE_MESSAGE'
+const GET_MESSAGES = 'direct_messages/GET_MESSAGES';
+// const RESET_MESSAGES = 'messages/RESET_MESSAGES';
+const ADD_MESSAGE = 'direct_messages/ADD_MESSAGE';
+const DELETE_MESSAGE = 'direct_messages/DELETE_MESSAGE'
 
 //action creators
 const getMessages = (messages) => ({
     type: GET_MESSAGES,
     messages,
 });
+// const resetMessages = () => ({
+//     type: GET_MESSAGES,
+// });
 const addMessage = (message) => ({
     type: ADD_MESSAGE,
     message
@@ -18,15 +22,23 @@ const deleteMessage = (messageId) => ({
 });
 
 //thunks
-export const getAllMessages = conversationId => async dispatch => {
-    const response = await fetch(`/api/conversations/${conversationId}/messages`);
-    const responseData = await response.json();
-    dispatch(getMessages(responseData.messages))
-}
+// export const getAllMessages = (data) => async dispatch => {
+//     const {conversationId, userId} = data;
+//     const response = await fetch(`/api/conversations/${conversationId}/messages/${userId}`);
+//     const responseData = await response.json();
+//     dispatch(getMessages(responseData.messages))
+//     // else {
+//     //     dispatch(resetMessages())
+//     // }
+// }
 
-export const getAllDirectMessages = conversationId => async dispatch => {
-    const response = await fetch(`/api/conversations/${conversationId}/messages`);
+export const getAllDirectMessages = data => async dispatch => {
+    console.log('.........................hey')
+    const {conversationId, userId} = data;
+    console.log(conversationId, userId)
+    const response = await fetch(`/api/conversations/${conversationId}/messages/${userId}`);
     const responseData = await response.json();
+    console.log(responseData)
     dispatch(getMessages(responseData.messages))
 }
 
@@ -49,6 +61,10 @@ export const addToMessages = (data) => async dispatch => {
         return response;
     }
 }
+
+// export const resetAllMessages = () => async dispatch => {
+//     dispatch(resetMessages())
+// }
 
 export const editAMessage = (data) => async dispatch => {
     const [messageId, content] = data;
@@ -92,9 +108,12 @@ const directMessageReducer = (state = null, action) => {
     switch (action.type) {
         case GET_MESSAGES:
             action.messages.forEach(message => {
-                const key = message.id;
+                const key = message[0].id;
                 newState[key] = message;
             })
+            if(action.messages[0][0].id == 0) {
+                return newState = {}
+            }
             return newState;
         case ADD_MESSAGE:
             newState = {...state};
@@ -104,6 +123,9 @@ const directMessageReducer = (state = null, action) => {
             newState = {...state};
             delete newState[action.messageId];
             return newState;
+        // case RESET_MESSAGES:
+        //     newState = {}
+        //     return newState
         default:
             return state;
     }

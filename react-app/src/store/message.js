@@ -19,16 +19,18 @@ const deleteMessage = (messageId) => ({
 
 //thunks
 export const getAllMessages = channelId => async dispatch => {
+    console.log('...............hey')
     const response = await fetch(`/api/channels/${channelId}/messages`);
     const responseData = await response.json();
+    console.log(responseData)
     dispatch(getMessages(responseData.messages))
 }
 
-export const getAllDirectMessages = conversationId => async dispatch => {
-    const response = await fetch(`/api/conversations/${conversationId}/messages`);
-    const responseData = await response.json();
-    dispatch(getMessages(responseData.messages))
-}
+// export const getAllDirectMessages = conversationId => async dispatch => {
+//     const response = await fetch(`/api/conversations/${conversationId}/messages`);
+//     const responseData = await response.json();
+//     dispatch(getMessages(responseData.messages))
+// }
 
 export const addToMessages = (data) => async dispatch => {
     const [ channelId, message, username, image ] = data
@@ -91,10 +93,14 @@ const messageReducer = (state = null, action) => {
     let newState = {};
     switch (action.type) {
         case GET_MESSAGES:
+            console.log(action)
             action.messages.forEach(message => {
                 const key = message[0].id;
                 newState[key] = message;
             })
+            if(action.messages[0][0].id == 0) {
+                return newState = {}
+            }
             return newState;
         case ADD_MESSAGE:
             newState = {...state};
