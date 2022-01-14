@@ -145,7 +145,7 @@ function ChannelsList() {
 
             </div>
             <div id='members_container'>
-                {members && members.map((user) => 
+                {members && serverSelected && members.map((user) => 
                     <div>
                         <div key={user.id} className="server_info_block">
                             <a onClick={() => startConversation({userId: user.id})} className='server_a'>
