@@ -14,6 +14,7 @@ function ChannelsList() {
     const user = useSelector(state => state.session.user);
     const channels = useSelector(state => Object.values(state.channel));
     const servers = useSelector(state => Object.values(state.server))
+    const server = servers.filter(server => server.id === parseInt(serverId))
     const session = useSelector(state => state.session);
     const currentUser = session?.user.id
 
@@ -43,6 +44,9 @@ function ChannelsList() {
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
         }
+
+        document.title = `Harmony / ${server[0]?.server_name}`
+
     }, [dispatch, serverId, history])
 
     //if user is not logged in and reaches this page, return them to the login page
@@ -56,8 +60,6 @@ function ChannelsList() {
     } else serverSelected = true;
 
     const hideButton = () => {
-        const server = servers.filter(server => server.id === parseInt(serverId))
-
         if(server[0]?.users.length > 0){
             return false
         }
@@ -68,11 +70,13 @@ function ChannelsList() {
 
     return (
         <div id='channels_container'>
-            <h1>Channels:</h1>
+            <div id='server_title_block'>
+                <h4>{server[0]?.server_name}</h4>
+            </div>
             {serverSelected &&
                 channels.map(channel =>
                     <div key={channel.id}>
-                        <h2><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+                        <p><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}><i class="fas fa-hashtag"></i>  {channel.channel_name}</Link></p>
                         <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
                     </div>
                 )}
