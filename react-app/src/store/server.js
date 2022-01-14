@@ -205,7 +205,8 @@ const serverReducer = (state = {}, action) => {
       newState[action.payload.id]=action.payload
       return newState
     case JOIN_SERVER:
-      newState = { ...state, ...action.payload }
+      newState = { ...state }
+      newState[action.payload.id]=action.payload
       return newState
     case JOIN_ADMIN:
       newState = { ...state, ...action.payload }
