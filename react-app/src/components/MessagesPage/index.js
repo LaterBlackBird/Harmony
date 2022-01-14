@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
+import Message from '../MessagesEditForm';
 
-function Messages({socket}) {
+function Messages({ socket }) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
+    const [editMessageForm, setEditMessageForm] = useState(false);
+    const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
-    const { channelId } = useParams();
+    const { serverId, channelId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
+    // const [messageToEdit, setMessageToEdit] = useState({'content': 'empty'})
     const currentUser = session.user;
+    const [users, setUsers] = useState(null);
+    const history = useHistory();
+    
 
     useEffect(() => {
         async function fetchData() {
             await dispatch(messageActions.getAllMessages(channelId));
         }
         fetchData();
-        
-        
     }, [dispatch, channelId]);
-    
+
     useEffect(() => {
-        if(messageState){
+        if (messageState) {
             setMessages(Object.values(messageState))
         }
     }, [messageState])
@@ -30,7 +35,9 @@ function Messages({socket}) {
     useEffect(() => {
 
         socket.on('message', async (message) => {
-            await dispatch(messageActions.updateMessages(message));
+            if (currentUser.id !== message.user_id) {
+                await dispatch(messageActions.updateMessages(message));
+            }
         })
 
         socket.on('message_delete', async (messageId) => {
@@ -38,8 +45,9 @@ function Messages({socket}) {
         })
 
         socket.on('message_edit', async (message) => {
-            console.log(message)
-            await dispatch(messageActions.updateMessages(message));
+            if (currentUser.id !== message.user_id) {
+                await dispatch(messageActions.updateMessages(message));
+            }
         })
 
     }, [])
@@ -47,16 +55,13 @@ function Messages({socket}) {
     const addMessage = async (e) => {
         e.preventDefault()
         let message = content;
-        let data = [channelId, message]
+        let data = [channelId, message, currentUser.username, currentUser.profile_image]
         let res = await dispatch(messageActions.addToMessages(data))
         let messageRes = res;
-        console.log(res)
-        console.log(socket)
         socket.emit('message', { ...messageRes })
     }
 
     const deleteMessage = async (id) => {
-        console.log('hello')
         await dispatch(messageActions.removeAMessage(id))
         socket.emit('message_delete', { id })
     }
@@ -64,32 +69,53 @@ function Messages({socket}) {
     const buttons = (message) => {
         return (
             <>
-                <NavLink to={`/messages/${message.id}`} exact={true} activeClassName='active'>
-                    Edit
-                </NavLink>
+                <button id={message.id} onClick={e => {
+                    setEditMessageForm(true)
+                    setEditId(message.id)
+                }}>Edit</button>
                 <button onClick={e => deleteMessage(message.id)}>Delete</button>
+            </>
+        )
+    }
+
+    const showForm = (message) => {
+        return (
+            <>
+                {editId == message.id && <Message socket={socket} messageId={message.id} />}
             </>
         )
     }
 
     const messageComponents = messages.map((message) => {
         return (
-            <li key={message.id}>
-                <p>{message.content}</p>
-                {currentUser.id == message.user_id && buttons(message)}
+            <li key={message[0].id}>
+                <div>
+                    <img src={message[2]} alt="" />
+                </div>
+                <div>
+                    <p>{message[1]}</p>
+                    <p>{message[0].content}</p>
+                    {editMessageForm && showForm(message[0])}
+                    {currentUser.id === message[0].user_id && buttons(message[0])}
+                </div>
             </li>
         )
     });
 
+    
+
     return (
-        <div id='message_container'>
-            <h1>Messages: </h1>
-            <ul>{messageComponents}</ul>
-            <form onSubmit={addMessage}>
-                <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
-                <button>Submit</button>
-            </form>
-        </div>
+        <>
+            <div id='message_container'>
+                <h1>Messages: </h1>
+                <ul>{messageComponents}</ul>
+                <form onSubmit={addMessage}>
+                    <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
+                    <button>Submit</button>
+                </form>
+            </div>
+            
+        </>
     )
 };
 

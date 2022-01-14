@@ -111,7 +111,12 @@ def delete_conversation(conversation_id):
 def messages(conversation_id):
     conversation = db.session.query(Conversation).get_or_404(conversation_id)
     messages = Direct_Message.query.filter(Direct_Message.conversation_id == conversation_id)
-    return {'messages': [message.to_dict() for message in messages if message.user_id == conversation.from_user or message.user_id == conversation.to_user]}
+    messages_and_users = []
+    if messages[0].user_id == conversation.from_user or messages[0].user_id == conversation.to_user:
+        for message in messages:
+            user = User.query.get_or_404(message.user_id)
+            messages_and_users.append([message.to_dict(), user.username, user.profile_image])
+        return {'messages': messages_and_users}
 
 # @socketio.event
 # def message(data):

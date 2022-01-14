@@ -3,6 +3,7 @@ import { useParams, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as directMessageActions from '../../store/direct_message';
 import * as messageActions from '../../store/message';
+import DirectMessage from '../DirectMessagesEditForm';
 // import { io } from 'socket.io-client';
 
 // let socket;
@@ -10,6 +11,8 @@ import * as messageActions from '../../store/message';
 function Messages({socket}) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
+    const [editMessageForm, setEditMessageForm] = useState(false);
+    const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
     const { serverId, conversationId } = useParams();
     const session = useSelector(state => state.session);
@@ -21,10 +24,10 @@ function Messages({socket}) {
             await dispatch(directMessageActions.getAllMessages(conversationId));
         }
         fetchData();
-        
-        
+
+
     }, [dispatch, conversationId]);
-    
+
     useEffect(() => {
         if(messageState){
             setMessages(Object.values(messageState))
@@ -43,7 +46,6 @@ function Messages({socket}) {
         })
 
         socket.on('message_edit', async (message) => {
-            console.log(message)
             await dispatch(messageActions.updateMessages(message));
         })
 
@@ -55,16 +57,13 @@ function Messages({socket}) {
     const addMessage = async (e) => {
         e.preventDefault()
         let message = content;
-        let data = [conversationId, message]
+        let data = [conversationId, message, currentUser.username, currentUser.profile_image]
         let res = await dispatch(directMessageActions.addToMessages(data))
         let messageRes = res;
-        console.log(res)
-        console.log(socket)
         socket.emit('message', { ...messageRes })
     }
 
     const deleteMessage = async (id) => {
-        console.log('hello')
         await dispatch(directMessageActions.removeAMessage(id))
         socket.emit('message_delete', { id })
     }
@@ -72,19 +71,35 @@ function Messages({socket}) {
     const buttons = (message) => {
         return (
             <>
-                <NavLink to={`/direct_messages/${message.id}`} exact={true} activeClassName='active'>
-                    Edit
-                </NavLink>
+                <button id={message.id} onClick={e => {
+                    setEditMessageForm(true)
+                    setEditId(message.id)
+                }}>Edit</button>
                 <button onClick={e => deleteMessage(message.id)}>Delete</button>
+            </>
+        )
+    }
+
+    const showForm = (message) => {
+        return (
+            <>
+                {editId == message.id && <DirectMessage socket={socket} directMessageId={message.id} />}
             </>
         )
     }
 
     const messageComponents = messages.map((message) => {
         return (
-            <li key={message.id}>
-                <p>{message.content}</p>
-                {currentUser.id == message.user_id && buttons(message)}
+            <li key={message[0].id}>
+                <div>
+                    <img src={message[2]} alt="" />
+                </div>
+                <div>
+                    <p>{message[1]}</p>
+                    <p>{message[0].content}</p>
+                    {editMessageForm && showForm(message[0])}
+                    {currentUser.id === message[0].user_id && buttons(message[0])}
+                </div>
             </li>
         )
     });
