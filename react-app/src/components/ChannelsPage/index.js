@@ -22,8 +22,8 @@ function ChannelsList() {
     let [displayUsers, setDisplayUsers] = useState(false)
     const currentUser = session?.user.id
     let [members, setMembers] = useState(null)
+    const [addAdmin, setAddAdmin] = useState(false)
 
-    
     async function fetchData() {
         const res = await fetch(`/api/users/members/${serverId}`)
         const responseData = await res.json()
@@ -39,9 +39,10 @@ function ChannelsList() {
         return
     }
 
-    const joinServerAdminButton = () => {
-        const userId = currentUser
-        return dispatch(serverActions.joinAsAdmin({ userId, serverId }))
+    const joinServerAdminButton = async ({userId}) => {
+        // const userId = currentUser
+        await dispatch(serverActions.joinAsAdmin({ userId, serverId }))
+        fetchData()
     }
 
     const sendId = async (serverId) => {
@@ -117,6 +118,15 @@ function ChannelsList() {
                 <div className="serverOptions">
                     {serverSelected &&
                         <>  
+                            {users && users.map((user) => 
+                                <div>
+                                    <div key={user.id} className="users_info_block">
+                                        <a onClick={() => joinServerButton({userId: user.id})} className='server_a'>
+                                            <img className={`server_image ${user.id === parseInt(serverId) ? 'selected' : ''}`} src={user.profile_image} alt={user.username} /></a>
+                                        <p>{`${user.username}`}</p>
+                                    </div>
+                                </div>
+                            )}
                             { displayUsers && (
                                 <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
                             )}
@@ -129,25 +139,27 @@ function ChannelsList() {
                             }
                             <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
                             <button onClick={() => sendId(serverId)}>Delete Server</button>
+                            <div>
+                                <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
+                            </div>
+                            {addAdmin && members && serverSelected && members.map((user) => 
+                                <div>
+                                    <div key={user.id} className="member_info_block">
+                                        <a onClick={() => joinServerAdminButton({userId: user.id})} className='server_a'>
+                                            <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
+                                        <p>{`${user.username}`}</p>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     }
                 </div>
-                {}
-                {users && users.map((user) => 
-                    <div>
-                        <div key={user.id} className="server_info_block">
-                            <a onClick={() => joinServerButton({userId: user.id})} className='server_a'>
-                                <img className={`server_image ${user.id === parseInt(serverId) ? 'selected' : ''}`} src={user.profile_image} alt={user.username} /></a>
-                            <p>{`${user.username}`}</p>
-                        </div>
-                    </div>
-                )}
 
             </div>
             <div id='members_container'>
                 {members && serverSelected && members.map((user) => 
                     <div>
-                        <div key={user.id} className="server_info_block">
+                        <div key={user.id} className="member_info_block">
                             <a onClick={() => startConversation({userId: user.id})} className='server_a'>
                                 <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
                             <p>{`${user.username}`}</p>

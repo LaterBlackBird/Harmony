@@ -57,8 +57,8 @@ const getServer = (server) => {
 }
 
 export const joinAsAdmin = ({ userId, serverId }) => async (dispatch) => {
-  const res = await fetch(`/api/servers/${serverId}/joinAsAdmin`, {
-    method: 'POST',
+  const res = await fetch(`/api/servers/${serverId}/add_admin`, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
