@@ -58,7 +58,7 @@ function Messages({socket}) {
     const addMessage = async (e) => {
         e.preventDefault()
         let message = content;
-        let data = [conversationId, message]
+        let data = [conversationId, message, currentUser.username, currentUser.profile_image]
         let res = await dispatch(directMessageActions.addToMessages(data))
         let messageRes = res;
         console.log(res)
@@ -87,17 +87,23 @@ function Messages({socket}) {
     const showForm = (message) => {
         return (
             <>
-                {editMessageForm && <DirectMessage socket={socket} directMessageId={message.id} />}
+                {editId == message.id && <DirectMessage socket={socket} directMessageId={message.id} />}
             </>
         )
     } 
 
     const messageComponents = messages.map((message) => {
         return (
-            <li key={message.id}>
-                <p>{message.content}</p>
-                {message.id == editId && showForm(message)}
-                {currentUser.id == message.user_id && buttons(message)}
+            <li key={message[0].id}>
+                <div>
+                    <img src={message[2]} alt="" />
+                </div>
+                <div>
+                    <p>{message[1]}</p>
+                    <p>{message[0].content}</p>
+                    {editMessageForm && showForm(message[0])}
+                    {currentUser.id === message[0].user_id && buttons(message[0])}
+                </div>
             </li>
         )
     });

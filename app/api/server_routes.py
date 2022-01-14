@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, session, request
-from app.models import Server, db, User
+from app.models import Server, db, User, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
 from app.models import Server, db, Channel
 from app.forms import CreateServerForm, UpdateServerForm
@@ -28,18 +28,28 @@ def server_by_id(id):
 @server_routes.route('/', methods=['POST'])
 def create_server():
   form = CreateServerForm()
+  data = request.json
 
   server_name = form.data['server_name']
   server_image = form.data['server_image']
 
   new_server = Server(server_name=server_name, server_image=server_image)
-
   try:
     db.session.add(new_server)
     db.session.commit()
-    return new_server.to_dict()
   except:
     return "There was an error creating that server"
+    
+  new_admin = Server_Members(server_id=new_server.id,
+                            user_id=data['currentUser'],
+                            admin=True)
+  print(new_admin)
+  try:
+    db.session.add(new_admin)
+    db.session.commit()
+    return new_server.to_dict()
+  except:
+    return "There was an error creating admin"
 
 
 @server_routes.route('/<int:id>', methods=['PUT'])
@@ -65,6 +75,16 @@ def delete_server(id):
     return "Successfully deleted the server!"
   except:
     return "There was an error deleting the server!"
+
+@server_routes.route('/<int:server_id>/add_admin', methods=['PATCH'])
+def add_admin(server_id):
+  user = request.json
+  user_id = user['userId']
+
+  member = db.session.query(Server_Members).filter(Server_Members.server_id == server_id, Server_Members.user_id == user_id).first()
+  member.admin = True
+  db.session.commit()
+  return member.to_dict()
 
 # Get all channels associated with the current server
 @server_routes.route('/<int:serverId>/channels')
@@ -104,16 +124,13 @@ def join_server(serverId):
 
   return server_object.to_dict()
 
-@server_routes.route('/<int:serverId>/joinAsAdmin', methods=['POST'])
-@login_required
-def join_server_as_admin(serverId):
-  userId = request.json['userId']
+# @server_routes.route('/<int:server_id>/joinAsAdmin', methods=['PATCH'])
+# @login_required
+# def join_server_as_admin(server_id):
+#   user = request.json
+#   user_id = user['userId']
 
-
-  user_object = User.query.filter(User.id == userId).first()
-
-  server_object = Server.query.get_or_404(serverId)
-
-  server_object.add_admin(user_object)
-
-  return server_object.to_dict()
+#   member = db.session.query(Server_Members).filter(Server_Members.server_id == server_id, Server_Members.user_id == user_id).first()
+#   member.admin = True
+#   db.session.commit()
+#   return member.to_dict()

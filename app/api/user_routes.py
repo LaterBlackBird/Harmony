@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from flask_login import login_required
-from app.models import User
+from app.models import db, User, Server_Members, Channel
 
 
 user_routes = Blueprint('users', __name__)
@@ -12,6 +12,20 @@ def users():
     users = User.query.all()
     return {'users': [user.to_dict() for user in users]}
 
+@user_routes.route('/<username>')
+@login_required
+def users_filtered(username):
+    users = User.query.filter(User.username.ilike(f'{username}%')).all()
+    return {'users': [user.to_dict() for user in users]}
+
+@user_routes.route('/members/<int:server_id>')
+@login_required
+def users_filtered_members(server_id):
+    members = db.session.query(Server_Members).filter(Server_Members.server_id == server_id).all()
+    users = []
+    for member in members:
+        users.append(User.query.get_or_404(member.user_id))
+    return {'users': [user.to_dict() for user in users]}
 
 @user_routes.route('/<int:id>')
 @login_required

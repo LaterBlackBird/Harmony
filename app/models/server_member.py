@@ -28,4 +28,11 @@ class Server_Members(object):
         self.user_id = user_id
         self.admin = admin
 
+    def to_dict(self):
+        return {
+            'server_id': self.server_id,
+            'user_id': self.user_id,
+            'admin': self.admin,
+        }
+
 db.mapper(Server_Members, server_members)
