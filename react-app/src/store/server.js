@@ -140,8 +140,7 @@ export const editOneServer = (server) => async (dispatch) => {
   }
 }
 
-export const createAServer = (server) => async (dispatch) => {
-  const { server_name, server_image, currentUser } = server;
+export const createAServer = (server_name, imageUrl, currentUser) => async (dispatch) => {
   const res = await fetch('/api/servers/', {
     method: 'POST',
     headers: {
@@ -149,14 +148,13 @@ export const createAServer = (server) => async (dispatch) => {
     },
     body: JSON.stringify({
       server_name,
-      server_image
+      server_image: imageUrl
     })
   })
 
   if (res.ok) {
     const data = await res.json()
     dispatch(createServer(data))
-    console.log(data.id)
     return data
   }
   else if (res.status < 500) {
@@ -197,7 +195,6 @@ const serverReducer = (state = {}, action) => {
       newState = { ...state, ...action.payload }
       return newState
     case CREATE_SERVER:
-      console.log('Action Payload', action.payload)
       newState = { ...state }
       newState[action.payload.id]=action.payload
       return newState
