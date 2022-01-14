@@ -60,14 +60,30 @@ function CreateServerPage() {
     setImage(file);
   }
 
+  const dropHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e.dataTransfer)
+    let data = e.dataTransfer.files;
+    console.log(data['0'])
+    setImage(data['0']);
+  }
+
+  function allowDrop(e) {
+    e.target.style.backgroundColor = 'blue';
+    e.preventDefault();
+  }
+
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className='create_server_page'>
+      <form className= 'create_server_form' onSubmit={handleSubmit}>
+        <div className='main_section'>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
-        <h1>Create a Server!</h1>
+        <h1 className='user_auth_welcome'>Create a Server!</h1>
+        <div className='create_server_input'>
         <label>
           Server name
           <input
@@ -78,6 +94,8 @@ function CreateServerPage() {
             required
           />
         </label>
+        </div>
+        <div className='create_server_input'>
         <label>
           Server Image
           <input
@@ -87,9 +105,21 @@ function CreateServerPage() {
             onChange={updateImage}
             required
           />
-        </label>
+          </label>
+          <label>
+            Drag and Drop Image Zone
+          <input
+              className='drop_zone'
+              type='file'
+              accept="image/*"
+              onDrop={dropHandler}
+              onDragOver={allowDrop}
+          />
+          </label>
+        </div>
         <button type="submit">Create Server</button>
         {(imageLoading) && <p>Loading...</p>}
+        </div>
       </form>
     </div>
   )
