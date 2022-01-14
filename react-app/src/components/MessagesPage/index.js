@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
 import Message from '../MessagesEditForm';
@@ -10,19 +10,20 @@ function Messages({ socket }) {
     const [editMessageForm, setEditMessageForm] = useState(false);
     const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
-    const { channelId } = useParams();
+    const { serverId, channelId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
     // const [messageToEdit, setMessageToEdit] = useState({'content': 'empty'})
     const currentUser = session.user;
+    const [users, setUsers] = useState(null);
+    const history = useHistory();
+    
 
     useEffect(() => {
         async function fetchData() {
             await dispatch(messageActions.getAllMessages(channelId));
         }
         fetchData();
-
-
     }, [dispatch, channelId]);
 
     useEffect(() => {
@@ -80,7 +81,7 @@ function Messages({ socket }) {
     const showForm = (message) => {
         return (
             <>
-                {editMessageForm && <Message socket={socket} messageId={message.id} />}
+                {editId == message.id && <Message socket={socket} messageId={message.id} />}
             </>
         )
     }
@@ -94,21 +95,27 @@ function Messages({ socket }) {
                 <div>
                     <p>{message[1]}</p>
                     <p>{message[0].content}</p>
-                    {currentUser.id === message[0].user_id && buttons(message)}
+                    {editMessageForm && showForm(message[0])}
+                    {currentUser.id === message[0].user_id && buttons(message[0])}
                 </div>
             </li>
         )
     });
 
+    
+
     return (
-        <div id='message_container'>
-            <h1>Messages: </h1>
-            <ul>{messageComponents}</ul>
-            <form onSubmit={addMessage}>
-                <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
-                <button>Submit</button>
-            </form>
-        </div>
+        <>
+            <div id='message_container'>
+                <h1>Messages: </h1>
+                <ul>{messageComponents}</ul>
+                <form onSubmit={addMessage}>
+                    <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
+                    <button>Submit</button>
+                </form>
+            </div>
+            
+        </>
     )
 };
 

@@ -21,8 +21,8 @@ input {
 #main_page {
   display: grid;
   grid-template-areas:
-    'servers selections navbar'
-    'servers selections messages';
+    'servers selections navbar navbar'
+    'servers selections messages members';
   grid-template-columns: 80px 25vw 50vw;
 }
 
@@ -71,6 +71,10 @@ nav ul a {
 
 #message_container {
   grid-area: messages;
+  background-color: #202225;
+}
+#members_container {
+  grid-area: members;
   background-color: #202225;
 }
 

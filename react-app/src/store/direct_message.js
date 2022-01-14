@@ -31,7 +31,7 @@ export const getAllDirectMessages = conversationId => async dispatch => {
 }
 
 export const addToMessages = (data) => async dispatch => {
-    const [ conversationId, message ] = data
+    const [ conversationId, message, username, image ] = data
     const res = await fetch(`/api/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: {
@@ -43,8 +43,8 @@ export const addToMessages = (data) => async dispatch => {
     })
     if(res.ok){
         let response = await res.json()
-
-        dispatch(addMessage(response))
+        const messageAndUserInfo = [response, username, image]
+        dispatch(addMessage(messageAndUserInfo))
 
         return response;
     }
