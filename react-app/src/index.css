@@ -429,3 +429,9 @@ button {
 .tippy-arrow::before {
   color: black;
 }
+
+.drop_zone {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+}
