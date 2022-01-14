@@ -81,6 +81,20 @@ const SignUpForm = () => {
     setImage(file);
   }
 
+  const dropHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e.dataTransfer)
+    let data = e.dataTransfer.files;
+    console.log(data['0'])
+    setImage(data['0']);
+  }
+
+  function allowDrop(e) {
+    e.target.style.backgroundColor = 'blue';
+    e.preventDefault();
+  }
+
   if (user) {
     return <Redirect to='/' />;
   }
@@ -133,12 +147,20 @@ const SignUpForm = () => {
             ></input>
           </div>
           <div>
-            <input
+            {/* <input
               type="file"
               accept="image/*"
               onChange={updateImage}
               id='profile_pic_picker'
+            /> */}
+            <input 
+              className='drop_zone' 
+              type='file' 
+              accept="image/*" 
+              onDrop={dropHandler} 
+              onDragOver={allowDrop}
             />
+
           </div>
           <button type='submit'>Sign Up</button>
           {(imageLoading) && <p>Loading...</p>}
