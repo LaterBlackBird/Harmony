@@ -128,7 +128,7 @@ export const editOneServer = (server) => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json()
-    dispatch(editServer(data))
+    dispatch(createServer(data))
     return data
   }
   else if (res.status < 500) {
@@ -141,6 +141,7 @@ export const editOneServer = (server) => async (dispatch) => {
 }
 
 export const createAServer = (server_name, imageUrl, currentUser) => async (dispatch) => {
+  let server_image = imageUrl
   const res = await fetch('/api/servers/', {
     method: 'POST',
     headers: {
@@ -148,7 +149,7 @@ export const createAServer = (server_name, imageUrl, currentUser) => async (disp
     },
     body: JSON.stringify({
       server_name,
-      server_image: imageUrl,
+      server_image,
       currentUser
     })
   })
@@ -187,10 +188,14 @@ export const setServers = () => async (dispatch) => {
 
 
 const serverReducer = (state = {}, action) => {
-  let newState;
+  let newState = {};
   switch (action.type) {
     case SET_SERVER:
-      newState = { ...action.payload };
+      console.log(action.payload)
+      action.payload.forEach(server => {
+        const key = server.id;
+        newState[key] = server;
+      })
       return newState;
     case GET_SERVER:
       newState = { ...state, ...action.payload }
