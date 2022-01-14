@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import * as serverActions from '../../store/server'
 import { useHistory } from 'react-router';
@@ -95,6 +95,7 @@ function EditServerPage() {
           />
         </label>
         <button type="submit">Edit Server</button>
+        {(imageLoading) && <p>Loading...</p>}
       </form>
     </div>
   )

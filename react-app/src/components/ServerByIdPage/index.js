@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as serverActions from '../../store/server'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 function ServerByIdPage() {
   const dispatch = useDispatch()
@@ -19,11 +19,11 @@ function ServerByIdPage() {
 
   useEffect(() => {
     dispatch(serverActions.getOneServer(id))
-  },[dispatch])
+  },[dispatch, id])
 
   return(
     <div>
-      <img src={server[0]?.server_image}></img>
+      <img alt='server' src={server[0]?.server_image }></img>
       <h1>{server[0]?.server_name}</h1>
       <h2>This is my server</h2>
       <h2>I am just typing to see if this works!</h2>

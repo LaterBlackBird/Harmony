@@ -16,32 +16,23 @@ function ServerPage() {
     dispatch(serverActions.setServers())
   }, [dispatch, server_members])
 
-  const sendId = async (server) => {
-    await dispatch(serverActions.deleteAServer(server.id))
-    dispatch(serverActions.setServers())
-  }
-
-  const refresh = () => {
-    dispatch(serverActions.setServers())
-  }
-
   return (
     <div id='servers_container'>
-      {/* <h1>Servers:</h1> */}
-      {serversArr?.map(server =>
-          <div key={server.id} className="server_info_block">
-            <Link to={`/servers/${server.id}/channels`} className='server_link'><img className={`server_image ${server.id === parseInt(serverId) ? 'selected' : ''}`} src={server.server_image} alt={server.server_name} /></Link>
-            <p className='hide'>{`${server.server_name}`}</p>
-          </div>
-      )}
-      <div>
-        <Link to={`/servers/new`} id='server_add_icon'><i className="fas fa-plus"></i></Link>
-        <p className='hide'>Add A Server</p>
-      </div>
-      <div>
-        <NavLink to={`/servers/0/conversations/${user.id}`} exact={true} activeClassName='active'>
-            Conversations
+      <div className="server_info_block" id='convo_block'>
+        <NavLink to={`/servers/0/conversations/${user.id}`} exact={true} activeClassName='active' className='server_image server_icon'>
+          <i className="far fa-comments"></i>
         </NavLink>
+        <div id="guild_seperator"></div>
+      </div>
+      {serversArr?.map(server =>
+        <div key={server.id} className="server_info_block">
+          <Link to={`/servers/${server.id}/channels`} className='server_link'><img className={`server_image ${server.id === parseInt(serverId) ? 'selected' : ''}`} src={server.server_image} alt={server.server_name} /></Link>
+          <p className='hide'>{`${server.server_name}`}</p>
+        </div>
+      )}
+      <div className='server_info_block'>
+        <Link to={`/servers/new`} className='server_image server_icon'><i className="fas fa-plus"></i></Link>
+        <p className='hide'>Add A Server</p>
       </div>
     </div>
   )
