@@ -123,10 +123,11 @@ function ChannelsList() {
     //             )}
     //         {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
     //         {!serverSelected && <h3>Select A Server</h3>}
-    // const startConversation = async ({ userId }) => {
-    //     let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
-    //     history.push(`/servers/0/conversations/${res.id}/messages`)
     // }
+    const startConversation = async ({ userId }) => {
+        let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
+        history.push(`/servers/0/conversations/${res.id}/messages`)
+    }
 
     return (
 
