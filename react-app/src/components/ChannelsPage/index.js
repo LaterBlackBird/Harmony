@@ -178,26 +178,30 @@ function ChannelsList() {
                     }
                 </div>
 
+
                 <div id="channel_list">
                     {serverSelected &&
                         channels.map(channel =>
                             <div key={channel.id} className='channel_name_block'>
                                 <Link
                                     to={`/servers/${serverId}/channels/${channel.id}/messages`} >
-                                    <span className='channel_link'>
-                                        <i className="fas fa-hashtag"></i>
-                                        {channel.channel_name.toLowerCase()}
-                                        <i class="fas fa-cog"></i>
-                                    </span>
+                                    <div className="channel_link">
+                                        <span>
+                                            <i className="fas fa-hashtag"></i>
+                                            {channel.channel_name.toLowerCase()}
+                                        </span>
+                                        {isAdmin && (
+                                            <Link to={`/servers/${serverId}/channels/${channel.id}/edit`} className='hide'><i className="fas fa-cog hide"></i></Link>
+                                        )}
+                                    </div>
                                 </Link>
-                                {isAdmin && (
-                                    <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
-                                )}
+
                             </div>
                         )}
                 </div>
-
             </div>
+
+
             <div id='members_container'>
                 {members && serverSelected && members.map((user) =>
                     <div>
