@@ -16,12 +16,14 @@ function Messages({socket}) {
     const dispatch = useDispatch();
     const { serverId, conversationId } = useParams();
     const session = useSelector(state => state.session);
-    const messageState = useSelector(state => state.message)
+    const messageState = useSelector(state => state.direct_message)
     const currentUser = session.user;
 
     useEffect(() => {
         async function fetchData() {
-            await dispatch(directMessageActions.getAllMessages(conversationId));
+            const userId = currentUser.id
+            // await dispatch(directMessageActions.resetAllMessages())
+            await dispatch(directMessageActions.getAllDirectMessages({conversationId, userId}));
         }
         fetchData();
 
