@@ -176,8 +176,8 @@ export const getOneServer = (id) => async (dispatch) => {
   dispatch(getServer(data.server))
 }
 
-export const setServers = () => async (dispatch) => {
-  const res = await fetch('/api/servers', {
+export const setServers = (userId) => async (dispatch) => {
+  const res = await fetch(`/api/servers/user/${userId}`, {
     method: 'GET'
   })
 

@@ -10,10 +10,15 @@ from flask_login import login_required
 server_routes = Blueprint('servers', __name__)
 
 
-@server_routes.route('/')
-def servers():
+@server_routes.route('/user/<int:userId>')
+def servers(userId):
   servers = Server.query.all()
-  return {'servers': [server.to_dict() for server in servers]}
+  new_servers = []
+  for server in servers:
+    for user in server.users:
+      if(user.id == userId):
+        new_servers.append(server)
+  return {'servers': [server.to_dict() for server in new_servers]}
 
 @server_routes.route('/<int:id>')
 def server_by_id(id):
@@ -40,7 +45,7 @@ def create_server():
     db.session.commit()
   except:
     return "There was an error creating that server"
-    
+
   new_admin = Server_Members(server_id=new_server.id,
                             user_id=data['currentUser'],
                             admin=True)
