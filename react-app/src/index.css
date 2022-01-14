@@ -45,7 +45,9 @@ nav ul a {
 #servers_container {
   grid-area: servers;
   background-color: #2f3136;
+  box-sizing: border-box;
   height: 100vh;
+  width: 80px;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -55,10 +57,12 @@ nav ul a {
   display: none;
 }
 
-#channels_container, #conversations_container {
+#channels_container,
+#conversations_container {
   grid-area: selections;
   background-color: #36393f;
 }
+
 #message_container {
   grid-area: messages;
   background-color: #202225;
@@ -198,8 +202,10 @@ button {
 }
 
 .server_info_block {
-  display: inline;
-  height: 4.5rem;
+  display: flex;
+  box-sizing: border-box;
+  height: 65px;
+  width: 80px;
 }
 
 .server_info_block p,
@@ -213,43 +219,58 @@ button {
   vertical-align: middle;
 }
 
-.server_link:hover+p{
-  display: inherit;
+.server_link {
+  margin: auto;
+  display: flex;
 }
 
 .server_image {
+  margin: auto;
   object-fit: cover;
+  display: flex;
+  align-items: space-around;
+  justify-content: space-around;
   box-sizing: border-box;
   height: 3.5rem;
   width: 3.5rem;
   border: 3px solid transparent;
   border-radius: 50%;
-  margin: 1em 1em 0.25em 1em;
+  transition: border-radius .5s;
 }
 
 .selected {
   border: 3px solid white;
 }
 
-#server_add_icon {
+.server_icon {
   background-color: #36393f;
-  box-sizing: border-box;
-  height: 3.5rem;
-  width: 3.5rem;
-  border: 3px solid transparent;
-  border-radius: 50%;
-  margin: 1em 1em 0.25em 1em;
-  display: flex;
   text-decoration: none;
+  transition: border-radius .5s, background-color .5s;
 }
 
-#server_add_icon i {
+.server_icon i {
   margin: auto;
   color: green;
   font-size: 1.5em;
 }
 
-.server_image:hover,
-#server_add_icon:hover {
-  border: 3px solid white;
+.server_image:hover {
+  border-radius: 40%;
+}
+
+.server_icon:hover,
+.server_icon:hover+i {
+  background-color: rgb(114, 137, 218);
+  color: white;
+
+}
+
+#guild_seperator {
+  position: absolute;
+  top: 65px;
+  left: 15px;
+  box-sizing: border-box;
+  height: 2px;
+  width: 50px;
+  background-color: #36393f;
 }
