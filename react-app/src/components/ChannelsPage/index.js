@@ -75,8 +75,8 @@ function ChannelsList() {
             </div>
             {serverSelected &&
                 channels.map(channel =>
-                    <div key={channel.id}>
-                        <p><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}><i class="fas fa-hashtag"></i>  {channel.channel_name}</Link></p>
+                    <div key={channel.id} className='channel_name_block'>
+                        <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
                         <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
                     </div>
                 )}

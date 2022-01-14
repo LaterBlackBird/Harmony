@@ -9,6 +9,10 @@ body {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 input {
   color: #b9bbbe;
   height: 1.5em;
@@ -291,4 +295,31 @@ button {
 
 #server_title_block:hover{
   background-color: rgba(79,84,92,0.16);
+}
+
+.channel_name_block {
+  display: flex;
+  flex-direction: column;
+}
+
+.channel_link {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 230px;
+  padding: 4px;
+  margin: 2px 10px;
+  text-overflow: ellipsis;
+  border-radius: 5px;
+  color: #72767d;
+  font-weight: bold;
+  text-align: left;
+}
+
+.fa-hashtag {
+  color: #72767d;
+}
+
+.channel_link:hover {
+  color: white;
+  background-color: #36393f;
 }
