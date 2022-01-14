@@ -25,6 +25,7 @@ function ChannelsList() {
     let [members, setMembers] = useState(null)
     const [addAdmin, setAddAdmin] = useState(false)
     const [editButtons, setEditButtons] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
 
     async function fetchData() {
         const res = await fetch(`/api/users/members/${serverId}`)
@@ -59,6 +60,8 @@ function ChannelsList() {
             fetchData()
         }
 
+        
+
         //if server state is empty, return them to the servers page
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
@@ -67,6 +70,21 @@ function ChannelsList() {
         document.title = `Harmony / ${server[0]?.server_name}`
 
     }, [dispatch, serverId, history])
+
+    useEffect(() => {
+        console.log(members, currentUser)
+        async function fetchData() {
+            let res = await fetch(`/api/users/${currentUser}/${serverId}/validate_admin`)
+            let responseData = await res.json();
+            if(responseData.admin) {
+                console.log('hello')
+                setIsAdmin(responseData.admin)
+            } else setIsAdmin(false)
+            console.log(isAdmin)
+        }
+        fetchData()
+
+    }, [members])
 
     useEffect(() => {
         async function fetchData() {
@@ -114,15 +132,17 @@ function ChannelsList() {
                     channels.map(channel =>
                         <div key={channel.id} className='channel_name_block'>
                             <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
-                            <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
+                            {isAdmin && (
+                                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
+                            )}
                         </div>
                     )}
-                {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
+                {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
                 {!serverSelected && <h3>Select A Server</h3>}
 
 
                 <div className="serverOptions">
-                    {serverSelected && (
+                    {serverSelected && isAdmin && (
                         <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
                     )}
                     {serverSelected && editButtons &&

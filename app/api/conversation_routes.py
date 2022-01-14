@@ -115,20 +115,16 @@ def messages(conversation_id, user_id):
     print(user_id == conversation.from_user or user_id == conversation.to_user)
     if user_id == conversation.from_user:
         if messages:
-            print('.................good')
             for message in messages:
                 user = User.query.get_or_404(message.user_id)
                 messages_and_users.append([message.to_dict(), user.username, user.profile_image])
-            print(messages_and_users)
             return {'messages': messages_and_users}
         return { 'messages': [[{'id': 0}]]}
     elif user_id == conversation.to_user:
         if messages:
-            print('.................good')
             for message in messages:
                 user = User.query.get_or_404(message.user_id)
                 messages_and_users.append([message.to_dict(), user.username, user.profile_image])
-            print(messages_and_users)
             return {'messages': messages_and_users}
         return { 'messages': [[{'id': 0}]]}
 

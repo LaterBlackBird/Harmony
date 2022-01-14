@@ -27,6 +27,15 @@ def users_filtered_members(server_id):
         users.append(User.query.get_or_404(member.user_id))
     return {'users': [user.to_dict() for user in users]}
 
+@user_routes.route('/<int:user_id>/<int:server_id>/validate_admin')
+@login_required
+def user_admin_validate(user_id, server_id):
+    member = db.session.query(Server_Members).filter(Server_Members.user_id == user_id, Server_Members.server_id == server_id).all()
+    if member:
+        return member[0].to_dict()
+    else:
+        return {'admin': False}
+
 @user_routes.route('/<int:id>')
 @login_required
 def user(id):
