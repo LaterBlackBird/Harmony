@@ -76,12 +76,14 @@ function CreateServerPage() {
 
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className='create_server_page'>
+      <form className= 'create_server_form' onSubmit={handleSubmit}>
+        <div className='main_section'>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
-        <h1>Create a Server!</h1>
+        <h1 className='user_auth_welcome'>Create a Server!</h1>
+        <div className='create_server_input'>
         <label>
           Server name
           <input
@@ -92,25 +94,32 @@ function CreateServerPage() {
             required
           />
         </label>
+        </div>
+        <div className='create_server_input'>
         <label>
           Server Image
-          {/* <input
+          <input
             type="file"
             accept="image/*"
             name='server_image'
             onChange={updateImage}
             required
-          /> */}
-          <input 
-              className='drop_zone' 
-              type='file' 
-              accept="image/*" 
-              onDrop={dropHandler} 
+          />
+          </label>
+          <label>
+            Drag and Drop Image Zone
+          <input
+              className='drop_zone'
+              type='file'
+              accept="image/*"
+              onDrop={dropHandler}
               onDragOver={allowDrop}
           />
-        </label>
+          </label>
+        </div>
         <button type="submit">Create Server</button>
         {(imageLoading) && <p>Loading...</p>}
+        </div>
       </form>
     </div>
   )

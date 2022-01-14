@@ -31,12 +31,14 @@ function CreateChannel() {
 
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
+        <div className='create_channel_page'>
+            <form className='create_channel_form' onSubmit={handleSubmit}>
+                <div className='main_section'>
                 <ul>
                     {errors.map((error, idx) => <li key={idx}>{error}</li>)}
                 </ul>
-                <h1>Create a Channel!</h1>
+                <h1 className='user_auth_welcome'>Create a Channel!</h1>
+                <div className='create_channel_input'>
                 <label>
                     Channel name
                     <input
@@ -47,7 +49,9 @@ function CreateChannel() {
                         required
                     />
                 </label>
+                </div>
                 <button type="submit">Create Channel</button>
+                </div>
             </form>
         </div>
     )

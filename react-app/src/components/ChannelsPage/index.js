@@ -119,7 +119,20 @@ function ChannelsList() {
         }
     }
 
-    const startConversation = async ({ userId }) => {
+    const isMember = () => {
+        const server = servers.filter(server => server.id === parseInt(serverId))
+        const member = server[0]?.users.filter((user) => user.id === currentUser)
+        // console.log(member.length > 0 === true)
+        if(member?.length > 0 === true){
+            return true
+        }
+        else{
+            return false
+        }
+
+    }
+
+        const startConversation = async ({ userId }) => {
         let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
         history.push(`/servers/0/conversations/${res.id}/messages`)
     }

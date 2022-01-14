@@ -5,6 +5,14 @@ const EDIT_SERVER = 'server/EDIT_SERVER'
 const DELETE_SERVER = 'server/DELETE_SERVER'
 const JOIN_SERVER = 'server/JOIN_SERVER'
 const JOIN_ADMIN = 'server/JOIN_ADMIN'
+const GET_ADMIN = 'server/GET_ADMIN'
+
+const getAdmin = (server) => {
+  return{
+    type: GET_ADMIN,
+    payload: server
+  }
+}
 
 const joinAdmin = (server) => {
   return {
@@ -176,8 +184,8 @@ export const getOneServer = (id) => async (dispatch) => {
   dispatch(getServer(data.server))
 }
 
-export const setServers = () => async (dispatch) => {
-  const res = await fetch('/api/servers', {
+export const setServers = (userId) => async (dispatch) => {
+  const res = await fetch(`/api/servers/user/${userId}`, {
     method: 'GET'
   })
 
