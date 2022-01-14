@@ -21,6 +21,7 @@ import EditChannel from './components/EditChannelForm';
 import ConversationsList from './components/ConversationPage';
 import { authenticate } from './store/session';
 import { io } from 'socket.io-client';
+import SplashPage from './components/SplashPage';
 
 let socket;
 socket = io();
@@ -44,6 +45,10 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <Route exact path='/'>
+          <NavBar />
+          <SplashPage />
+        </Route>
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>

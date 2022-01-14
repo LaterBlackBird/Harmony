@@ -184,8 +184,8 @@ export const getOneServer = (id) => async (dispatch) => {
   dispatch(getServer(data.server))
 }
 
-export const setServers = () => async (dispatch) => {
-  const res = await fetch('/api/servers', {
+export const setServers = (userId) => async (dispatch) => {
+  const res = await fetch(`/api/servers/user/${userId}`, {
     method: 'GET'
   })
 
@@ -213,7 +213,8 @@ const serverReducer = (state = {}, action) => {
       newState[action.payload.id]=action.payload
       return newState
     case JOIN_SERVER:
-      newState = { ...state, ...action.payload }
+      newState = { ...state }
+      newState[action.payload.id]=action.payload
       return newState
     case JOIN_ADMIN:
       newState = { ...state, ...action.payload }

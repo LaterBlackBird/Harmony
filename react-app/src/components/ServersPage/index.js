@@ -14,7 +14,7 @@ function ServerPage() {
   const user = session.user
   const server_members = server.users
   useEffect(() => {
-    dispatch(serverActions.setServers())
+    dispatch(serverActions.setServers(user.id))
 
   }, [dispatch])
   useEffect(() => {

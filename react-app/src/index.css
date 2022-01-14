@@ -18,6 +18,107 @@ input {
   height: 1.5em;
 }
 
+.splash_text{
+  color: black;
+}
+
+.header {
+  position: relative;
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header::before {
+  content: '';
+  background-image: url('https://images.unsplash.com/photo-1639673806257-954838b3ec6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.3;
+}
+
+.header h1 {
+  font-size: 3em;
+  margin: 150px 0 0 0;
+}
+
+.header h2 {
+  padding: 5% 10%;
+}
+
+.sell {
+  background-color: white;
+  height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 5%;
+}
+
+.about {
+  background-color: #f6f6f6;
+  height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 5%;
+}
+
+img.splash {
+  height: 40px;
+  position: absolute;
+  box-sizing: border-box;
+  top: 4px;
+  left: 50%;
+}
+
+#authors {
+  display: flex;
+  width: 50vw;
+  justify-content: space-evenly;
+}
+
+.author_detail {
+  margin-top: 25px;
+}
+
+.author_detail img{
+  margin: auto;
+  object-fit: cover;
+  display: flex;
+  box-sizing: border-box;
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+}
+
+.author_detail p{
+  padding: 3px;
+  font-weight: bold;
+}
+
+.author_links {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.author_links .fa-linkedin,
+.author_links .fa-github-square {
+  font-size: 2.5em;
+  color: rgb(114, 137, 218);
+}
+
+
+
 #main_page {
   display: grid;
   grid-template-areas:
@@ -247,7 +348,7 @@ button {
   width: 3.5rem;
   border: 3px solid transparent;
   border-radius: 50%;
-  transition: border-radius .5s;
+  transition: border-radius 0.5s;
 }
 
 .selected {
@@ -257,7 +358,7 @@ button {
 .server_icon {
   background-color: #36393f;
   text-decoration: none;
-  transition: border-radius .5s, background-color .5s;
+  transition: border-radius 0.5s, background-color 0.5s;
 }
 
 .server_icon i {
@@ -271,10 +372,9 @@ button {
 }
 
 .server_icon:hover,
-.server_icon:hover+i {
+.server_icon:hover + i {
   background-color: rgb(114, 137, 218);
   color: white;
-
 }
 
 #guild_seperator {
@@ -287,7 +387,7 @@ button {
   background-color: #36393f;
 }
 
-#server_title_block{
+#server_title_block {
   box-sizing: border-box;
   height: 50px;
   border-bottom: 1px black solid;
@@ -295,12 +395,12 @@ button {
   text-align: center;
 }
 
-#server_title_block h4{
+#server_title_block h4 {
   margin: auto;
 }
 
-#server_title_block:hover{
-  background-color: rgba(79,84,92,0.16);
+#server_title_block:hover {
+  background-color: rgba(79, 84, 92, 0.16);
 }
 
 .channel_name_block {
