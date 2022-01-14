@@ -23,6 +23,7 @@ function ChannelsList() {
     const currentUser = session?.user.id
     let [members, setMembers] = useState(null)
     const [addAdmin, setAddAdmin] = useState(false)
+    const [editButtons, setEditButtons] = useState(false)
 
     async function fetchData() {
         const res = await fetch(`/api/users/members/${serverId}`)
@@ -116,8 +117,12 @@ function ChannelsList() {
 
 
                 <div className="serverOptions">
-                    {serverSelected &&
+                    <button onClick={() => setEditButtons(!editButtons)}>Edit Server</button>
+                    {serverSelected && editButtons &&
                         <>  
+                            { displayUsers && (
+                                <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
+                            )}
                             {users && users.map((user) => 
                                 <div>
                                     <div key={user.id} className="users_info_block">
@@ -127,18 +132,23 @@ function ChannelsList() {
                                     </div>
                                 </div>
                             )}
-                            { displayUsers && (
-                                <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
-                            )}
-                            <button onClick={() => {
-                                setDisplayUsers(!displayUsers)
-                                setSearchValue('')
-                            }}>Add Server Member</button>
+                            <div>
+                                <button onClick={() => {
+                                    setDisplayUsers(!displayUsers)
+                                    setSearchValue('')
+                                }}>Add Server Member</button>
+                            </div>
                             {hideButton() === true &&
-                                <button onClick={joinServerAdminButton}>Join as Admin!</button>
+                                <div>
+                                    <button onClick={joinServerAdminButton}>Join as Admin!</button>
+                                </div>
                             }
-                            <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
-                            <button onClick={() => sendId(serverId)}>Delete Server</button>
+                            <div>
+                                <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
+                            </div>
+                            <div>
+                                <button onClick={() => sendId(serverId)}>Delete Server</button>
+                            </div>
                             <div>
                                 <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
                             </div>
