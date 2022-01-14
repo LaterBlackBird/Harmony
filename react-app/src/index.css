@@ -124,7 +124,7 @@ img.splash {
   grid-template-areas:
     'servers selections navbar navbar'
     'servers selections messages members';
-  grid-template-columns: 80px 25vw 50vw;
+  grid-template-columns: 80px 250px 50vw;
 }
 
 #nav_bar {
@@ -158,17 +158,23 @@ nav ul a {
   overflow-y: scroll;
 }
 
-#servers_container::-webkit-scrollbar {
-  display: none;
-}
-
 #channels_container,
 #conversations_container {
   grid-area: selections;
   background-color: #2f3136;
   box-sizing: border-box;
-  width: 250px;
 }
+
+#channel_list{
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* #servers_container::-webkit-scrollbar,
+#channel_list::-webkit-scrollbar,
+#conversations_container::-webkit-scrollbar  {
+  display: none;
+} */
 
 #message_container {
   grid-area: messages;
@@ -410,6 +416,8 @@ button {
   color: #72767d;
   font-weight: bold;
   text-align: left;
+  overflow: hidden;
+
 }
 
 .fa-hashtag {
