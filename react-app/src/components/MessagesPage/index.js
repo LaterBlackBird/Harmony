@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
-import * as conversationActions from '../../store/conversation'
 import Message from '../MessagesEditForm';
 
 function Messages({ socket }) {
@@ -23,10 +22,6 @@ function Messages({ socket }) {
     useEffect(() => {
         async function fetchData() {
             await dispatch(messageActions.getAllMessages(channelId));
-            const res = await fetch(`/api/users/members/${serverId}`)
-            const responseData = await res.json()
-            console.log(responseData)
-            setUsers(responseData.users)
         }
         fetchData();
     }, [dispatch, channelId]);
@@ -108,11 +103,7 @@ function Messages({ socket }) {
         )
     });
 
-    const startConversation = async ({userId}) => {
-        let res = await dispatch(conversationActions.addNewConversation({from_user:currentUser.id, to_user:userId}))
-        console.log(res)
-        history.push(`/servers/0/conversations/${res.id}/messages`)
-    }
+    
 
     return (
         <>
@@ -124,17 +115,7 @@ function Messages({ socket }) {
                     <button>Submit</button>
                 </form>
             </div>
-            <div id='members_container'>
-                {users && users.map((user) => 
-                    <div>
-                        <div key={user.id} className="server_info_block">
-                            <a onClick={() => startConversation({userId: user.id})} className='server_a'>
-                                <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
-                            <p>{`${user.username}`}</p>
-                        </div>
-                    </div>
-                )}
-            </div>
+            
         </>
     )
 };
