@@ -31,7 +31,7 @@ def conversations(user_id):
     # user = User()
     # from_users = User.query.join(Conversation, User.id == Conversation.from_user).filter(Conversation.from_user == user_id).all()
     # print(from_users)
-    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user == user_id))
+    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user == user_id)).all()
     
     # print(convos[0].id)
     # from_user = user.users
@@ -106,17 +106,27 @@ def delete_conversation(conversation_id):
         return { "conversation": "success" }
 
 
-@conversation_routes.route('/<int:conversation_id>/messages')
+@conversation_routes.route('/<int:conversation_id>/messages/<int:user_id>')
 @login_required
-def messages(conversation_id):
+def messages(conversation_id, user_id):
     conversation = db.session.query(Conversation).get_or_404(conversation_id)
-    messages = Direct_Message.query.filter(Direct_Message.conversation_id == conversation_id)
+    messages = Direct_Message.query.filter(Direct_Message.conversation_id == conversation_id).all()
     messages_and_users = []
-    if messages[0].user_id == conversation.from_user or messages[0].user_id == conversation.to_user:
-        for message in messages:
-            user = User.query.get_or_404(message.user_id)
-            messages_and_users.append([message.to_dict(), user.username, user.profile_image])
-        return {'messages': messages_and_users}
+    print(user_id == conversation.from_user or user_id == conversation.to_user)
+    if user_id == conversation.from_user:
+        if messages:
+            for message in messages:
+                user = User.query.get_or_404(message.user_id)
+                messages_and_users.append([message.to_dict(), user.username, user.profile_image])
+            return {'messages': messages_and_users}
+        return { 'messages': [[{'id': 0}]]}
+    elif user_id == conversation.to_user:
+        if messages:
+            for message in messages:
+                user = User.query.get_or_404(message.user_id)
+                messages_and_users.append([message.to_dict(), user.username, user.profile_image])
+            return {'messages': messages_and_users}
+        return { 'messages': [[{'id': 0}]]}
 
 # @socketio.event
 # def message(data):
