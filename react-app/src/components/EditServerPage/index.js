@@ -63,6 +63,20 @@ function EditServerPage() {
     setImage(file);
   }
 
+  const dropHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e.dataTransfer)
+    let data = e.dataTransfer.files;
+    console.log(data['0'])
+    setImage(data['0']);
+  }
+
+  function allowDrop(e) {
+    e.target.style.backgroundColor = 'blue';
+    e.preventDefault();
+  }
+
 
   return(
     <div>
@@ -87,12 +101,19 @@ function EditServerPage() {
         </label>
         <label>
           Server Image
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             name='server_image'
             onChange={updateImage}
             required
+          /> */}
+          <input 
+            className='drop_zone' 
+            type='file' 
+            accept="image/*" 
+            onDrop={dropHandler} 
+            onDragOver={allowDrop}
           />
         </label>
         <button type="submit">Edit Server</button>
