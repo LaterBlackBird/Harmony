@@ -18,7 +18,7 @@ input {
   height: 1.5em;
 }
 
-.splash_text{
+.splash_text {
   color: black;
 }
 
@@ -91,7 +91,7 @@ img.splash {
   margin-top: 25px;
 }
 
-.author_detail img{
+.author_detail img {
   margin: auto;
   object-fit: cover;
   display: flex;
@@ -101,7 +101,7 @@ img.splash {
   border-radius: 50%;
 }
 
-.author_detail p{
+.author_detail p {
   padding: 3px;
   font-weight: bold;
 }
@@ -116,8 +116,6 @@ img.splash {
   font-size: 2.5em;
   color: rgb(114, 137, 218);
 }
-
-
 
 #main_page {
   display: grid;
@@ -165,16 +163,15 @@ nav ul a {
   box-sizing: border-box;
 }
 
-#channel_list{
+#channel_list {
   height: 86vh;
   overflow-y: scroll;
   overflow-x: hidden;
-
 }
 
 #servers_container::-webkit-scrollbar,
 #channel_list::-webkit-scrollbar,
-#conversations_container::-webkit-scrollbar  {
+#conversations_container::-webkit-scrollbar {
   display: none;
 }
 
@@ -372,7 +369,7 @@ button {
   color: white;
 }
 
-#convo_block{
+#convo_block {
   display: flex;
   flex-direction: column;
 }
@@ -400,6 +397,37 @@ button {
 
 #server_title_block:hover {
   background-color: rgba(79, 84, 92, 0.16);
+}
+
+i.fas.fa-sort-down {
+  position: relative;
+  top: 15px;
+  right: 10px;
+}
+
+.serverOptions {
+  background-color: #202225;
+  position: absolute;
+  width: 230px;
+  left: 88px;
+  top: 55px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.serverOptions button {
+  background-color: rgb(114, 137, 218);
+  color: white;
+  font-weight: bolder;
+  width: 80%;
+  margin: 0.5em 0;
+  box-sizing: border-box;
+  height: 2.25em;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
 }
 
 .channel_name_block {
@@ -445,4 +473,22 @@ button {
   width: 100px;
   height: 100px;
   background-color: black;
+}
+
+
+
+.member_result {
+  display: flex;
+  margin: 5px 0;
+}
+
+.member_result p {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.member_search_image {
+  border-radius: 50%;
+  height: 30px;
 }

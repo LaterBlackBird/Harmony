@@ -36,6 +36,7 @@ function ChannelsList() {
 
     const joinServerButton = async ({ userId }) => {
         setUsers(null)
+        setEditButtons(false)
         setDisplayUsers(false)
         await dispatch(serverActions.joinAServer({ userId, serverId }))
         fetchData()
@@ -127,10 +128,56 @@ function ChannelsList() {
 
         <>
             <div id='channels_container'>
-                <div id='server_title_block' onClick={() => setEditButtons(!editButtons)}>
-                    {serverSelected && <h4>{server[0]?.server_name} <i class="fas fa-sort-down"></i></h4>}
+                <div id='server_title_block' onClick={isAdmin ? () => setEditButtons(!editButtons) : null}>
+                    {serverSelected && <h4>{server[0]?.server_name}</h4>}
+                    {serverSelected && isAdmin && <i class="fas fa-sort-down"></i>}
                     {!serverSelected && <h4>Select A Server</h4>}
                 </div>
+
+                <div className="serverOptions">
+                    {serverSelected && editButtons &&
+                        <>
+                            <button onClick={(e) => {
+                                e.stopPropagation()
+                                history.push(`/servers/${serverId}/channels/new`)
+                            }}>Add A Channel</button>
+
+                            {displayUsers && (
+                                <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
+                            )}
+                            {users && users.map((user) =>
+                                <div key={user.id} className="users_info_block">
+                                    <div onClick={() => joinServerButton({ userId: user.id })} className='member_result'>
+                                        <img className='member_search_image' src={user.profile_image} alt={user.username} />
+                                        <p>{`${user.username}`}</p>
+                                    </div>
+                                </div>
+                            )}
+                            <button onClick={() => {
+                                setDisplayUsers(!displayUsers)
+                                setSearchValue('')
+                            }}>Add Server Member</button>
+
+                            {hideButton() === true &&
+                                <div>
+                                    <button onClick={joinServerAdminButton}>Join as Admin!</button>
+                                </div>
+                            }
+                            <button><Link to={`/servers/edit/${serverId}`}>Edit Server</Link></button>
+                            <button onClick={() => sendId(serverId)}>Delete Server</button>
+                            <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
+                            {addAdmin && members && serverSelected && members.map((user) =>
+                                <div key={user.id} className="user_info_block">
+                                    <div onClick={() => joinServerAdminButton({ userId: user.id })} className='member_result'>
+                                        <img className={`member_search_image`} src={user.profile_image} alt={user.username} />
+                                        <p>{`${user.username}`}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    }
+                </div>
+
                 <div id="channel_list">
                     {serverSelected &&
                         channels.map(channel =>
@@ -148,59 +195,6 @@ function ChannelsList() {
                                 )}
                             </div>
                         )}
-                </div>
-                {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
-
-
-                <div className="serverOptions">
-                    {serverSelected && isAdmin && (
-                        <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
-                    )}
-                    {serverSelected && editButtons &&
-                        <>
-                            {displayUsers && (
-                                <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
-                            )}
-                            {users && users.map((user) =>
-                                <div>
-                                    <div key={user.id} className="users_info_block">
-                                        <a onClick={() => joinServerButton({ userId: user.id })} className='server_a'>
-                                            <img className={`server_image ${user.id === parseInt(serverId) ? 'selected' : ''}`} src={user.profile_image} alt={user.username} /></a>
-                                        <p>{`${user.username}`}</p>
-                                    </div>
-                                </div>
-                            )}
-                            <div>
-                                <button onClick={() => {
-                                    setDisplayUsers(!displayUsers)
-                                    setSearchValue('')
-                                }}>Add Server Member</button>
-                            </div>
-                            {hideButton() === true &&
-                                <div>
-                                    <button onClick={joinServerAdminButton}>Join as Admin!</button>
-                                </div>
-                            }
-                            <div>
-                                <button><Link to={`/servers/edit/${serverId}`} style={{ color: 'black' }}>Edit Server</Link></button>
-                            </div>
-                            <div>
-                                <button onClick={() => sendId(serverId)}>Delete Server</button>
-                            </div>
-                            <div>
-                                <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
-                            </div>
-                            {addAdmin && members && serverSelected && members.map((user) =>
-                                <div>
-                                    <div key={user.id} className="member_info_block">
-                                        <a onClick={() => joinServerAdminButton({ userId: user.id })} className='server_a'>
-                                            <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
-                                        <p>{`${user.username}`}</p>
-                                    </div>
-                                </div>
-                            )}
-                        </>
-                    }
                 </div>
 
             </div>
