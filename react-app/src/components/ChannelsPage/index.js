@@ -66,6 +66,19 @@ function ChannelsList() {
         }
     }
 
+    const isMember = () => {
+        const server = servers.filter(server => server.id === parseInt(serverId))
+        const member = server[0]?.users.filter((user) => user.id === currentUser)
+        // console.log(member.length > 0 === true)
+        if(member?.length > 0 === true){
+            return true
+        }
+        else{
+            return false
+        }
+
+    }
+
     return (
         <div id='channels_container'>
             <h1>Channels:</h1>
@@ -83,7 +96,9 @@ function ChannelsList() {
             <div className="serverOptions">
                 {serverSelected &&
                     <>
-                        <button onClick={joinServerButton}>Join this Server!</button>
+                        {isMember() === false &&
+                         <button onClick={joinServerButton}>Join this Server!</button>
+                        }
                         {hideButton() === true &&
                             <button onClick={joinServerAdminButton}>Join as Admin!</button>
                         }

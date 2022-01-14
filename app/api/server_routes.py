@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, session, request
 from app.models import Server, db, User
 from app.forms import CreateServerForm, UpdateServerForm
-from app.models import Server, db, Channel
+from app.models import Server, db, Channel, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
 from app.forms import ChannelForm
 from flask_login import login_required
@@ -117,3 +117,4 @@ def join_server_as_admin(serverId):
   server_object.add_admin(user_object)
 
   return server_object.to_dict()
+
