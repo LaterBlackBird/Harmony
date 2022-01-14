@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as serverActions from '../../store/server'
 import { Link, useParams, NavLink } from 'react-router-dom'
@@ -9,14 +9,19 @@ function ServerPage() {
   const dispatch = useDispatch()
   const server = useSelector(state => state.server)
   const { serverId } = useParams();
-  const serversArr = Object.values(server)
+  const [serversArr, setServersArr] = useState(Object.values(server))
   const session = useSelector(state => state.session);
   const user = session.user
   const server_members = server.users
-
   useEffect(() => {
     dispatch(serverActions.setServers())
-  }, [dispatch, server_members])
+
+  }, [dispatch])
+  useEffect(() => {
+    setServersArr(Object.values(server))
+    console.log(Object.values(server))
+    console.log(server)
+  }, [dispatch, server])
 
   return (
     <div id='servers_container'>
