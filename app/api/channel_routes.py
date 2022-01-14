@@ -53,12 +53,17 @@ def delete_channel(id):
 @channel_routes.route('/<int:id>/messages')
 @login_required
 def messages(id):
-    messages = Message.query.filter(Message.channel_id == id)
+    messages = Message.query.filter(Message.channel_id == id).all()
     messages_and_users = []
-    for message in messages:
-        user = User.query.get_or_404(message.user_id)
-        messages_and_users.append([message.to_dict(), user.username, user.profile_image])
-    return {'messages': messages_and_users}
+    print('...............')
+    print(messages)
+    if messages:
+        for message in messages:
+            user = User.query.get_or_404(message.user_id)
+            messages_and_users.append([message.to_dict(), user.username, user.profile_image])
+        return {'messages': messages_and_users}
+    return { 'messages': [[{'id': 0}]]}
+    
 
 @socketio.event
 def message(data):

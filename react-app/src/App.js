@@ -21,6 +21,7 @@ import EditChannel from './components/EditChannelForm';
 import ConversationsList from './components/ConversationPage';
 import { authenticate } from './store/session';
 import { io } from 'socket.io-client';
+import SplashPage from './components/SplashPage';
 
 let socket;
 socket = io();
@@ -28,7 +29,7 @@ socket = io();
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     (async () => {
       await dispatch(authenticate());
@@ -44,6 +45,10 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <Route exact path='/'>
+          <NavBar />
+          <SplashPage />
+        </Route>
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>
