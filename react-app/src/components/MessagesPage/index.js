@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
+import Message from '../MessagesEditForm';
 
 function Messages({ socket }) {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
+    const [editMessageForm, setEditMessageForm] = useState(false);
+    const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
     const { channelId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
+    // const [messageToEdit, setMessageToEdit] = useState({'content': 'empty'})
     const currentUser = session.user;
 
     useEffect(() => {
@@ -65,13 +69,22 @@ function Messages({ socket }) {
     const buttons = (message) => {
         return (
             <>
-                <NavLink to={`/messages/${message[0].id}`} exact={true} activeClassName='active'>
-                    Edit
-                </NavLink>
-                <button onClick={e => deleteMessage(message[0].id)}>Delete</button>
+                <button id={message.id} onClick={e => {
+                    setEditMessageForm(true)
+                    setEditId(message.id)
+                }}>Edit</button>
+                <button onClick={e => deleteMessage(message.id)}>Delete</button>
             </>
         )
     }
+
+    const showForm = (message) => {
+        return (
+            <>
+                {editMessageForm && <Message socket={socket} messageId={message.id} />}
+            </>
+        )
+    } 
 
     const messageComponents = messages.map((message) => {
         return (

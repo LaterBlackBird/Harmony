@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message'
 import { useHistory, Redirect } from 'react-router-dom';
 
-function Message({socket}) {
+function Message({socket, messageId}) {
     const [content, setContent] = useState([]);
     const [messageData, setMessageData] = useState([]);
-    const { messageId } = useParams();
+    // const { messageId } = useParams();
     const dispatch = useDispatch();
     const messages = useSelector(state => state.message)
     const history = useHistory()
@@ -29,8 +29,6 @@ function Message({socket}) {
         let res = await dispatch(messageActions.editAMessage(data))
         let messageRes = res;
         socket.emit('message_edit', { ...messageRes })
-        history.push(`/channels/${messageData.channel_id}/messages`)
-        
     }
     return (
         <>
