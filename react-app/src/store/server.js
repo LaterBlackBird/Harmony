@@ -149,7 +149,8 @@ export const createAServer = (server) => async (dispatch) => {
     },
     body: JSON.stringify({
       server_name,
-      server_image
+      server_image,
+      currentUser
     })
   })
 

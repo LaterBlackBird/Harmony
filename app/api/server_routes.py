@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, session, request
-from app.models import Server, db, User
+from app.models import Server, db, User, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
 from app.models import Server, db, Channel
 from app.forms import CreateServerForm, UpdateServerForm
@@ -28,18 +28,28 @@ def server_by_id(id):
 @server_routes.route('/', methods=['POST'])
 def create_server():
   form = CreateServerForm()
+  data = request.json
 
   server_name = form.data['server_name']
   server_image = form.data['server_image']
 
   new_server = Server(server_name=server_name, server_image=server_image)
-
   try:
     db.session.add(new_server)
     db.session.commit()
-    return new_server.to_dict()
   except:
     return "There was an error creating that server"
+    
+  new_admin = Server_Members(server_id=new_server.id,
+                            user_id=data['currentUser'],
+                            admin=True)
+  print(new_admin)
+  try:
+    db.session.add(new_admin)
+    db.session.commit()
+    return new_server.to_dict()
+  except:
+    return "There was an error creating admin"
 
 
 @server_routes.route('/<int:id>', methods=['PUT'])

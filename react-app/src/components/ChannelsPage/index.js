@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom'
 import { getAllChannels } from '../../store/channel';
 import { useHistory, Redirect } from 'react-router';
-import * as serverActions from '../../store/server'
+import * as serverActions from '../../store/server';
 
 
 
@@ -15,11 +15,15 @@ function ChannelsList() {
     const channels = useSelector(state => Object.values(state.channel));
     const servers = useSelector(state => Object.values(state.server))
     const session = useSelector(state => state.session);
+    const [searchValue, setSearchValue] = useState('')
+    let [users, setUsers] = useState(null)
+    let [displayUsers, setDisplayUsers] = useState(false)
     const currentUser = session?.user.id
 
 
-    const joinServerButton = () => {
-        const userId = currentUser
+    const joinServerButton = ({userId}) => {
+        setUsers(null)
+        setDisplayUsers(false)
         return dispatch(serverActions.joinAServer({ userId, serverId }))
     }
 
@@ -45,6 +49,18 @@ function ChannelsList() {
         }
     }, [dispatch, serverId, history])
 
+    useEffect(() => {
+        async function fetchData() {
+            const response = await fetch(`/api/users/${searchValue}`);
+            const responseData = await response.json();
+            setUsers(responseData.users)
+            console.log(users)
+        }
+        if(!(/^\s+$/.test(searchValue)) && searchValue !== ''){
+            fetchData();
+        } else setUsers(null)
+    }, [searchValue])
+
     //if user is not logged in and reaches this page, return them to the login page
     if (!user) {
         return <Redirect to='/login' />;
@@ -66,6 +82,23 @@ function ChannelsList() {
         }
     }
 
+    const test = (
+        <p>hello</p>
+    )
+
+    const hi = () => {
+        if (users) {
+            const display = users.forEach(user => {
+                console.log(user)
+                return (
+                    <p>Hello</p>
+                )
+            })
+            
+            return display
+        }
+    }
+
     return (
         <div id='channels_container'>
             <h1>Channels:</h1>
@@ -82,8 +115,14 @@ function ChannelsList() {
 
             <div className="serverOptions">
                 {serverSelected &&
-                    <>
-                        <button onClick={joinServerButton}>Join this Server!</button>
+                    <>  
+                        { displayUsers && (
+                            <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
+                        )}
+                        <button onClick={() => {
+                            setDisplayUsers(!displayUsers)
+                            setSearchValue('')
+                        }}>Add Server Member</button>
                         {hideButton() === true &&
                             <button onClick={joinServerAdminButton}>Join as Admin!</button>
                         }
@@ -92,6 +131,16 @@ function ChannelsList() {
                     </>
                 }
             </div>
+            {}
+            {users && users.map((user) => 
+                <div>
+                    <div key={user.id} className="server_info_block">
+                        <a onClick={() => joinServerButton({userId: user.id})} className='server_a'>
+                            <img className={`server_image ${user.id === parseInt(serverId) ? 'selected' : ''}`} src={user.profile_image} alt={user.username} /></a>
+                        <p>{`${user.username}`}</p>
+                    </div>
+                </div>
+            )}
 
         </div>
     )

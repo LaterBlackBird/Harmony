@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
+import * as conversationActions from '../../store/conversation'
 import Message from '../MessagesEditForm';
 
 function Messages({ socket }) {
@@ -10,19 +11,24 @@ function Messages({ socket }) {
     const [editMessageForm, setEditMessageForm] = useState(false);
     const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
-    const { channelId } = useParams();
+    const { serverId, channelId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
     // const [messageToEdit, setMessageToEdit] = useState({'content': 'empty'})
     const currentUser = session.user;
+    const [users, setUsers] = useState(null);
+    const history = useHistory();
+    
 
     useEffect(() => {
         async function fetchData() {
             await dispatch(messageActions.getAllMessages(channelId));
+            const res = await fetch(`/api/users/members/${serverId}`)
+            const responseData = await res.json()
+            console.log(responseData)
+            setUsers(responseData.users)
         }
         fetchData();
-
-
     }, [dispatch, channelId]);
 
     useEffect(() => {
@@ -81,7 +87,7 @@ function Messages({ socket }) {
     const showForm = (message) => {
         return (
             <>
-                {editMessageForm && <Message socket={socket} messageId={message.id} />}
+                {editId == message.id && <Message socket={socket} messageId={message.id} />}
             </>
         )
     } 
@@ -95,21 +101,41 @@ function Messages({ socket }) {
                 <div>
                     <p>{message[1]}</p>
                     <p>{message[0].content}</p>
-                    {currentUser.id === message[0].user_id && buttons(message)}
+                    {editMessageForm && showForm(message[0])}
+                    {currentUser.id === message[0].user_id && buttons(message[0])}
                 </div>
             </li>
         )
     });
 
+    const startConversation = async ({userId}) => {
+        let res = await dispatch(conversationActions.addNewConversation({from_user:currentUser.id, to_user:userId}))
+        console.log(res)
+        history.push(`/servers/0/conversations/${res.id}/messages`)
+    }
+
     return (
-        <div id='message_container'>
-            <h1>Messages: </h1>
-            <ul>{messageComponents}</ul>
-            <form onSubmit={addMessage}>
-                <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
-                <button>Submit</button>
-            </form>
-        </div>
+        <>
+            <div id='message_container'>
+                <h1>Messages: </h1>
+                <ul>{messageComponents}</ul>
+                <form onSubmit={addMessage}>
+                    <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
+                    <button>Submit</button>
+                </form>
+            </div>
+            <div id='members_container'>
+                {users && users.map((user) => 
+                    <div>
+                        <div key={user.id} className="server_info_block">
+                            <a onClick={() => startConversation({userId: user.id})} className='server_a'>
+                                <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
+                            <p>{`${user.username}`}</p>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </>
     )
 };
 
