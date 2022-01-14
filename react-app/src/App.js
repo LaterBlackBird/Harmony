@@ -46,7 +46,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path='/'>
-          <NavBar />
+          <NavBar socket={socket} />
           <SplashPage />
         </Route>
         <Route path='/login' exact={true}>

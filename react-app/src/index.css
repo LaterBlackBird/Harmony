@@ -319,24 +319,13 @@ button {
   width: 80px;
 }
 
-.server_info_block p,
-#server_add_icon p {
-  position: relative;
-  top: -72%;
-  right: -95%;
-  background-color: #202225;
-  line-height: 2em;
-  text-align: center;
-  vertical-align: middle;
-}
-
 .server_link {
   margin: auto;
   display: flex;
 }
 
 .server_image {
-  margin: auto;
+  margin: 5px auto;
   object-fit: cover;
   display: flex;
   align-items: space-around;
@@ -375,9 +364,13 @@ button {
   color: white;
 }
 
+#convo_block{
+  display: flex;
+  flex-direction: column;
+}
+
 #guild_seperator {
-  position: absolute;
-  top: 65px;
+  position: relative;
   left: 15px;
   box-sizing: border-box;
   height: 2px;
