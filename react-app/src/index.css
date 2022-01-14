@@ -327,3 +327,12 @@ button {
   color: white;
   background-color: #36393f;
 }
+
+.tippy-box[data-theme~='black'] {
+  background-color: black;
+  color: white;
+}
+
+.tippy-arrow::before {
+  color: black;
+}
