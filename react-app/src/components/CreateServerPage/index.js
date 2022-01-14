@@ -107,6 +107,7 @@ function CreateServerPage() {
               accept="image/*" 
               onDrop={dropHandler} 
               onDragOver={allowDrop}
+              // onDragEnd={style}
           />
         </label>
         <button type="submit">Create Server</button>

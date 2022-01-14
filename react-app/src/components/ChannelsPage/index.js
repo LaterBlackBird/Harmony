@@ -60,7 +60,7 @@ function ChannelsList() {
             fetchData()
         }
 
-        
+        setEditButtons(false)
 
         //if server state is empty, return them to the servers page
         if (Object.keys(servers).length < 1) {
