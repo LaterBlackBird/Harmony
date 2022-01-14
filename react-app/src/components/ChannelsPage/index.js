@@ -127,14 +127,22 @@ function ChannelsList() {
 
         <>
             <div id='channels_container'>
-                <div id='server_title_block'>
-                    <h4>{server[0]?.server_name}</h4>
+                <div id='server_title_block' onClick={() => setEditButtons(!editButtons)}>
+                    {serverSelected && <h4>{server[0]?.server_name} <i class="fas fa-sort-down"></i></h4>}
+                    {!serverSelected && <h4>Select A Server</h4>}
                 </div>
                 <div id="channel_list">
                     {serverSelected &&
                         channels.map(channel =>
                             <div key={channel.id} className='channel_name_block'>
-                                <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
+                                <Link
+                                    to={`/servers/${serverId}/channels/${channel.id}/messages`} >
+                                    <span className='channel_link'>
+                                        <i className="fas fa-hashtag"></i>
+                                        {channel.channel_name.toLowerCase()}
+                                        <i class="fas fa-cog"></i>
+                                    </span>
+                                </Link>
                                 {isAdmin && (
                                     <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
                                 )}
@@ -142,7 +150,6 @@ function ChannelsList() {
                         )}
                 </div>
                 {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
-                {!serverSelected && <h3>Select A Server</h3>}
 
 
                 <div className="serverOptions">
