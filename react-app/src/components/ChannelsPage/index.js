@@ -60,7 +60,7 @@ function ChannelsList() {
             fetchData()
         }
 
-        
+
 
         //if server state is empty, return them to the servers page
         if (Object.keys(servers).length < 1) {
@@ -73,16 +73,18 @@ function ChannelsList() {
 
     useEffect(() => {
         console.log(members, currentUser)
-        async function fetchData() {
-            let res = await fetch(`/api/users/${currentUser}/${serverId}/validate_admin`)
-            let responseData = await res.json();
-            if(responseData.admin) {
-                console.log('hello')
-                setIsAdmin(responseData.admin)
-            } else setIsAdmin(false)
-            console.log(isAdmin)
+        if (serverId) {
+            async function fetchData() {
+                let res = await fetch(`/api/users/${currentUser}/${serverId}/validate_admin`)
+                let responseData = await res.json();
+                if (responseData.admin) {
+                    console.log('hello')
+                    setIsAdmin(responseData.admin)
+                } else setIsAdmin(false)
+                console.log(isAdmin)
+            }
+            fetchData()
         }
-        fetchData()
 
     }, [members])
 
@@ -146,14 +148,14 @@ function ChannelsList() {
                         <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
                     )}
                     {serverSelected && editButtons &&
-                        <>  
-                            { displayUsers && (
+                        <>
+                            {displayUsers && (
                                 <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
                             )}
-                            {users && users.map((user) => 
+                            {users && users.map((user) =>
                                 <div>
                                     <div key={user.id} className="users_info_block">
-                                        <a onClick={() => joinServerButton({userId: user.id})} className='server_a'>
+                                        <a onClick={() => joinServerButton({ userId: user.id })} className='server_a'>
                                             <img className={`server_image ${user.id === parseInt(serverId) ? 'selected' : ''}`} src={user.profile_image} alt={user.username} /></a>
                                         <p>{`${user.username}`}</p>
                                     </div>
@@ -171,7 +173,7 @@ function ChannelsList() {
                                 </div>
                             }
                             <div>
-                                <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
+                                <button><Link to={`/servers/edit/${serverId}`} style={{ color: 'black' }}>Edit Server</Link></button>
                             </div>
                             <div>
                                 <button onClick={() => sendId(serverId)}>Delete Server</button>
@@ -179,10 +181,10 @@ function ChannelsList() {
                             <div>
                                 <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
                             </div>
-                            {addAdmin && members && serverSelected && members.map((user) => 
+                            {addAdmin && members && serverSelected && members.map((user) =>
                                 <div>
                                     <div key={user.id} className="member_info_block">
-                                        <a onClick={() => joinServerAdminButton({userId: user.id})} className='server_a'>
+                                        <a onClick={() => joinServerAdminButton({ userId: user.id })} className='server_a'>
                                             <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
                                         <p>{`${user.username}`}</p>
                                     </div>
