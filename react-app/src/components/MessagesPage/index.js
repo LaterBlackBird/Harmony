@@ -88,7 +88,7 @@ function Messages({ socket }) {
 
     const messageComponents = messages.map((message) => {
         return (
-            <li key={message[0].id}>
+            <li key={message[0].id} className='message_content'>
                 <div>
                     <img src={message[2]} alt="" />
                 </div>

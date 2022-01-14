@@ -234,7 +234,7 @@ button {
   display: flex;
 }
 
-.server_image {
+.server_image, .message_content img {
   margin: auto;
   object-fit: cover;
   display: flex;
@@ -341,4 +341,24 @@ button {
   width: 100px;
   height: 100px;
   background-color: black;
+}
+
+.message_content {
+  display: flex;
+  /* position: relative; */
+  margin-bottom: 30px;
+}
+
+.message_content p:first-child {
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.message_content div {
+  margin-left: 20px;
+}
+
+h1 {
+  margin-bottom: 40px;
 }
