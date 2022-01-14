@@ -16,6 +16,7 @@ function ChannelsList() {
     const user = useSelector(state => state.session.user);
     const channels = useSelector(state => Object.values(state.channel));
     const servers = useSelector(state => Object.values(state.server))
+    const server = servers.filter(server => server.id === parseInt(serverId))
     const session = useSelector(state => state.session);
     const [searchValue, setSearchValue] = useState('')
     let [users, setUsers] = useState(null)
@@ -32,7 +33,7 @@ function ChannelsList() {
         setMembers(responseData.users)
     }
 
-    const joinServerButton = async ({userId}) => {
+    const joinServerButton = async ({ userId }) => {
         setUsers(null)
         setDisplayUsers(false)
         await dispatch(serverActions.joinAServer({ userId, serverId }))
@@ -40,7 +41,7 @@ function ChannelsList() {
         return
     }
 
-    const joinServerAdminButton = async ({userId}) => {
+    const joinServerAdminButton = async ({ userId }) => {
         // const userId = currentUser
         await dispatch(serverActions.joinAsAdmin({ userId, serverId }))
         fetchData()
@@ -62,6 +63,9 @@ function ChannelsList() {
         if (Object.keys(servers).length < 1) {
             history.push(`/servers`)
         }
+
+        document.title = `Harmony / ${server[0]?.server_name}`
+
     }, [dispatch, serverId, history])
 
     useEffect(() => {
@@ -70,7 +74,7 @@ function ChannelsList() {
             const responseData = await response.json();
             setUsers(responseData.users)
         }
-        if(!(/^\s+$/.test(searchValue)) && searchValue !== ''){
+        if (!(/^\s+$/.test(searchValue)) && searchValue !== '') {
             fetchData();
         } else setUsers(null)
     }, [searchValue])
@@ -86,29 +90,30 @@ function ChannelsList() {
     } else serverSelected = true;
 
     const hideButton = () => {
-        const server = servers.filter(server => server.id === parseInt(serverId))
-
-        if(server[0]?.users.length > 0){
+        if (server[0]?.users.length > 0) {
             return false
         }
-        else{
+        else {
             return true
         }
     }
 
-    const startConversation = async ({userId}) => {
-        let res = await dispatch(conversationActions.addNewConversation({from_user:currentUser, to_user:userId}))
+    const startConversation = async ({ userId }) => {
+        let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
         history.push(`/servers/0/conversations/${res.id}/messages`)
     }
 
     return (
+
         <>
             <div id='channels_container'>
-                <h1>Channels:</h1>
+                <div id='server_title_block'>
+                    <h4>{server[0]?.server_name}</h4>
+                </div>
                 {serverSelected &&
                     channels.map(channel =>
-                        <div key={channel.id}>
-                            <h2><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+                        <div key={channel.id} className='channel_name_block'>
+                            <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
                             <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
                         </div>
                     )}
@@ -169,10 +174,10 @@ function ChannelsList() {
 
             </div>
             <div id='members_container'>
-                {members && serverSelected && members.map((user) => 
+                {members && serverSelected && members.map((user) =>
                     <div>
                         <div key={user.id} className="member_info_block">
-                            <a onClick={() => startConversation({userId: user.id})} className='server_a'>
+                            <a onClick={() => startConversation({ userId: user.id })} className='server_a'>
                                 <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
                             <p>{`${user.username}`}</p>
                         </div>

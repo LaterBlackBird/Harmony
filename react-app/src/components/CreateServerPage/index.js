@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as serverActions from '../../store/server'
 import { useHistory } from 'react-router';
 
 
-function CreateServerPage(){
+function CreateServerPage() {
   const history = useHistory();
   const dispatch = useDispatch();
   const [server_name, setServer_name] = useState("")
@@ -17,14 +17,16 @@ function CreateServerPage(){
 
 
   const handleSubmit = async (e) => {
-    let server_image;
     e.preventDefault();
-    if(server_name.length < 5 || server_name.length > 100){
+    if (server_name.length < 5 || server_name.length > 100) {
       setErrors(['Server name must be between 5 and 100 characters'])
     }
-    else{
+    else {
       const formData = new FormData();
       formData.append("image", image);
+
+      let imageUrl = '';
+
       setImageLoading(true);
       const res = await fetch('/api/images', {
         method: "POST",
@@ -32,22 +34,22 @@ function CreateServerPage(){
       });
 
       if (res.ok) {
-        let response = await res.json();
-        server_image = response.url
+        const response = await res.json();
+        imageUrl = response.url
         setImageLoading(false);
       }
       else {
         setImageLoading(false);
         // a real app would probably use more advanced
         // error handling
-        console.log("error");
+        console.log('error');
       }
       setErrors([])
       history.push('/servers')
-      return dispatch(serverActions.createAServer({ server_name, server_image, currentUser }))
+      return dispatch(serverActions.createAServer( server_name, imageUrl, currentUser ))
         .catch(async (res) => {
           const data = await res.json();
-          if(data && data.errors.length > 0) setErrors(data.errors)
+          if (data && data.errors.length > 0) setErrors(data.errors)
         })
 
     }
@@ -59,7 +61,7 @@ function CreateServerPage(){
   }
 
 
-  return(
+  return (
     <div>
       <form onSubmit={handleSubmit}>
         <ul>
@@ -87,7 +89,7 @@ function CreateServerPage(){
           />
         </label>
         <button type="submit">Create Server</button>
-        {(imageLoading)&& <p>Loading...</p>}
+        {(imageLoading) && <p>Loading...</p>}
       </form>
     </div>
   )

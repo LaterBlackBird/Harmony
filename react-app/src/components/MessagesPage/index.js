@@ -62,7 +62,6 @@ function Messages({ socket }) {
     }
 
     const deleteMessage = async (id) => {
-        console.log('hello')
         await dispatch(messageActions.removeAMessage(id))
         socket.emit('message_delete', { id })
     }
@@ -85,7 +84,7 @@ function Messages({ socket }) {
                 {editId == message.id && <Message socket={socket} messageId={message.id} />}
             </>
         )
-    } 
+    }
 
     const messageComponents = messages.map((message) => {
         return (

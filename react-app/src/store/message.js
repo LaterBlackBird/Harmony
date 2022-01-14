@@ -64,7 +64,6 @@ export const editAMessage = (data) => async dispatch => {
     if(res.ok){
         let response = await res.json()
         // dispatch(addMessage(response))
-        console.log(response)
         return response;
     }
 }
@@ -77,14 +76,12 @@ export const removeAMessage = id => async dispatch => {
     const res = await fetch(`/api/messages/${id}`, {
         method: 'DELETE'
     })
-    console.log(res.ok)
     if(res.ok){
         dispatch(deleteMessage(id))
     }
 }
 
 export const removeTheMessage = (id) => async dispatch => {
-    console.log(id)
     dispatch(deleteMessage(id.id))
 }
 
