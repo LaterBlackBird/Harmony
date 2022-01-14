@@ -116,6 +116,32 @@ function ChannelsList() {
         }
     }
 
+    const isMember = () => {
+        const server = servers.filter(server => server.id === parseInt(serverId))
+        const member = server[0]?.users.filter((user) => user.id === currentUser)
+        // console.log(member.length > 0 === true)
+        if(member?.length > 0 === true){
+            return true
+        }
+        else{
+            return false
+        }
+
+    }
+
+    // return (
+    //     <div id='channels_container'>
+    //         <h1>Channels:</h1>
+    //         {serverSelected &&
+    //             channels.map(channel =>
+    //                 <div key={channel.id}>
+    //                     <h2><Link to={`/servers/${serverId}/channels/${channel.id}/messages`}>{channel.channel_name}</Link></h2>
+    //                     <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
+    //                 </div>
+    //             )}
+    //         {serverSelected && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
+    //         {!serverSelected && <h3>Select A Server</h3>}
+    // }
     const startConversation = async ({ userId }) => {
         let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
         history.push(`/servers/0/conversations/${res.id}/messages`)
@@ -146,11 +172,11 @@ function ChannelsList() {
                         <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
                     )}
                     {serverSelected && editButtons &&
-                        <>  
+                        <>
                             { displayUsers && (
                                 <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
                             )}
-                            {users && users.map((user) => 
+                            {users && users.map((user) =>
                                 <div>
                                     <div key={user.id} className="users_info_block">
                                         <a onClick={() => joinServerButton({userId: user.id})} className='server_a'>
@@ -179,7 +205,7 @@ function ChannelsList() {
                             <div>
                                 <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
                             </div>
-                            {addAdmin && members && serverSelected && members.map((user) => 
+                            {addAdmin && members && serverSelected && members.map((user) =>
                                 <div>
                                     <div key={user.id} className="member_info_block">
                                         <a onClick={() => joinServerAdminButton({userId: user.id})} className='server_a'>
