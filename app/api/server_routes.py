@@ -54,14 +54,17 @@ def create_server():
 
 @server_routes.route('/<int:id>', methods=['PUT'])
 def update_server(id):
+  data = request.json
   server = Server.query.get_or_404(id)
 
   form = UpdateServerForm()
 
-  server.server_name = form.data['server_name']
-  server.server_image = form.data['server_image']
+  server.server_name = data['server_name']
+  server.server_image = data['server_image']
 
   db.session.commit()
+
+  return server.to_dict()
 
 
 @server_routes.route('/<int:id>', methods=['DELETE'])

@@ -47,12 +47,13 @@ function EditServerPage() {
         console.log("error");
       }
       setErrors([])
-      history.push('/servers')
-      return dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
+      await dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
         .catch(async (res) => {
           const data = await res.json();
           if(data && data.errors.length > 0) setErrors(data.errors)
         })
+      history.push('/servers')
+      return 
 
     }
   }

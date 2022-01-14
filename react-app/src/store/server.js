@@ -128,7 +128,7 @@ export const editOneServer = (server) => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json()
-    dispatch(editServer(data))
+    dispatch(createServer(data))
     return data
   }
   else if (res.status < 500) {
@@ -189,10 +189,14 @@ export const setServers = () => async (dispatch) => {
 
 
 const serverReducer = (state = {}, action) => {
-  let newState;
+  let newState = {};
   switch (action.type) {
     case SET_SERVER:
-      newState = { ...action.payload };
+      console.log(action.payload)
+      action.payload.forEach(server => {
+        const key = server.id;
+        newState[key] = server;
+      })
       return newState;
     case GET_SERVER:
       newState = { ...state, ...action.payload }

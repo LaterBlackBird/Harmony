@@ -117,7 +117,9 @@ function ChannelsList() {
 
 
                 <div className="serverOptions">
-                    <button onClick={() => setEditButtons(!editButtons)}>Edit Server</button>
+                    {serverSelected && (
+                        <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
+                    )}
                     {serverSelected && editButtons &&
                         <>  
                             { displayUsers && (
