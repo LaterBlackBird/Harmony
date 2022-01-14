@@ -9,6 +9,10 @@ body {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 input {
   color: #b9bbbe;
   height: 1.5em;
@@ -17,8 +21,8 @@ input {
 #main_page {
   display: grid;
   grid-template-areas:
-    'servers selections navbar'
-    'servers selections messages';
+    'servers selections navbar navbar'
+    'servers selections messages members';
   grid-template-columns: 80px 25vw 50vw;
 }
 
@@ -44,8 +48,10 @@ nav ul a {
 
 #servers_container {
   grid-area: servers;
-  background-color: #2f3136;
+  background-color: #202225;
+  box-sizing: border-box;
   height: 100vh;
+  width: 80px;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -55,12 +61,20 @@ nav ul a {
   display: none;
 }
 
-#channels_container, #conversations_container {
+#channels_container,
+#conversations_container {
   grid-area: selections;
-  background-color: #36393f;
+  background-color: #2f3136;
+  box-sizing: border-box;
+  width: 250px;
 }
+
 #message_container {
   grid-area: messages;
+  background-color: #202225;
+}
+#members_container {
+  grid-area: members;
   background-color: #202225;
 }
 
@@ -198,8 +212,10 @@ button {
 }
 
 .server_info_block {
-  display: inline;
-  height: 4.5rem;
+  display: flex;
+  box-sizing: border-box;
+  height: 65px;
+  width: 80px;
 }
 
 .server_info_block p,
@@ -213,43 +229,110 @@ button {
   vertical-align: middle;
 }
 
-.server_link:hover+p{
-  display: inherit;
+.server_link {
+  margin: auto;
+  display: flex;
 }
 
 .server_image {
+  margin: auto;
   object-fit: cover;
+  display: flex;
+  align-items: space-around;
+  justify-content: space-around;
   box-sizing: border-box;
   height: 3.5rem;
   width: 3.5rem;
   border: 3px solid transparent;
   border-radius: 50%;
-  margin: 1em 1em 0.25em 1em;
+  transition: border-radius .5s;
 }
 
 .selected {
   border: 3px solid white;
 }
 
-#server_add_icon {
+.server_icon {
   background-color: #36393f;
-  box-sizing: border-box;
-  height: 3.5rem;
-  width: 3.5rem;
-  border: 3px solid transparent;
-  border-radius: 50%;
-  margin: 1em 1em 0.25em 1em;
-  display: flex;
   text-decoration: none;
+  transition: border-radius .5s, background-color .5s;
 }
 
-#server_add_icon i {
+.server_icon i {
   margin: auto;
   color: green;
   font-size: 1.5em;
 }
 
-.server_image:hover,
-#server_add_icon:hover {
-  border: 3px solid white;
+.server_image:hover {
+  border-radius: 40%;
+}
+
+.server_icon:hover,
+.server_icon:hover+i {
+  background-color: rgb(114, 137, 218);
+  color: white;
+
+}
+
+#guild_seperator {
+  position: absolute;
+  top: 65px;
+  left: 15px;
+  box-sizing: border-box;
+  height: 2px;
+  width: 50px;
+  background-color: #36393f;
+}
+
+#server_title_block{
+  box-sizing: border-box;
+  height: 50px;
+  border-bottom: 1px black solid;
+  display: flex;
+  text-align: center;
+}
+
+#server_title_block h4{
+  margin: auto;
+}
+
+#server_title_block:hover{
+  background-color: rgba(79,84,92,0.16);
+}
+
+.channel_name_block {
+  display: flex;
+  flex-direction: column;
+}
+
+.channel_link {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 230px;
+  padding: 4px;
+  margin: 2px 10px;
+  text-overflow: ellipsis;
+  border-radius: 5px;
+  color: #72767d;
+  font-weight: bold;
+  text-align: left;
+}
+
+.fa-hashtag {
+  color: #72767d;
+}
+
+.channel_link:hover {
+  color: white;
+  background-color: #36393f;
+}
+
+.tippy-box[data-theme~='black'] {
+  background-color: black;
+  color: white;
+}
+
+.tippy-arrow::before {
+  color: black;
 }

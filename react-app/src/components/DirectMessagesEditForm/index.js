@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as directMessageActions from '../../store/direct_message'
 import { useHistory, Redirect } from 'react-router-dom';
 
-function DirectMessage({socket}) {
+function DirectMessage({socket, directMessageId}) {
     const [content, setContent] = useState([]);
     const [messageData, setMessageData] = useState([]);
-    const { directMessageId } = useParams();
+    
+    // const { directMessageId } = useParams();
     const dispatch = useDispatch();
     const messages = useSelector(state => state.message)
     const history = useHistory()
@@ -30,7 +31,7 @@ function DirectMessage({socket}) {
         let res = await dispatch(directMessageActions.editAMessage(data))
         let messageRes = res;
         socket.emit('message_edit', { ...messageRes })
-        history.push(`/conversations/${messageData.conversation_id}/messages`)
+        history.push(`/servers/0/conversations/${messageData.conversation_id}/messages`)
         
     }
     return (

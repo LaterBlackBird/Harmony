@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import * as serverActions from '../../store/server'
 import { useHistory } from 'react-router';
@@ -17,7 +17,7 @@ function EditServerPage() {
   const { id } = useParams()
   useEffect(() => {
     setServerId(id)
-  })
+  }, [])
 
 
   const handleSubmit = async (e) => {
@@ -47,12 +47,13 @@ function EditServerPage() {
         console.log("error");
       }
       setErrors([])
-      history.push('/servers')
-      return dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
+      await dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
         .catch(async (res) => {
           const data = await res.json();
           if(data && data.errors.length > 0) setErrors(data.errors)
         })
+      history.push('/servers')
+      return 
 
     }
   }
@@ -95,6 +96,7 @@ function EditServerPage() {
           />
         </label>
         <button type="submit">Edit Server</button>
+        {(imageLoading) && <p>Loading...</p>}
       </form>
     </div>
   )

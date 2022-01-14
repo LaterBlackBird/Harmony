@@ -7,7 +7,6 @@ import LogoutButton from './auth/LogoutButton';
 const NavBar = ({socket}) => {
   let userLinks;
   const user = useSelector(state => state.session.user);
-  console.log(socket)
   if (!user) {
     userLinks = (
       <>

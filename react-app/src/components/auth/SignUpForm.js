@@ -24,13 +24,31 @@ const SignUpForm = () => {
     let imageUrl = '';
 
     setImageLoading(true);
-
-    const res = await fetch('/api/images', {
-      method: "POST",
-      body: formData,
-    });
-    if (res.ok) {
-      imageUrl = await res.json();
+    if(image) {
+      const res = await fetch('/api/images', {
+        method: "POST",
+        body: formData,
+      });
+      if (res.ok) {
+        imageUrl = await res.json();
+        setImageLoading(false);
+        history.push("/images");
+        if (password === repeatPassword) {
+          const data = await dispatch(signUp(username, email, password, imageUrl));
+          if (data) {
+            setErrors(data)
+          }
+        }
+      }
+      else {
+        setImageLoading(false);
+        // a real app would probably use more advanced
+        // error handling
+        console.log("error");
+      }
+    }
+    else {
+      imageUrl = {'url': 'https://humbleimages.s3.amazonaws.com/68f2472108db4b15a928a7ca82035a9d.png'};
       setImageLoading(false);
       history.push("/images");
       if (password === repeatPassword) {
@@ -39,12 +57,6 @@ const SignUpForm = () => {
           setErrors(data)
         }
       }
-    }
-    else {
-      setImageLoading(false);
-      // a real app would probably use more advanced
-      // error handling
-      console.log("error");
     }
   };
 
