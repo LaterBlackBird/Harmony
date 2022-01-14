@@ -61,6 +61,10 @@ function ChannelsList() {
             fetchData()
         }
 
+        history.listen((location) => {
+            setEditButtons(false)
+         })
+
 
 
         //if server state is empty, return them to the servers page
