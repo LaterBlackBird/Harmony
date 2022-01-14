@@ -107,7 +107,7 @@ export const joinAServer = ({ userId, serverId }) => async (dispatch) => {
 }
 
 export const deleteAServer = (serverId) => async (dispatch) => {
-  const res = await fetch(`/api/servers/${serverId}`, {
+  await fetch(`/api/servers/${serverId}`, {
     method: 'DELETE'
   })
   dispatch(deleteServer())

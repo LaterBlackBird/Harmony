@@ -64,7 +64,6 @@ export const editAMessage = (data) => async dispatch => {
     if(res.ok){
         let response = await res.json()
         // dispatch(addMessage(response))
-        console.log(response)
         return response;
     }
 }
@@ -77,14 +76,12 @@ export const removeAMessage = id => async dispatch => {
     const res = await fetch(`/api/direct_messages/${id}`, {
         method: 'DELETE'
     })
-    console.log(res.ok)
     if(res.ok){
         dispatch(deleteMessage(id))
     }
 }
 
 export const removeTheMessage = (id) => async dispatch => {
-    console.log(id)
     dispatch(deleteMessage(id.id))
 }
 
@@ -100,7 +97,6 @@ const directMessageReducer = (state = null, action) => {
             })
             return newState;
         case ADD_MESSAGE:
-            console.log(action)
             newState = {...state};
             newState[action.message.id] = action.message;
             return newState

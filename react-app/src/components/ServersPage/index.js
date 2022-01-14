@@ -30,7 +30,7 @@ function ServerPage() {
       </div>
       <div>
         <NavLink to={`/servers/0/conversations/${user.id}`} exact={true} activeClassName='active'>
-          <i class="far fa-comments"></i>
+          <i className="far fa-comments"></i>
         </NavLink>
       </div>
     </div>

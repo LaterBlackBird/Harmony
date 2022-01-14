@@ -24,10 +24,10 @@ function Messages({socket}) {
             await dispatch(directMessageActions.getAllMessages(conversationId));
         }
         fetchData();
-        
-        
+
+
     }, [dispatch, conversationId]);
-    
+
     useEffect(() => {
         if(messageState){
             setMessages(Object.values(messageState))
@@ -46,7 +46,6 @@ function Messages({socket}) {
         })
 
         socket.on('message_edit', async (message) => {
-            console.log(message)
             await dispatch(messageActions.updateMessages(message));
         })
 
@@ -61,13 +60,10 @@ function Messages({socket}) {
         let data = [conversationId, message]
         let res = await dispatch(directMessageActions.addToMessages(data))
         let messageRes = res;
-        console.log(res)
-        console.log(socket)
         socket.emit('message', { ...messageRes })
     }
 
     const deleteMessage = async (id) => {
-        console.log('hello')
         await dispatch(directMessageActions.removeAMessage(id))
         socket.emit('message_delete', { id })
     }
@@ -90,7 +86,7 @@ function Messages({socket}) {
                 {editMessageForm && <DirectMessage socket={socket} directMessageId={message.id} />}
             </>
         )
-    } 
+    }
 
     const messageComponents = messages.map((message) => {
         return (
