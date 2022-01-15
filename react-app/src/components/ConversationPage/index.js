@@ -15,6 +15,8 @@ function ConversationsList() {
     const servers = useSelector(state => Object.values(state.server));
     const [convoUsers, setConvoUsers] = useState([])
     const [convos, setConvos] = useState([])
+    const [editButtons, setEditButtons] = useState(false)
+
 
 
 
@@ -65,8 +67,9 @@ function ConversationsList() {
     }
     return (
         <div id='conversations_container'>
-            <div id="server_title_block">
+            <div id="server_title_block" onClick={() => setEditButtons(!editButtons)}>
                 <h4>Conversations</h4>
+                <i className="fas fa-sort-down"></i>
             </div>
             {convos?.map(conversation => {
                 let otherUser = convoUsers.filter(user => user.id === conversation.to_user || user.id === conversation.from_user)
