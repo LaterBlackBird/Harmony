@@ -54,6 +54,7 @@ export const addToMessages = (data) => async dispatch => {
 
 export const editAMessage = (data) => async dispatch => {
     const [messageId, content] = data;
+    console.log(data)
     const res = await fetch(`/api/messages/${messageId}`, {
         method: "PATCH",
         headers: {

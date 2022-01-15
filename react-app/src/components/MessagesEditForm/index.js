@@ -4,37 +4,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message'
 import { useHistory, Redirect } from 'react-router-dom';
 
-function Message({socket, messageId}) {
+function Message({socket, message}) {
     const [content, setContent] = useState([]);
     const [messageData, setMessageData] = useState([]);
-    // const { messageId } = useParams();
+    // const { message.id } = useParams();
     const dispatch = useDispatch();
     const messages = useSelector(state => state.message)
     const history = useHistory()
     useEffect(() => {
-        if(messages) {
-            setContent(messages[messageId].content)
-            setMessageData(messages[messageId])
+        if(message) {
+            setContent(message.content)
+            setMessageData(message)
         }
-    }, [messageId])
-    
-    useEffect(() => {
-        
+    }, [message])
 
-    }, [])
-
-    const editMessage = async (e) => {
-        e.preventDefault()
-        let data = [messageId, content]
-        let res = await dispatch(messageActions.editAMessage(data))
-        let messageRes = res;
-        socket.emit('message_edit', { ...messageRes })
-    }
     return (
         <>
-            <form onSubmit={editMessage}>
-                <input type='text' name='content' onChange={e => setContent(e.target.value)} value={content}></input>
-                <button>Submit</button>
+            <form>
+                <textarea name='content' onChange={async e => {
+                    setContent(e.target.value)
+                    
+                }}
+                onMouseOut={async e => {
+                    let content = e.target.value
+                    const messageId = message.id
+                    let data = [messageId, content]
+                    let res = await dispatch(messageActions.editAMessage(data))
+                    let messageRes = res;
+                    socket.emit('message_edit', { ...messageRes })
+                }} value={content}></textarea>
             </form>
         </>
     )

@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import * as messageActions from '../../store/message'
 import * as directMessageActions from '../../store/direct_message'
 import { useHistory, Redirect } from 'react-router-dom';
 
-function DirectMessage({socket, directMessageId}) {
+function DirectMessage({socket, directMessage}) {
     const [content, setContent] = useState([]);
     const [messageData, setMessageData] = useState([]);
-    
-    // const { directMessageId } = useParams();
+    // const { directMessage.id } = useParams();
     const dispatch = useDispatch();
     const messages = useSelector(state => state.message)
     const history = useHistory()
     useEffect(() => {
-        if(messages) {
-            setContent(messages[directMessageId].content)
-            setMessageData(messages[directMessageId])
+        if(directMessage) {
+            console.log('hey')
+            setContent(directMessage.content)
+            setMessageData(directMessage)
         }
-    }, [directMessageId])
-    
-    useEffect(() => {
-        
+    }, [directMessage])
 
-    }, [])
 
-    const editMessage = async (e) => {
-        e.preventDefault()
-        let data = [directMessageId, content]
-        let res = await dispatch(directMessageActions.editAMessage(data))
-        let messageRes = res;
-        socket.emit('message_edit', { ...messageRes })
-        history.push(`/servers/0/conversations/${messageData.conversation_id}/messages`)
-        
-    }
     return (
         <>
-            <form onSubmit={editMessage}>
-                <input type='text' name='content' onChange={e => setContent(e.target.value)} value={content}></input>
-                <button>Submit</button>
+            <form>
+                <textarea name='content' onChange={async e => {
+                    setContent(e.target.value)
+                    
+                }}
+                onMouseOut={async e => {
+                    let content = e.target.value
+                    const messageId = directMessage.id
+                    let data = [messageId, content]
+                    let res = await dispatch(directMessageActions.editAMessage(data))
+                    let messageRes = res;
+                    socket.emit('message_edit', { ...messageRes })
+                }} value={content}></textarea>
             </form>
         </>
     )

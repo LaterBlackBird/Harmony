@@ -331,8 +331,8 @@ button {
   display: flex;
 }
 
-.server_image {
-  margin: 5px auto;
+.server_image, .message_content img {
+  margin: auto;
   object-fit: cover;
   display: flex;
   align-items: space-around;
@@ -486,6 +486,44 @@ i.fas.fa-sort-down {
   background-color: black;
 }
 
+.message_content {
+  display: flex;
+  /* position: relative; */
+  margin-bottom: 30px;
+}
+
+.message_content p:first-child {
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.message_content div {
+  margin-left: 20px;
+}
+
+h1 {
+  margin-bottom: 40px;
+}
+
+.message_content p {
+  word-break: break-word;
+}
+
+.message_content textarea {
+  width: 40vw;
+  height: 20vh;
+}
+
+.message_content textarea:focus, .message_content textarea:hover{
+  width: 40vw;
+  height: 20vh;
+}
+
+#message_container input, #message_container textarea {
+  background-color: black;
+  color: white;
+}
 
 
 .member_result {

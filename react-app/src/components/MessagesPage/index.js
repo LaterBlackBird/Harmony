@@ -15,7 +15,7 @@ function Messages({ socket }) {
     const messageState = useSelector(state => state.message)
     // const [messageToEdit, setMessageToEdit] = useState({'content': 'empty'})
     const currentUser = session.user;
-    const [users, setUsers] = useState(null);
+    const [editMessage, setEditMessage] = useState(false);
     const history = useHistory();
     
 
@@ -58,6 +58,7 @@ function Messages({ socket }) {
         let data = [channelId, message, currentUser.username, currentUser.profile_image]
         let res = await dispatch(messageActions.addToMessages(data))
         let messageRes = res;
+        setMessage([])
         socket.emit('message', { ...messageRes })
     }
 
@@ -69,11 +70,21 @@ function Messages({ socket }) {
     const buttons = (message) => {
         return (
             <>
-                <button id={message.id} onClick={e => {
-                    setEditMessageForm(true)
-                    setEditId(message.id)
-                }}>Edit</button>
-                <button onClick={e => deleteMessage(message.id)}>Delete</button>
+                {!editMessageForm && (
+                    <>
+                        <button id={message.id} onClick={e => {
+                            setEditMessageForm(true)
+                            setEditId(message.id)
+                        }}>Edit</button>
+                        <button onClick={e => deleteMessage(message.id)}>Delete</button>
+                    </>
+                )}
+                {editMessageForm && editId == message.id && (
+                    <button id={message.id} onClick={e => {
+                        setEditMessageForm(false)
+                        setEditId(null)
+                    }}>Close Edit</button>
+                )}
             </>
         )
     }
@@ -81,22 +92,32 @@ function Messages({ socket }) {
     const showForm = (message) => {
         return (
             <>
-                {editId == message.id && <Message socket={socket} messageId={message.id} />}
+                {editId == message.id && <Message socket={socket} message={message} />}
+                {editId == message.id && <button onClick={e => deleteMessage(message.id)}>Delete</button>}
             </>
         )
     }
 
     const messageComponents = messages.map((message) => {
         return (
-            <li key={message[0].id}>
+            <li key={message[0].id} className='message_content' 
+                onMouseEnter={() => {
+                    setEditMessageForm(true)
+                    setEditId(message[0].id) 
+                }} 
+                onMouseLeave={() => {
+                    setEditMessageForm(false)
+                    setEditId(null)
+                }}>
                 <div>
                     <img src={message[2]} alt="" />
                 </div>
                 <div>
                     <p>{message[1]}</p>
-                    <p>{message[0].content}</p>
-                    {editMessageForm && showForm(message[0])}
-                    {currentUser.id === message[0].user_id && buttons(message[0])}
+                    { message[0].id != editId && <p>{message[0].content}</p>}
+                    {editMessageForm && currentUser.id != message[0].user_id && message[0].id == editId && <p>{message[0].content}</p>}
+                    {editMessageForm && currentUser.id === message[0].user_id && showForm(message[0])}
+                    {/* {currentUser.id === message[0].user_id && buttons(message[0])} */}
                 </div>
             </li>
         )

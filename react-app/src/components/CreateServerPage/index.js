@@ -98,12 +98,20 @@ function CreateServerPage() {
         <div className='create_server_input'>
         <label>
           Server Image
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             name='server_image'
             onChange={updateImage}
             required
+          /> */}
+          <input 
+              className='drop_zone' 
+              type='file' 
+              accept="image/*" 
+              onDrop={dropHandler} 
+              onDragOver={allowDrop}
+              // onDragEnd={style}
           />
           </label>
           <label>
