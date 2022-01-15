@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, session, request
 from app.models import Server, db, User, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
-from app.models import Server, db, Channel
+from app.models import Server, db, Channel, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
 from app.forms import ChannelForm
 from flask_login import login_required
@@ -10,10 +10,15 @@ from flask_login import login_required
 server_routes = Blueprint('servers', __name__)
 
 
-@server_routes.route('/')
-def servers():
+@server_routes.route('/user/<int:userId>')
+def servers(userId):
   servers = Server.query.all()
-  return {'servers': [server.to_dict() for server in servers]}
+  new_servers = []
+  for server in servers:
+    for user in server.users:
+      if(user.id == userId):
+        new_servers.append(server)
+  return {'servers': [server.to_dict() for server in new_servers]}
 
 @server_routes.route('/<int:id>')
 def server_by_id(id):
@@ -40,7 +45,7 @@ def create_server():
     db.session.commit()
   except:
     return "There was an error creating that server"
-    
+
   new_admin = Server_Members(server_id=new_server.id,
                             user_id=data['currentUser'],
                             admin=True)
@@ -134,7 +139,7 @@ def join_server(serverId):
 #   user = request.json
 #   user_id = user['userId']
 
-#   member = db.session.query(Server_Members).filter(Server_Members.server_id == server_id, Server_Members.user_id == user_id).first()
-#   member.admin = True
-#   db.session.commit()
-#   return member.to_dict()
+  # server_object.add_admin(user_object)
+
+  # return server_object.to_dict()
+

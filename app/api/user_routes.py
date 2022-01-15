@@ -31,7 +31,6 @@ def users_filtered_members(server_id):
 @login_required
 def user_admin_validate(user_id, server_id):
     member = db.session.query(Server_Members).filter(Server_Members.user_id == user_id, Server_Members.server_id == server_id).all()
-    print(member)
     if member:
         return member[0].to_dict()
     else:

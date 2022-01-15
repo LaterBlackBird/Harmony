@@ -37,25 +37,29 @@ function EditChannel() {
 
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <ul>
-                    {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-                </ul>
-                <h1>Edit Channel</h1>
-                <label>
-                    Channel Name
-                    <input
-                        type="text"
-                        name='channel_name'
-                        value={channel_name}
-                        onChange={(e) => setChannelName(e.target.value)}
-                        required
-                    />
-                </label>
-                <button type="submit">Edit Channel</button>
+        <div className='edit_channel_page'>
+            <form className='edit_channel_form' onSubmit={handleSubmit}>
+                <div className='main_section'>
+                    <ul>
+                        {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+                    </ul>
+                    <h1 className='user_auth_welcome'>Edit Channel</h1>
+                    <div className='edit_channel_input'>
+                    <label>
+                        Channel Name
+                        <input
+                            type="text"
+                            name='channel_name'
+                            value={channel_name}
+                            onChange={(e) => setChannelName(e.target.value)}
+                            required
+                        />
+                    </label>
+                    </div>
+                    <button type="submit">Edit Channel</button>
+                    <button onClick={deleteChannel}>Delete Channel</button>
+                </div>
             </form>
-            <button onClick={deleteChannel}>Delete Channel</button>
         </div>
     )
 }

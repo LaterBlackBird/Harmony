@@ -53,7 +53,7 @@ function EditServerPage() {
           if(data && data.errors.length > 0) setErrors(data.errors)
         })
       history.push('/servers')
-      return 
+      return
 
     }
   }
@@ -79,16 +79,18 @@ function EditServerPage() {
 
 
   return(
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className='edit_server_page'>
+      <form className='edit_server_form' onSubmit={handleSubmit}>
+        <div className='main_section'>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
-        <h1>Edit a Server!</h1>
+        <h1 className='user_auth_welcome'>Edit a Server!</h1>
         <input
           type='hidden'
           value={serverId}
         />
+        <div className='edit_server_input'>
         <label>
           Server name
           <input
@@ -99,6 +101,8 @@ function EditServerPage() {
             required
           />
         </label>
+        </div>
+        <div className='edit_server_input'>
         <label>
           Server Image
           {/* <input
@@ -115,9 +119,21 @@ function EditServerPage() {
             onDrop={dropHandler} 
             onDragOver={allowDrop}
           />
-        </label>
+          </label>
+          <label>
+            Drag and Drop Image Zone
+          <input
+            className='drop_zone'
+            // type='file'
+            accept="image/*"
+            onDrop={dropHandler}
+            onDragOver={allowDrop}
+          />
+          </label>
+        </div>
         <button type="submit">Edit Server</button>
         {(imageLoading) && <p>Loading...</p>}
+        </div>
       </form>
     </div>
   )
