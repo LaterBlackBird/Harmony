@@ -16,6 +16,10 @@ p, textarea {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#members_container p, #message_container p:first-child {
+  font-family: 'Press Start 2P', Arial, Helvetica, sans-serif;
+}
+
 a {
   text-decoration: none;
 }
@@ -825,6 +829,15 @@ textarea {
   background-color: rgb(68, 68, 68);
   border: none;
   padding: 10px;
+}
+
+#message_container p:first-child {
+  font-size: 15px;
+  font-weight: lighter;
+}
+
+#message_container p {
+  padding: 5px;
 }
 
 #message_container .new_content input {
