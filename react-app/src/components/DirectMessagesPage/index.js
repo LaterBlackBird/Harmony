@@ -116,8 +116,8 @@ function Messages({socket}) {
         const directMessage = message;
         return (
             <>
+                {editId == message.id && <button className='delete_button' onClick={e => deleteMessage(message.id)}>Remove</button>}
                 {editId == message.id && <DirectMessage socket={socket} directMessage={directMessage} />}
-                {editId == message.id && <button onClick={e => deleteMessage(message.id)}>Delete</button>}
             </>
         )
     }
@@ -151,9 +151,9 @@ function Messages({socket}) {
         <div id='message_container'>
             <h1>Messages: </h1>
             <ul>{messageComponents}</ul>
-            <form onSubmit={addMessage}>
+            <form className='new_content' onSubmit={addMessage}>
                 <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
-                <button>Submit</button>
+                {/* <button>Submit</button> */}
             </form>
         </div>
     )
