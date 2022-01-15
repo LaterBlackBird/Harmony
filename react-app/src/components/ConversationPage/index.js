@@ -155,6 +155,14 @@ function ConversationsList() {
             }
             )}
             {/* <Link to={`/servers/${serverId}/conversations/new`}>Add A Conversation</Link> */}
+            <div className='current_user'>
+                <div>
+                    <div key={user.id} className="member_info_block">
+                        <img className={`server_member_image`} src={user.profile_image} alt={user.username} />
+                        <p>{`${user.username}`}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
