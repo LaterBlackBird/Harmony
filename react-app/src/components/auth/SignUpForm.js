@@ -88,11 +88,20 @@ const SignUpForm = () => {
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    e.target.style.backgroundColor = 'green'
+    e.target.innerHTML = 'Image Selected'
   }
 
   function allowDrop(e) {
-    e.target.style.backgroundColor = 'blue';
+    e.stopPropagation();
     e.preventDefault();
+    e.target.style.backgroundColor = 'blue';
+
+  }
+  function revertDrop(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.target.style.backgroundColor = '#202225';
   }
 
   if (user) {
@@ -153,13 +162,16 @@ const SignUpForm = () => {
               onChange={updateImage}
               id='profile_pic_picker'
             /> */}
-            <input 
+            <div className='drop_zone'
               className='drop_zone' 
-              type='file' 
+              // type='file' 
               accept="image/*" 
               onDrop={dropHandler} 
               onDragOver={allowDrop}
-            />
+              onDragLeave={revertDrop}
+              >
+              Drag and Drop Profile Image Here
+            </div>
 
           </div>
           <button type='submit'>Sign Up</button>
