@@ -17,7 +17,9 @@ const NavBar = ({socket}) => {
   } else {
     userLinks = (
       <>
-        <NavLink to='/users' exact={true} activeClassName='active'>Users</NavLink>
+        {/* <NavLink to='/users' exact={true} activeClassName='active'>Users</NavLink> */}
+        {!window.location.href.includes('servers') &&
+        <NavLink to='/servers'>Home</NavLink> }
         <LogoutButton socket={socket} />
       </>
     )

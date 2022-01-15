@@ -103,15 +103,15 @@ function EditServerPage() {
         </label>
         </div>
         <div className='edit_server_input'>
-        <label>
+        {/* <label>
           Server Image
-          {/* <input
+          <input
             type="file"
             accept="image/*"
             name='server_image'
             onChange={updateImage}
             required
-          /> */}
+          />
           <input
             className='drop_zone'
             type='file'
@@ -119,7 +119,7 @@ function EditServerPage() {
             onDrop={dropHandler}
             onDragOver={allowDrop}
           />
-          </label>
+          </label> */}
           <label>
             Drag and Drop Image Zone
           <input
@@ -132,6 +132,7 @@ function EditServerPage() {
           </label>
         </div>
         <button type="submit">Edit Server</button>
+        <button onClick={ () => history.push(`/servers/${serverId}/channels`)}>Cancel</button>
         {(imageLoading) && <p>Loading...</p>}
         </div>
       </form>
