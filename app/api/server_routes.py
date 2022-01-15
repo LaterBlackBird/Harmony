@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, session, request
 from app.models import Server, db, User, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
-from app.models import Server, db, Channel
+from app.models import Server, db, Channel, Server_Members
 from app.forms import CreateServerForm, UpdateServerForm
 from app.forms import ChannelForm
 from flask_login import login_required
@@ -139,7 +139,7 @@ def join_server(serverId):
 #   user = request.json
 #   user_id = user['userId']
 
-#   member = db.session.query(Server_Members).filter(Server_Members.server_id == server_id, Server_Members.user_id == user_id).first()
-#   member.admin = True
-#   db.session.commit()
-#   return member.to_dict()
+  # server_object.add_admin(user_object)
+
+  # return server_object.to_dict()
+

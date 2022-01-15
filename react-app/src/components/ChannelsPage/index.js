@@ -36,6 +36,7 @@ function ChannelsList() {
 
     const joinServerButton = async ({ userId }) => {
         setUsers(null)
+        setEditButtons(false)
         setDisplayUsers(false)
         await dispatch(serverActions.joinAServer({ userId, serverId }))
         fetchData()
@@ -60,7 +61,11 @@ function ChannelsList() {
             fetchData()
         }
 
-        
+        history.listen((location) => {
+            setEditButtons(false)
+         })
+
+
 
         //if server state is empty, return them to the servers page
         if (Object.keys(servers).length < 1) {
@@ -73,16 +78,18 @@ function ChannelsList() {
 
     useEffect(() => {
         console.log(members, currentUser)
-        async function fetchData() {
-            let res = await fetch(`/api/users/${currentUser}/${serverId}/validate_admin`)
-            let responseData = await res.json();
-            if(responseData.admin) {
-                console.log('hello')
-                setIsAdmin(responseData.admin)
-            } else setIsAdmin(false)
-            console.log(isAdmin)
+        if (serverId) {
+            async function fetchData() {
+                let res = await fetch(`/api/users/${currentUser}/${serverId}/validate_admin`)
+                let responseData = await res.json();
+                if (responseData.admin) {
+                    console.log('hello')
+                    setIsAdmin(responseData.admin)
+                } else setIsAdmin(false)
+                console.log(isAdmin)
+            }
+            fetchData()
         }
-        fetchData()
 
     }, [members])
 
@@ -116,7 +123,20 @@ function ChannelsList() {
         }
     }
 
-    const startConversation = async ({ userId }) => {
+    const isMember = () => {
+        const server = servers.filter(server => server.id === parseInt(serverId))
+        const member = server[0]?.users.filter((user) => user.id === currentUser)
+        // console.log(member.length > 0 === true)
+        if(member?.length > 0 === true){
+            return true
+        }
+        else{
+            return false
+        }
+
+    }
+
+        const startConversation = async ({ userId }) => {
         let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
         history.push(`/servers/0/conversations/${res.id}/messages`)
     }
@@ -125,65 +145,48 @@ function ChannelsList() {
 
         <>
             <div id='channels_container'>
-                <div id='server_title_block'>
-                    <h4>{server[0]?.server_name}</h4>
+                <div id='server_title_block' onClick={isAdmin ? () => setEditButtons(!editButtons) : null}>
+                    {serverSelected && <h4>{server[0]?.server_name}</h4>}
+                    {serverSelected && isAdmin && <i class="fas fa-sort-down"></i>}
+                    {!serverSelected && <h4>Select A Server</h4>}
                 </div>
-                {serverSelected &&
-                    channels.map(channel =>
-                        <div key={channel.id} className='channel_name_block'>
-                            <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
-                            {isAdmin && (
-                                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
-                            )}
-                        </div>
-                    )}
-                {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
-                {!serverSelected && <h3>Select A Server</h3>}
-
 
                 <div className="serverOptions">
-                    {serverSelected && isAdmin && (
-                        <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
-                    )}
                     {serverSelected && editButtons &&
-                        <>  
-                            { displayUsers && (
+                        <>
+                            <button onClick={(e) => {
+                                e.stopPropagation()
+                                history.push(`/servers/${serverId}/channels/new`)
+                            }}>Add A Channel</button>
+
+                            {displayUsers && (
                                 <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue}></input>
                             )}
-                            {users && users.map((user) => 
-                                <div>
-                                    <div key={user.id} className="users_info_block">
-                                        <a onClick={() => joinServerButton({userId: user.id})} className='server_a'>
-                                            <img className={`server_image ${user.id === parseInt(serverId) ? 'selected' : ''}`} src={user.profile_image} alt={user.username} /></a>
+                            {users && users.map((user) =>
+                                <div key={user.id} className="users_info_block">
+                                    <div onClick={() => joinServerButton({ userId: user.id })} className='member_result'>
+                                        <img className='member_search_image' src={user.profile_image} alt={user.username} />
                                         <p>{`${user.username}`}</p>
                                     </div>
                                 </div>
                             )}
-                            <div>
-                                <button onClick={() => {
-                                    setDisplayUsers(!displayUsers)
-                                    setSearchValue('')
-                                }}>Add Server Member</button>
-                            </div>
+                            <button onClick={() => {
+                                setDisplayUsers(!displayUsers)
+                                setSearchValue('')
+                            }}>Add Server Member</button>
+
                             {hideButton() === true &&
                                 <div>
                                     <button onClick={joinServerAdminButton}>Join as Admin!</button>
                                 </div>
                             }
-                            <div>
-                                <button><Link to={`/servers/edit/${serverId}`} style={{color:'black'}}>Edit Server</Link></button>
-                            </div>
-                            <div>
-                                <button onClick={() => sendId(serverId)}>Delete Server</button>
-                            </div>
-                            <div>
-                                <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
-                            </div>
-                            {addAdmin && members && serverSelected && members.map((user) => 
-                                <div>
-                                    <div key={user.id} className="member_info_block">
-                                        <a onClick={() => joinServerAdminButton({userId: user.id})} className='server_a'>
-                                            <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
+                            <button><Link to={`/servers/edit/${serverId}`}>Edit Server</Link></button>
+                            <button onClick={() => sendId(serverId)}>Delete Server</button>
+                            <button onClick={() => setAddAdmin(!addAdmin)}>Add Admin</button>
+                            {addAdmin && members && serverSelected && members.map((user) =>
+                                <div key={user.id} className="user_info_block">
+                                    <div onClick={() => joinServerAdminButton({ userId: user.id })} className='member_result'>
+                                        <img className={`member_search_image`} src={user.profile_image} alt={user.username} />
                                         <p>{`${user.username}`}</p>
                                     </div>
                                 </div>
@@ -192,7 +195,30 @@ function ChannelsList() {
                     }
                 </div>
 
+
+                <div id="channel_list">
+                    {serverSelected &&
+                        channels.map(channel =>
+                            <div key={channel.id} className='channel_name_block'>
+                                <Link
+                                    to={`/servers/${serverId}/channels/${channel.id}/messages`} >
+                                    <div className="channel_link">
+                                        <span>
+                                            <i className="fas fa-hashtag"></i>
+                                            {channel.channel_name.toLowerCase()}
+                                        </span>
+                                        {isAdmin && (
+                                            <Link to={`/servers/${serverId}/channels/${channel.id}/edit`} className='hide'><i className="fas fa-cog hide"></i></Link>
+                                        )}
+                                    </div>
+                                </Link>
+
+                            </div>
+                        )}
+                </div>
             </div>
+
+
             <div id='members_container'>
                 {members && serverSelected && members.map((user) =>
                     <div>
