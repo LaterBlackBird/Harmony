@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom'
 import { getAllConversations, deleteThisConversation } from '../../store/conversation';
 import { useHistory, Redirect } from 'react-router';
+import * as conversationActions from '../../store/conversation';
+
 
 
 function ConversationsList() {
@@ -16,6 +18,11 @@ function ConversationsList() {
     const [convoUsers, setConvoUsers] = useState([])
     const [convos, setConvos] = useState([])
     const [editButtons, setEditButtons] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
+    let [users, setUsers] = useState(null)
+    let [displayUsers, setDisplayUsers] = useState(false)
+    const session = useSelector(state => state.session);
+    const currentUser = session?.user.id
 
 
 
@@ -40,6 +47,17 @@ function ConversationsList() {
         }
     }, [conversations])
 
+    useEffect(() => {
+        async function fetchData() {
+            const response = await fetch(`/api/users/${searchValue}`);
+            const responseData = await response.json();
+            setUsers(responseData.users)
+        }
+        if (!(/^\s+$/.test(searchValue)) && searchValue !== '') {
+            fetchData();
+        } else setUsers(null)
+    }, [searchValue])
+
     //if user is not logged in and reaches this page, return them to the login page
     if (!user) {
         return <Redirect to='/login' />;
@@ -59,6 +77,12 @@ function ConversationsList() {
     //     // console.log(otherUser)
     // }
 
+    const startConversation = async ({ userId }) => {
+        let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
+        await dispatch(getAllConversations(userId))
+        history.push(`/servers/0/conversations/${currentUser}/${res.id}/messages`)
+    }
+
     const deleteConversation = async (conversationId) => {
         const userId = user.id
         await dispatch(deleteThisConversation({ conversationId, userId }))
@@ -71,6 +95,32 @@ function ConversationsList() {
                 <h4>Conversations</h4>
                 <i className="fas fa-sort-down"></i>
             </div>
+
+            <div className="serverOptions">
+                {editButtons &&
+                    <>
+                        {displayUsers && (
+                            <input type='text' onChange={e => setSearchValue(e.target.value)} value={searchValue} placeholder='username'></input>
+                        )}
+                        {users && users.map((user) =>
+                            <div key={user.id} className="users_info_block">
+                                <div onClick={() => startConversation({ userId: user.id })} className='member_result'>
+                                    <img className='member_search_image' src={user.profile_image} alt={user.username} />
+                                    <p>{`${user.username}`}</p>
+                                </div>
+                            </div>
+                        )}
+                        <button onClick={() => {
+                            setDisplayUsers(!displayUsers)
+                            setSearchValue('')
+                        }}>Search for User</button>
+
+
+                    </>
+                }
+            </div>
+
+
             {convos?.map(conversation => {
                 let otherUser = convoUsers.filter(user => user.id === conversation.to_user || user.id === conversation.from_user)
                 if (otherUser[0]) {
