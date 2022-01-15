@@ -233,7 +233,7 @@ button {
 }
 
 #login_form {
-  height: 40vh;
+  height: auto;
 }
 
 #signup_form {
