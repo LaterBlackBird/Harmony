@@ -18,7 +18,7 @@ input {
   height: 1.5em;
 }
 
-.splash_text{
+.splash_text {
   color: black;
 }
 
@@ -91,7 +91,7 @@ img.splash {
   margin-top: 25px;
 }
 
-.author_detail img{
+.author_detail img {
   margin: auto;
   object-fit: cover;
   display: flex;
@@ -101,7 +101,7 @@ img.splash {
   border-radius: 50%;
 }
 
-.author_detail p{
+.author_detail p {
   padding: 3px;
   font-weight: bold;
 }
@@ -117,14 +117,12 @@ img.splash {
   color: rgb(114, 137, 218);
 }
 
-
-
 #main_page {
   display: grid;
   grid-template-areas:
     'servers selections navbar navbar'
     'servers selections messages members';
-  grid-template-columns: 80px 25vw 50vw;
+  grid-template-columns: 80px 250px 50vw;
 }
 
 #nav_bar {
@@ -160,16 +158,23 @@ nav ul a {
   overflow: auto;
 }
 
-#servers_container::-webkit-scrollbar {
-  display: none;
-}
-
 #channels_container,
 #conversations_container {
   grid-area: selections;
   background-color: #2f3136;
   box-sizing: border-box;
-  width: 250px;
+}
+
+#channel_list {
+  height: 86vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#servers_container::-webkit-scrollbar,
+#channel_list::-webkit-scrollbar,
+#conversations_container::-webkit-scrollbar {
+  display: none;
 }
 
 #message_container {
@@ -321,24 +326,13 @@ button {
   width: 80px;
 }
 
-.server_info_block p,
-#server_add_icon p {
-  position: absolute;
-  top: 28px;
-  right: -65%;
-  background-color: #202225;
-  line-height: 2em;
-  text-align: center;
-  vertical-align: middle;
-}
-
 .server_link {
   margin: auto;
   display: flex;
 }
 
 .server_image {
-  margin: auto;
+  margin: 5px auto;
   object-fit: cover;
   display: flex;
   align-items: space-around;
@@ -377,9 +371,13 @@ button {
   color: white;
 }
 
+#convo_block {
+  display: flex;
+  flex-direction: column;
+}
+
 #guild_seperator {
-  position: absolute;
-  top: 65px;
+  position: relative;
   left: 15px;
   box-sizing: border-box;
   height: 2px;
@@ -403,31 +401,74 @@ button {
   background-color: rgba(79, 84, 92, 0.16);
 }
 
+i.fas.fa-sort-down {
+  position: relative;
+  top: 15px;
+  right: 10px;
+}
+
+.serverOptions {
+  background-color: #202225;
+  position: absolute;
+  width: 230px;
+  left: 88px;
+  top: 55px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.serverOptions button {
+  background-color: rgb(114, 137, 218);
+  color: white;
+  font-weight: bolder;
+  width: 80%;
+  margin: 0.5em 0;
+  box-sizing: border-box;
+  height: 2.25em;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
 .channel_name_block {
   display: flex;
   flex-direction: column;
 }
 
 .channel_link {
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
   box-sizing: border-box;
   width: 230px;
   padding: 4px;
   margin: 2px 10px;
-  text-overflow: ellipsis;
   border-radius: 5px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.channel_link span {
   color: #72767d;
   font-weight: bold;
-  text-align: left;
+  max-width: 210px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .fa-hashtag {
   color: #72767d;
+  margin-right: 10px;
 }
 
 .channel_link:hover {
   color: white;
   background-color: #36393f;
+}
+
+.channel_link:hover .hide {
+  display: inherit;
 }
 
 .tippy-box[data-theme~='black'] {
@@ -443,6 +484,24 @@ button {
   width: 100px;
   height: 100px;
   background-color: black;
+}
+
+
+
+.member_result {
+  display: flex;
+  margin: 5px 0;
+}
+
+.member_result p {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.member_search_image {
+  border-radius: 50%;
+  height: 30px;
 }
 
  .edit_server_page{
