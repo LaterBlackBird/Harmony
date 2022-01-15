@@ -67,6 +67,7 @@ export const addToMessages = (data) => async dispatch => {
 // }
 
 export const editAMessage = (data) => async dispatch => {
+    console.log(data)
     const [messageId, content] = data;
     const res = await fetch(`/api/direct_messages/${messageId}`, {
         method: "PATCH",
@@ -79,12 +80,14 @@ export const editAMessage = (data) => async dispatch => {
     })
     if(res.ok){
         let response = await res.json()
+        console.log(response)
         // dispatch(addMessage(response))
         return response;
     }
 }
 
 export const updateMessages = (message) => async dispatch => {
+    console.log('sup')
     dispatch(addMessage(message))
 }
 
@@ -117,7 +120,7 @@ const directMessageReducer = (state = null, action) => {
             return newState;
         case ADD_MESSAGE:
             newState = {...state};
-            newState[action.message.id] = action.message;
+            newState[action.message[0].id] = action.message;
             return newState
         case DELETE_MESSAGE:
             newState = {...state};

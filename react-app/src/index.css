@@ -362,3 +362,22 @@ button {
 h1 {
   margin-bottom: 40px;
 }
+
+.message_content p {
+  word-break: break-word;
+}
+
+.message_content textarea {
+  width: 40vw;
+  height: 20vh;
+}
+
+.message_content textarea:focus, .message_content textarea:hover{
+  width: 40vw;
+  height: 20vh;
+}
+
+#message_container input, #message_container textarea {
+  background-color: black;
+  color: white;
+}
