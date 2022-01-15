@@ -100,12 +100,14 @@ const conversationReducer = (state = {}, action) => {
         case GET_CONVERSATIONS:
             // normalize data
             const allConversations = {};
-            action.conversations.forEach(conversation => {
+            console.log(action.conversations)
+            action.conversations.conversations.forEach(conversation => {
                 allConversations[conversation.id] = conversation;
             });
             return {
                 ...allConversations,
                 ...state,
+                'users': action.conversations.other_user,
             };
         case ADD_CONVERSATION:
             const addState = {...state};

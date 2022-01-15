@@ -110,7 +110,7 @@ function App() {
             <ConversationsList />
           </div>
         </ProtectedRoute>
-        <ProtectedRoute path='/servers/:serverId/conversations/:conversationId/messages' exact={true} >
+        <ProtectedRoute path='/servers/:serverId/conversations/:userId/:conversationId/messages' exact={true} >
           <div id='main_page'>
             <NavBar socket={socket} />
             <ServerPage />

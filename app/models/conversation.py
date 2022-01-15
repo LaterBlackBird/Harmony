@@ -1,5 +1,6 @@
 from .db import db
 from .direct_message import Direct_Message
+# from .user import User
 
 conversations = db.Table(
     'conversations',

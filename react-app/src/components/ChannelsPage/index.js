@@ -138,7 +138,7 @@ function ChannelsList() {
 
         const startConversation = async ({ userId }) => {
         let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
-        history.push(`/servers/0/conversations/${res.id}/messages`)
+        history.push(`/servers/0/conversations/${currentUser}/${res.id}/messages`)
     }
 
     return (
