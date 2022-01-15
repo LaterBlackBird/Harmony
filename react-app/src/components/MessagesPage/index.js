@@ -10,7 +10,7 @@ function Messages({ socket }) {
     const [editMessageForm, setEditMessageForm] = useState(false);
     const [editId, setEditId] = useState(null)
     const dispatch = useDispatch();
-    const { serverId, channelId } = useParams();
+    const { serverId, channelName, channelId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.message)
     // const [messageToEdit, setMessageToEdit] = useState({'content': 'empty'})
@@ -128,11 +128,11 @@ function Messages({ socket }) {
     return (
         <>
             <div id='message_container'>
-                <h1>Messages: </h1>
+                <h1>{channelName}: </h1>
                 <ul>{messageComponents}</ul>
-                <form onSubmit={addMessage}>
+                <form className='new_content' onSubmit={addMessage}>
                     <input type='text' name='content' onChange={e => setMessage(e.target.value)} value={content}></input>
-                    <button>Submit</button>
+                    {/* <button>Submit</button> */}
                 </form>
             </div>
             

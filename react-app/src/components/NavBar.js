@@ -24,7 +24,7 @@ const NavBar = ({socket}) => {
   }
 
   return (
-    <nav>
+    <nav id='navbar'>
       <ul>
         <li>
           {/* <NavLink to='/servers' exact={true} activeClassName='active'>Home</NavLink> */}

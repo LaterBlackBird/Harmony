@@ -122,10 +122,10 @@ img.splash {
   grid-template-areas:
     'servers selections navbar navbar'
     'servers selections messages members';
-  grid-template-columns: 80px 250px 50vw;
+  grid-template-columns: 80px 250px auto 200px;
 }
 
-#nav_bar {
+#navbar {
   grid-area: navbar;
   display: flex;
   flex-direction: column;
@@ -173,7 +173,8 @@ nav ul a {
 
 #servers_container::-webkit-scrollbar,
 #channel_list::-webkit-scrollbar,
-#conversations_container::-webkit-scrollbar {
+#conversations_container::-webkit-scrollbar,
+#message_container ul::-webkit-scrollbar{
   display: none;
 }
 
@@ -184,6 +185,7 @@ nav ul a {
 #members_container {
   grid-area: members;
   background-color: #202225;
+  margin: 30px;
 }
 
 button {
@@ -319,11 +321,15 @@ button {
   display: none;
 }
 
-.server_info_block {
+.server_info_block, .member_info_block {
   display: flex;
   box-sizing: border-box;
   height: 65px;
   width: 80px;
+}
+
+.member_info_block {
+  align-items: center;
 }
 
 .server_link {
@@ -331,8 +337,7 @@ button {
   display: flex;
 }
 
-.server_image,
-.message_content img {
+.server_image, .server_member_image, .message_content img {
   margin: auto;
   object-fit: cover;
   display: flex;
@@ -362,7 +367,7 @@ button {
   font-size: 1.5em;
 }
 
-.server_image:hover {
+.server_image:hover, .server_member_image:hover {
   border-radius: 40%;
 }
 
@@ -509,7 +514,8 @@ i.fas.fa-sort-down {
 }
 
 .message_content div {
-  margin-left: 20px;
+  margin-left: 0px;
+  padding-left: 0px;
 }
 
 h1 {
@@ -535,6 +541,7 @@ h1 {
 #message_container textarea {
   background-color: black;
   color: white;
+  border-radius: 10px;
 }
 
 .member_result {
@@ -757,4 +764,77 @@ h1 {
   border: solid black 1px;
   border-radius: 5px;
   width: 100%;
+}
+
+textarea {
+  resize: none;
+}
+
+#message_container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 50px
+}
+
+#message_container ul, #message_container h1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+/* #message_container h1 {
+  position: absolute;
+  top:10px;
+  left: 10px;
+} */
+#message_container {
+  height: 100%;
+}
+#message_container ul {
+  padding-left: 0px;
+  height: 60vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-bottom: 10px;
+}
+
+.new_content, .new_content input {
+  width: 100%
+}
+
+#message_container .new_content input, #message_container textarea {
+  border-radius: 7px;
+  background-color: rgb(68, 68, 68);
+  border: none;
+}
+
+.new_content input:focus, #message_container textarea, #message_container textarea:focus {
+  border: none;
+  outline: none;
+  padding: 10px;
+}
+
+#message_container .new_content input:focus, #message_container textarea:focus {
+  background-color: black;
+}
+
+.delete_button {
+  background: none;
+  border: none;
+  color: red;
+  margin: 5px;
+  margin-left: 0px;
+  padding: 5px;
+  padding-left: 0px;
+  border-radius: 2px;
+}
+
+.delete_button:hover {
+  background: red;
+  color: white;
+}
+
+h3 {
+  font-size: 17px;
 }

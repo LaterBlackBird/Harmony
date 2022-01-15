@@ -201,7 +201,7 @@ function ChannelsList() {
                         channels.map(channel =>
                             <div key={channel.id} className='channel_name_block'>
                                 <Link
-                                    to={`/servers/${serverId}/channels/${channel.id}/messages`} >
+                                    to={`/servers/${serverId}/channels/${channel.channel_name}/${channel.id}/messages`} >
                                     <div className="channel_link">
                                         <span>
                                             <i className="fas fa-hashtag"></i>
@@ -220,11 +220,12 @@ function ChannelsList() {
 
 
             <div id='members_container'>
+            {members && serverSelected &&<h3>Server Members</h3>}
                 {members && serverSelected && members.map((user) =>
                     <div>
                         <div key={user.id} className="member_info_block">
-                            <a onClick={() => startConversation({ userId: user.id })} className='server_a'>
-                                <img className={`server_image`} src={user.profile_image} alt={user.username} /></a>
+                            <a onClick={() => startConversation({ userId: user.id })} className='server_member_a'>
+                                <img className={`server_member_image`} src={user.profile_image} alt={user.username} /></a>
                             <p>{`${user.username}`}</p>
                         </div>
                     </div>
