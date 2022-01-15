@@ -52,7 +52,7 @@ function EditServerPage() {
           const data = await res.json();
           if(data && data.errors.length > 0) setErrors(data.errors)
         })
-      history.push('/servers')
+      history.push(`/servers/${serverId}/channels`)
       return
 
     }
@@ -112,11 +112,11 @@ function EditServerPage() {
             onChange={updateImage}
             required
           /> */}
-          <input 
-            className='drop_zone' 
-            type='file' 
-            accept="image/*" 
-            onDrop={dropHandler} 
+          <input
+            className='drop_zone'
+            type='file'
+            accept="image/*"
+            onDrop={dropHandler}
             onDragOver={allowDrop}
           />
           </label>

@@ -8,7 +8,7 @@ const JOIN_ADMIN = 'server/JOIN_ADMIN'
 const GET_ADMIN = 'server/GET_ADMIN'
 
 const getAdmin = (server) => {
-  return{
+  return {
     type: GET_ADMIN,
     payload: server
   }
@@ -29,9 +29,10 @@ const joinServer = (server) => {
 }
 
 
-const deleteServer = () => {
+const deleteServer = (serverId) => {
   return {
-    type: DELETE_SERVER
+    type: DELETE_SERVER,
+    payload: serverId
   }
 }
 
@@ -118,7 +119,7 @@ export const deleteAServer = (serverId) => async (dispatch) => {
   await fetch(`/api/servers/${serverId}`, {
     method: 'DELETE'
   })
-  dispatch(deleteServer())
+  dispatch(deleteServer(serverId))
 }
 
 export const editOneServer = (server) => async (dispatch) => {
@@ -210,14 +211,18 @@ const serverReducer = (state = {}, action) => {
       return newState
     case CREATE_SERVER:
       newState = { ...state }
-      newState[action.payload.id]=action.payload
+      newState[action.payload.id] = action.payload
       return newState
     case JOIN_SERVER:
       newState = { ...state }
-      newState[action.payload.id]=action.payload
+      newState[action.payload.id] = action.payload
       return newState
-    case JOIN_ADMIN:
-      newState = { ...state, ...action.payload }
+    // case JOIN_ADMIN:
+    //   newState = { ...state, ...action.payload }
+    //   return newState
+    case DELETE_SERVER:
+      newState = { ...state}
+      delete newState[action.payload]
       return newState
     default:
       return state;
