@@ -13,11 +13,14 @@ function Messages({socket}) {
     const [content, setMessage] = useState([]);
     const [editMessageForm, setEditMessageForm] = useState(false);
     const [editId, setEditId] = useState(null)
+    const conversations = useSelector(state => Object.values(state.conversation));
     const dispatch = useDispatch();
     const { serverId, conversationId } = useParams();
     const session = useSelector(state => state.session);
     const messageState = useSelector(state => state.direct_message)
     const currentUser = session.user;
+    const [otherUser, setOtherUser] =  useState('')
+    // 
 
     useEffect(() => {
         async function fetchData() {
@@ -26,6 +29,22 @@ function Messages({socket}) {
             await dispatch(directMessageActions.getAllDirectMessages({conversationId, userId}));
         }
         fetchData();
+
+        // const convo = conversations[0];
+        // if(currentUser.id === convo.to_user) {
+        //     (async () => {
+        //         const response = await fetch(`/api/users/${convo.from_user}`);
+        //         const user = await response.json();
+        //         setOtherUser(user);
+        //     })();
+        // } else {
+        //     (async () => {
+        //         const response = await fetch(`/api/users/${convo.to_user}`);
+        //         const user = await response.json();
+        //         setOtherUser(user);
+        //     })();
+        // }
+        // console.log(otherUser)
 
 
     }, [dispatch, conversationId]);

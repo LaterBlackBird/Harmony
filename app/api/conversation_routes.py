@@ -31,14 +31,23 @@ def conversations(user_id):
     # user = User()
     # from_users = User.query.join(Conversation, User.id == Conversation.from_user).filter(Conversation.from_user == user_id).all()
     # print(from_users)
-    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user == user_id)).all()
-    
+    conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user == user_id))
+
+    conversations_from = db.session.query(Conversation.from_user).filter(Conversation.to_user == user_id).subquery()
+    conversations_to = db.session.query(Conversation.to_user).filter(Conversation.from_user == user_id).subquery()
+    users = db.session.query(User).filter(db.or_(User.id.in_(conversations_to), User.id.in_(conversations_from)))
+    # conversations = db.session.query(Conversation).filter(db.or_(Conversation.from_user == user_id, Conversation.to_user == user_id)).all()
     # print(convos[0].id)
     # from_user = user.users
     # print(f'....  {user.__dict__} {type(user)}')
     # conversations = User.query.filter(User.from_user == user_id)
     # print(conversations)
-    return {'conversations': [conversation.to_dict() for conversation in conversations]}
+
+    return {'conversations': {
+            'conversations': [conversation.to_dict() for conversation in conversations],
+            'other_user': [user.to_dict() for user in users]
+        }
+    }
 
 @conversation_routes.route('/<int:user_id>', methods=['POST'])
 @login_required
