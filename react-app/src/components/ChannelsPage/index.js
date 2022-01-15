@@ -60,7 +60,7 @@ function ChannelsList() {
             fetchData()
         }
 
-        
+
 
         //if server state is empty, return them to the servers page
         if (Object.keys(servers).length < 1) {
@@ -159,11 +159,11 @@ function ChannelsList() {
                         <div key={channel.id} className='channel_name_block'>
                             <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
                             {isAdmin && (
-                                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
+                                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}><button>Edit</button></Link>
                             )}
                         </div>
                     )}
-                {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
+                {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}><button>Add A Channel</button></Link>}
                 {!serverSelected && <h3>Select A Server</h3>}
 
 
