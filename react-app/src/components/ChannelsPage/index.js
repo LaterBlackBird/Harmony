@@ -150,23 +150,8 @@ function ChannelsList() {
                     {serverSelected && isAdmin && <i class="fas fa-sort-down"></i>}
                     {!serverSelected && <h4>Select A Server</h4>}
                 </div>
-                {serverSelected &&
-                    channels.map(channel =>
-                        <div key={channel.id} className='channel_name_block'>
-                            <Link to={`/servers/${serverId}/channels/${channel.id}/messages`} ><span className='channel_link'><i className="fas fa-hashtag"></i> {channel.channel_name.toLowerCase()}</span></Link>
-                            {isAdmin && (
-                                <Link to={`/servers/${serverId}/channels/${channel.id}/edit`}>Edit</Link>
-                            )}
-                        </div>
-                    )}
-                {serverSelected && isAdmin && <Link to={`/servers/${serverId}/channels/new`}>Add A Channel</Link>}
-                {!serverSelected && <h3>Select A Server</h3>}
-
 
                 <div className="serverOptions">
-                    {serverSelected && isAdmin && (
-                        <button onClick={() => setEditButtons(!editButtons)}>Server Options</button>
-                    )}
                     {serverSelected && editButtons &&
                         <>
                             <button onClick={(e) => {
