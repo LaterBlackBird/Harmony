@@ -133,7 +133,7 @@ img.splash {
   grid-template-areas:
     'servers selections navbar navbar'
     'servers selections messages members';
-  grid-template-columns: 80px 250px auto 200px;
+  grid-template-columns: 80px 250px auto 220px;
   grid-template-rows: 50px auto;
 }
 
@@ -175,6 +175,14 @@ nav ul a {
   grid-area: selections;
   background-color: #2f3136;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.current_user {
+  margin-left: 10px;
+  margin-top: auto;
+  margin-bottom: 15px;
 }
 
 #channel_list {
