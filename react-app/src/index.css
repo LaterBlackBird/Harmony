@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
   background-color: #202225;
   margin: 0;
@@ -5,8 +7,17 @@ body {
 
 * {
   color: #f4f4f5;
-  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
+  font-weight: lighter;
+  font-family: 'Press Start 2P', Arial, Helvetica, sans-serif;
+}
+
+p, textarea {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#members_container p, #message_container p:first-child {
+  font-family: 'Press Start 2P', Arial, Helvetica, sans-serif;
 }
 
 a {
@@ -123,6 +134,7 @@ img.splash {
     'servers selections navbar navbar'
     'servers selections messages members';
   grid-template-columns: 80px 250px auto 200px;
+  grid-template-rows: 50px auto;
 }
 
 #navbar {
@@ -181,11 +193,15 @@ nav ul a {
 #message_container {
   grid-area: messages;
   background-color: #202225;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
 }
 #members_container {
   grid-area: members;
   background-color: #202225;
   margin: 30px;
+  
 }
 
 button {
@@ -789,30 +805,49 @@ textarea {
   left: 10px;
 } */
 #message_container {
-  height: 100%;
+  height: 90vh;
 }
 #message_container ul {
   padding-left: 0px;
-  height: 60vh;
+  height: fit-content;
   overflow-y: scroll;
   overflow-x: hidden;
   margin-bottom: 10px;
 }
 
 .new_content, .new_content input {
-  width: 100%
+  width: 100%;
+}
+
+.new_content{
+  height: 50px;
+  margin-top: auto;
 }
 
 #message_container .new_content input, #message_container textarea {
   border-radius: 7px;
   background-color: rgb(68, 68, 68);
   border: none;
+  padding: 10px;
+}
+
+#message_container p:first-child {
+  font-size: 15px;
+  font-weight: lighter;
+}
+
+#message_container p {
+  padding: 5px;
+}
+
+#message_container .new_content input {
+  word-break: break-word;
+  height: fit-content;
 }
 
 .new_content input:focus, #message_container textarea, #message_container textarea:focus {
   border: none;
   outline: none;
-  padding: 10px;
 }
 
 #message_container .new_content input:focus, #message_container textarea:focus {

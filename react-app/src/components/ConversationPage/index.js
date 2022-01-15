@@ -79,7 +79,7 @@ function ConversationsList() {
 
     const startConversation = async ({ userId }) => {
         let res = await dispatch(conversationActions.addNewConversation({ from_user: currentUser, to_user: userId }))
-        await dispatch(getAllConversations(userId))
+        await dispatch(getAllConversations(currentUser))
         history.push(`/servers/0/conversations/${currentUser}/${res.id}/messages`)
     }
 
@@ -104,7 +104,13 @@ function ConversationsList() {
                         )}
                         {users && users.map((user) =>
                             <div key={user.id} className="users_info_block">
-                                <div onClick={() => startConversation({ userId: user.id })} className='member_result'>
+                                <div onClick={() => {
+                                    startConversation({ userId: user.id })
+                                    setDisplayUsers(false)
+                                    setEditButtons(false)
+                                    setSearchValue('')
+                                }
+                                    } className='member_result'>
                                     <img className='member_search_image' src={user.profile_image} alt={user.username} />
                                     <p>{`${user.username}`}</p>
                                 </div>
