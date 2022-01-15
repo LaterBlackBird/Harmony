@@ -92,7 +92,7 @@ function App() {
             <ChannelsList />
           </div>
         </ProtectedRoute>
-        <ProtectedRoute path='/servers/:serverId/channels/:channelId/messages' exact={true} >
+        <ProtectedRoute path='/servers/:serverId/channels/:channelName/:channelId/messages' exact={true} >
           <div id='main_page'>
             <NavBar socket={socket} />
             <ServerPage />
