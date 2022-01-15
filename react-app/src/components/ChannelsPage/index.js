@@ -147,7 +147,7 @@ function ChannelsList() {
             <div id='channels_container'>
                 <div id='server_title_block' onClick={isAdmin ? () => setEditButtons(!editButtons) : null}>
                     {serverSelected && <h4>{server[0]?.server_name}</h4>}
-                    {serverSelected && isAdmin && <i class="fas fa-sort-down"></i>}
+                    {serverSelected && isAdmin && <i className="fas fa-sort-down"></i>}
                     {!serverSelected && <h4>Select A Server</h4>}
                 </div>
 

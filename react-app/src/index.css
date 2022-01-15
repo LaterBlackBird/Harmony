@@ -477,6 +477,15 @@ i.fas.fa-sort-down {
   display: inherit;
 }
 
+.channel_link button {
+  background: none;
+  border: none;
+}
+
+.channel_link button:hover {
+  cursor: pointer;
+}
+
 .tippy-box[data-theme~='black'] {
   background-color: black;
   color: white;
@@ -522,17 +531,18 @@ h1 {
   height: 20vh;
 }
 
-.message_content textarea:focus, .message_content textarea:hover{
+.message_content textarea:focus,
+.message_content textarea:hover {
   width: 40vw;
   height: 20vh;
 }
 
-#message_container input, #message_container textarea {
+#message_container input,
+#message_container textarea {
   background-color: black;
   color: white;
   border-radius: 10px;
 }
-
 
 .member_result {
   display: flex;
@@ -550,7 +560,7 @@ h1 {
   height: 30px;
 }
 
- .edit_server_page{
+.edit_server_page {
   height: 100vh;
   width: 100vw;
   background-image: url(https://images.unsplash.com/photo-1582641857491-7e9987c2e415?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
@@ -562,7 +572,7 @@ h1 {
   justify-content: center;
 }
 
-.edit_server_form{
+.edit_server_form {
   margin: auto;
   background-color: #36393f;
   border-radius: 5px;
@@ -615,7 +625,7 @@ h1 {
   cursor: pointer;
 }
 
-.create_server_page{
+.create_server_page {
   height: 100vh;
   width: 100vw;
   background-image: url(https://images.unsplash.com/photo-1582641857491-7e9987c2e415?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
@@ -627,7 +637,7 @@ h1 {
   justify-content: center;
 }
 
-.create_server_form{
+.create_server_form {
   margin: auto;
   background-color: #36393f;
   border-radius: 5px;
@@ -662,8 +672,7 @@ h1 {
   width: 100%;
 }
 
-
-.create_channel_page{
+.create_channel_page {
   height: 100vh;
   width: 100vw;
   background-image: url(https://images.unsplash.com/photo-1621508654686-809f23efdabc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80);
@@ -675,7 +684,7 @@ h1 {
   justify-content: center;
 }
 
-.create_channel_form{
+.create_channel_form {
   margin: auto;
   background-color: #36393f;
   border-radius: 5px;
@@ -710,7 +719,7 @@ h1 {
   width: 100%;
 }
 
-.edit_channel_page{
+.edit_channel_page {
   height: 100vh;
   width: 100vw;
   background-image: url(https://images.unsplash.com/photo-1621508654686-809f23efdabc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80);
@@ -722,7 +731,7 @@ h1 {
   justify-content: center;
 }
 
-.edit_channel_form{
+.edit_channel_form {
   margin: auto;
   background-color: #36393f;
   border-radius: 5px;
