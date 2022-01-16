@@ -38,7 +38,6 @@ function App() {
   }, [dispatch]);
 
   if (!loaded) {
-    // socket.disconnect()
     return null;
   }
 
@@ -126,7 +125,6 @@ function App() {
         </ProtectedRoute>
 
       </Switch>
-      {/* {() => { socket.disconnect() }} */}
     </BrowserRouter >
   );
 }

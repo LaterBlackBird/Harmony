@@ -70,9 +70,6 @@ function Messages({socket}) {
             await dispatch(directMessageActions.updateMessages(message));
         })
 
-        // return (() => {
-        //     socket.disconnect();
-        // });
     }, [])
 
     const addMessage = async (e) => {

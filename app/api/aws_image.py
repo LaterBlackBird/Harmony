@@ -10,7 +10,7 @@ image_routes = Blueprint("images", __name__)
 @image_routes.route("", methods=["POST"])
 def upload_image():
     if "image" not in request.files:
-        return {"errors": "image required"}, 400
+        return {"url": 'https://humbleimages.s3.us-east-2.amazonaws.com/06f0ac2c7e2747cc97c13038597313f8.jpg'}
 
     image = request.files["image"]
 
@@ -19,17 +19,17 @@ def upload_image():
     
     image.filename = get_unique_filename(image.filename)
 
-    upload = upload_file_to_s3(image)
+    # upload = upload_file_to_s3(image)
 
-    if "url" not in upload:
-        # if the dictionary doesn't have a url key
-        # it means that there was an error when we tried to upload
-        # so we send back that error message
-        return upload, 400
+    # if "url" not in upload:
+    #     # if the dictionary doesn't have a url key
+    #     # it means that there was an error when we tried to upload
+    #     # so we send back that error message
+    #     return upload, 400
 
-    url = upload["url"]
+    # url = upload["url"]
     # flask_login allows us to get the current user from the request
     # new_image = Image(user=current_user, url=url)
     # db.session.add(new_image)
     # db.session.commit()
-    return {"url": url}
+    return {"url": 'https://humbleimages.s3.us-east-2.amazonaws.com/06f0ac2c7e2747cc97c13038597313f8.jpg'}

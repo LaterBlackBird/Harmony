@@ -10,7 +10,7 @@ class Server(db.Model):
 
     server_image = db.Column(db.String(255))
 
-    channels = db.relationship('Channel', back_populates='server')
+    channels = db.relationship('Channel', cascade="all,delete", back_populates='server')
 
     users = db.relationship(
         'User',
