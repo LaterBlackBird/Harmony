@@ -209,7 +209,7 @@ nav ul a {
   grid-area: members;
   background-color: #202225;
   margin: 30px;
-  
+
 }
 
 button {
@@ -603,9 +603,10 @@ h1 {
   background-color: #36393f;
   border-radius: 5px;
   box-shadow: 2px 2px 10px black;
-  height: 40vh;
+  height: 60vh;
   width: 30vw;
   min-width: 330px;
+  min-height: 450px;
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -762,9 +763,10 @@ h1 {
   background-color: #36393f;
   border-radius: 5px;
   box-shadow: 2px 2px 10px black;
-  height: 30vh;
+  height: 45vh;
   width: 25vw;
   min-width: 330px;
+  min-height: 330px;
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -883,5 +885,3 @@ textarea {
 h3 {
   font-size: 17px;
 }
-
-

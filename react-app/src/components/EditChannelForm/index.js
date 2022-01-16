@@ -58,6 +58,8 @@ function EditChannel() {
                     </div>
                     <button type="submit">Edit Channel</button>
                     <button onClick={deleteChannel}>Delete Channel</button>
+                    <button onClick={ () => history.push(`/servers/${serverId}/channels`)}>Cancel</button>
+
                 </div>
             </form>
         </div>
