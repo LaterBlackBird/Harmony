@@ -19,10 +19,8 @@ const deleteMessage = (messageId) => ({
 
 //thunks
 export const getAllMessages = channelId => async dispatch => {
-    console.log('...............hey')
     const response = await fetch(`/api/channels/${channelId}/messages`);
     const responseData = await response.json();
-    console.log(responseData)
     dispatch(getMessages(responseData.messages))
 }
 
@@ -54,7 +52,6 @@ export const addToMessages = (data) => async dispatch => {
 
 export const editAMessage = (data) => async dispatch => {
     const [messageId, content] = data;
-    console.log(data)
     const res = await fetch(`/api/messages/${messageId}`, {
         method: "PATCH",
         headers: {
@@ -94,7 +91,6 @@ const messageReducer = (state = null, action) => {
     let newState = {};
     switch (action.type) {
         case GET_MESSAGES:
-            console.log(action)
             action.messages.forEach(message => {
                 const key = message[0].id;
                 newState[key] = message;

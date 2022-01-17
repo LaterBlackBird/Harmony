@@ -200,7 +200,6 @@ const serverReducer = (state = {}, action) => {
   let newState = {};
   switch (action.type) {
     case SET_SERVER:
-      console.log(action.payload)
       action.payload.forEach(server => {
         const key = server.id;
         newState[key] = server;

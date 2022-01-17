@@ -33,12 +33,9 @@ const deleteMessage = (messageId) => ({
 // }
 
 export const getAllDirectMessages = data => async dispatch => {
-    console.log('.........................hey')
     const {conversationId, userId} = data;
-    console.log(conversationId, userId)
     const response = await fetch(`/api/conversations/${conversationId}/messages/${userId}`);
     const responseData = await response.json();
-    console.log(responseData)
     dispatch(getMessages(responseData.messages))
 }
 
@@ -67,7 +64,6 @@ export const addToMessages = (data) => async dispatch => {
 // }
 
 export const editAMessage = (data) => async dispatch => {
-    console.log(data)
     const [messageId, content] = data;
     const res = await fetch(`/api/direct_messages/${messageId}`, {
         method: "PATCH",
@@ -80,14 +76,12 @@ export const editAMessage = (data) => async dispatch => {
     })
     if(res.ok){
         let response = await res.json()
-        console.log(response)
         // dispatch(addMessage(response))
         return response;
     }
 }
 
 export const updateMessages = (message) => async dispatch => {
-    console.log('sup')
     dispatch(addMessage(message))
 }
 

@@ -19,8 +19,6 @@ function ServerPage() {
   }, [dispatch])
   useEffect(() => {
     setServersArr(Object.values(server))
-    console.log(Object.values(server))
-    console.log(server)
   }, [dispatch, server])
 
   return (

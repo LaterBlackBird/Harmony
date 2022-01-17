@@ -44,7 +44,6 @@ function EditServerPage() {
         setImageLoading(false);
         // a real app would probably use more advanced
         // error handling
-        console.log("error");
       }
       setErrors([])
       await dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
@@ -66,7 +65,6 @@ function EditServerPage() {
   const dropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.dataTransfer)
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);

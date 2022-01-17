@@ -14,6 +14,7 @@ function CreateServerPage() {
   const session = useSelector(state => state.session);
   // const [server_image, setServer_image] = useState("")
   const currentUser = session.user.id
+  const[imageUrl, setImageUrl] = useState('')
 
 
   const handleSubmit = async (e) => {
@@ -22,27 +23,29 @@ function CreateServerPage() {
       setErrors(['Server name must be between 5 and 100 characters'])
     }
     else {
-      const formData = new FormData();
-      formData.append("image", image);
+      // const formData = new FormData();
+      // formData.append("image", image);
+      // getSignedRequest(image);
 
-      let imageUrl = '';
+      // setImageLoading(true);
+      // const res = await fetch('/api/images', {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      setImageLoading(true);
-      const res = await fetch('/api/images', {
-        method: "POST",
-        body: formData,
-      });
-
-      if (res.ok) {
-        const response = await res.json();
-        imageUrl = response.url
-        setImageLoading(false);
-      }
-      else {
-        setImageLoading(false);
-        // a real app would probably use more advanced
-        // error handling
-      }
+      // if (res.ok) {
+      //   const response = await res.json();
+      //   console.log(response)
+      //   imageUrl = response.url
+      //   uploadFile(image, response.data, response.url);
+      //   setImageLoading(false);
+      // }
+      // else {
+      //   setImageLoading(false);
+      //   // a real app would probably use more advanced
+      //   // error handling
+      // }
+      console.log(imageUrl)
       setErrors([])
       history.push('/servers')
       return dispatch(serverActions.createAServer( server_name, imageUrl, currentUser ))
@@ -54,6 +57,51 @@ function CreateServerPage() {
     }
   }
 
+  function getSignedRequest(file){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/images?file_name="+file.name+"&file_type="+file.type);
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          var response = JSON.parse(xhr.responseText);
+          uploadFile(file, response.data, response.url);
+        }
+        else{
+          alert("Could not get signed URL.");
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function uploadFile(file, s3Data, url){
+    var xhr = new XMLHttpRequest();
+    console.log(url)
+    console.log(file.type);
+    xhr.open("POST", s3Data.url, {
+      headers:{
+        'Content-Type': file.type
+      }
+    });
+    var postData = new FormData();
+    for(let key in s3Data.fields){
+      postData.append(key, s3Data.fields[key]);
+    }
+    postData.append('file', file);
+  
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200 || xhr.status === 204){
+          setImageUrl(url)
+        }
+        else{
+          alert("Could not upload file.");
+        }
+     }
+    };
+    xhr.send(postData);
+  }
+
   const updateImage = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -62,10 +110,10 @@ function CreateServerPage() {
   const dropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.dataTransfer)
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    getSignedRequest(data['0']);
     e.target.style.backgroundColor = 'green'
     e.target.innerHTML = 'Image Selected'
   }
@@ -76,7 +124,7 @@ function CreateServerPage() {
     e.target.style.backgroundColor = 'blue';
 
   }
-  
+
   function revertDrop(e) {
     e.stopPropagation();
     e.preventDefault();

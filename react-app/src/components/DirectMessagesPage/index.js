@@ -44,7 +44,6 @@ function Messages({socket}) {
         //         setOtherUser(user);
         //     })();
         // }
-        // console.log(otherUser)
 
 
     }, [dispatch, conversationId]);

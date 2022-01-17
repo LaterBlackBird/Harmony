@@ -13,7 +13,6 @@ function DirectMessage({socket, directMessage}) {
     const history = useHistory()
     useEffect(() => {
         if(directMessage) {
-            console.log('hey')
             setContent(directMessage.content)
             setMessageData(directMessage)
         }

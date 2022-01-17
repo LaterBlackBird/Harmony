@@ -64,7 +64,6 @@ function ConversationsList() {
     }
 
     // const getOtherUser = async (convo) => {
-    //     console.log(userId === convo.to_user)
     //     if(userId === convo.to_user) {
     //         const response = await fetch(`/api/users/${convo.from_user}`);
     //         const from_user = await response.json();
@@ -74,7 +73,6 @@ function ConversationsList() {
     //         const to_user = await response.json();
     //         setOtherUser(to_user);
     //     }
-    //     // console.log(otherUser)
     // }
 
     const startConversation = async ({ userId }) => {

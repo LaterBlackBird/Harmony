@@ -1,35 +1,39 @@
 from flask import Blueprint, request
+import json, os, boto3
 # from app.models import db, Image
 from flask_login import current_user, login_required
-from app.aws.config import (
-    upload_file_to_s3, allowed_file, get_unique_filename)
+# from app.aws.config import (
+#     upload_file_to_s3, allowed_file, get_unique_filename)
 
 image_routes = Blueprint("images", __name__)
 
 
-@image_routes.route("", methods=["POST"])
+@image_routes.route("", methods=["GET"])
 def upload_image():
-    if "image" not in request.files:
-        return {"url": 'https://humbleimages.s3.us-east-2.amazonaws.com/06f0ac2c7e2747cc97c13038597313f8.jpg'}
+  S3_BUCKET = os.environ.get('S3_BUCKET')
 
-    image = request.files["image"]
+  file_name = request.args.get('file_name')
+  file_type = request.args.get('file_type')
 
-    if not allowed_file(image.filename):
-        return {"errors": "file type not permitted"}, 400
-    
-    image.filename = get_unique_filename(image.filename)
+  print('.................')
+  print(file_name)
+  print(file_type)
+  s3 = boto3.client('s3',
+    region_name='us-east-2'
+  )
 
-    # upload = upload_file_to_s3(image)
+  presigned_post = s3.generate_presigned_post(
+    Bucket = S3_BUCKET,
+    Key = file_name,
+    Fields = {"acl": "public-read", "Content-Type": file_type},
+    Conditions = [
+      {"acl": "public-read"},
+      {"Content-Type": file_type}
+    ],
+    ExpiresIn = 3600
+  )
 
-    # if "url" not in upload:
-    #     # if the dictionary doesn't have a url key
-    #     # it means that there was an error when we tried to upload
-    #     # so we send back that error message
-    #     return upload, 400
-
-    # url = upload["url"]
-    # flask_login allows us to get the current user from the request
-    # new_image = Image(user=current_user, url=url)
-    # db.session.add(new_image)
-    # db.session.commit()
-    return {"url": 'https://humbleimages.s3.us-east-2.amazonaws.com/06f0ac2c7e2747cc97c13038597313f8.jpg'}
+  return json.dumps({
+    'data': presigned_post,
+    'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
+  })

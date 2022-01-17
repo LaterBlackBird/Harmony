@@ -44,7 +44,6 @@ const SignUpForm = () => {
         setImageLoading(false);
         // a real app would probably use more advanced
         // error handling
-        console.log("error");
       }
     }
     else {
@@ -83,7 +82,6 @@ const SignUpForm = () => {
   const dropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.dataTransfer)
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
