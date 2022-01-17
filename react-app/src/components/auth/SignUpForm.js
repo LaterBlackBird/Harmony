@@ -15,39 +15,41 @@ const SignUpForm = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
+  const[imageUrl, setImageUrl] = useState('')
 
   const onSignUp = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", image);
 
-    let imageUrl = '';
+    // let imageUrl = '';
 
     setImageLoading(true);
     if(image) {
-      const res = await fetch('/api/images', {
-        method: "POST",
-        body: formData,
-      });
-      if (res.ok) {
-        imageUrl = await res.json();
-        setImageLoading(false);
-        history.push("/images");
+      // const res = await fetch('/api/images', {
+      //   method: "POST",
+      //   body: formData,
+      // });
+      // if (res.ok) {
+      //   imageUrl = await res.json();
+      //   setImageLoading(false);
+        // history.push("/images");
+        console.log(imageUrl)
         if (password === repeatPassword) {
           const data = await dispatch(signUp(username, email, password, imageUrl));
           if (data) {
             setErrors(data)
           }
         }
-      }
-      else {
-        setImageLoading(false);
-        // a real app would probably use more advanced
-        // error handling
-      }
+      // }
+      // else {
+      //   setImageLoading(false);
+      //   // a real app would probably use more advanced
+      //   // error handling
+      // }
     }
     else {
-      imageUrl = {'url': 'https://humbleimages.s3.amazonaws.com/68f2472108db4b15a928a7ca82035a9d.png'};
+      setImageUrl('https://humbleimages.s3.amazonaws.com/68f2472108db4b15a928a7ca82035a9d.png');
       setImageLoading(false);
       if (password === repeatPassword) {
         const data = await dispatch(signUp(username, email, password, imageUrl));
@@ -57,6 +59,51 @@ const SignUpForm = () => {
       }
     }
   };
+
+  function getSignedRequest(file){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/images?file_name="+file.name+"&file_type="+file.type);
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          var response = JSON.parse(xhr.responseText);
+          uploadFile(file, response.data, response.url);
+        }
+        else{
+          alert("Could not get signed URL.");
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function uploadFile(file, s3Data, url){
+    var xhr = new XMLHttpRequest();
+    console.log(url)
+    console.log(file.type);
+    xhr.open("POST", s3Data.url, {
+      headers:{
+        'Content-Type': file.type
+      }
+    });
+    var postData = new FormData();
+    for(let key in s3Data.fields){
+      postData.append(key, s3Data.fields[key]);
+    }
+    postData.append('file', file);
+  
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200 || xhr.status === 204){
+          setImageUrl(url)
+        }
+        else{
+          alert("Could not upload file.");
+        }
+     }
+    };
+    xhr.send(postData);
+  }
 
   const updateUsername = (e) => {
     setUsername(e.target.value);
@@ -85,6 +132,7 @@ const SignUpForm = () => {
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    getSignedRequest(data['0']);
     e.target.style.backgroundColor = 'green'
     e.target.innerHTML = 'Image Selected'
   }
