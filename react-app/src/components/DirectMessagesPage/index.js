@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as directMessageActions from '../../store/direct_message';
 import * as messageActions from '../../store/message';
 import DirectMessage from '../DirectMessagesEditForm';
-// import { io } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-// let socket;
+let socket;
 
-function Messages({socket}) {
+function Messages() {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
     const [editMessageForm, setEditMessageForm] = useState(false);
@@ -55,21 +55,36 @@ function Messages({socket}) {
     }, [messageState])
 
     useEffect(() => {
-        // socket = io();
+        if(socket) {
+            socket.disconnect()
+        }
+    }, [])
+
+    useEffect(() => {
+
+        socket = io();
 
         socket.on('message', async (message) => {
-            await dispatch(directMessageActions.updateMessages(message));
+            if(!message[0].channel_id && message[0].conversation_id == conversationId) {
+                await dispatch(directMessageActions.updateMessages(message));
+            }
         })
 
         socket.on('message_delete', async (messageId) => {
-            await dispatch(directMessageActions.removeTheMessage(messageId));
+                await dispatch(directMessageActions.removeTheMessage(messageId));
         })
 
         socket.on('message_edit', async (message) => {
-            await dispatch(directMessageActions.updateMessages(message));
+            if(!message[0].channel_id && message[0].conversation_id == conversationId) {
+                await dispatch(directMessageActions.updateMessages(message));
+            }
         })
 
-    }, [])
+        return (() => {
+            socket.disconnect()
+        })
+
+    }, [conversationId])
 
     const addMessage = async (e) => {
         e.preventDefault()

@@ -3,8 +3,11 @@ import { useParams, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as messageActions from '../../store/message';
 import Message from '../MessagesEditForm';
+import { io } from 'socket.io-client';
 
-function Messages({ socket }) {
+let socket;
+
+function Messages() {
     const [messages, setMessages] = useState([]);
     const [content, setMessage] = useState([]);
     const [editMessageForm, setEditMessageForm] = useState(false);
@@ -17,7 +20,12 @@ function Messages({ socket }) {
     const currentUser = session.user;
     const [editMessage, setEditMessage] = useState(false);
     const history = useHistory();
+
+    console.log(channelId)
     
+    // useEffect(() => {
+    //     const { serverId, channelName, channelId } = useParams();
+    // })
 
     useEffect(() => {
         async function fetchData() {
@@ -33,10 +41,24 @@ function Messages({ socket }) {
     }, [messageState])
 
     useEffect(() => {
+        if(socket) {
+            socket.disconnect()
+        }
+    }, [])
+    
+    useEffect(() => {
+
+        socket = io();
+
 
         socket.on('message', async (message) => {
+            console.log(message[0].channel_id)
+            console.log(channelId)
+            console.log(!message[0].conversation_id && message[0].channel_id == channelId)
             if (currentUser.id !== message.user_id) {
-                await dispatch(messageActions.updateMessages(message));
+                if(!message[0].conversation_id && message[0].channel_id == channelId) {
+                    await dispatch(messageActions.updateMessages(message));
+                }
             }
         })
 
@@ -46,11 +68,21 @@ function Messages({ socket }) {
 
         socket.on('message_edit', async (message) => {
             if (currentUser.id !== message.user_id) {
-                await dispatch(messageActions.updateMessages(message));
+                if(!message[0].conversation_id && message[0].channel_id == channelId) {
+                    await dispatch(messageActions.updateMessages(message));
+                }
             }
         })
 
-    }, [])
+        return (() => {
+            socket.disconnect()
+        })
+
+    }, [channelId])
+
+    // useEffect(() => {
+    //     socket.disconnect()
+    // }, [channelId])
 
     const addMessage = async (e) => {
         e.preventDefault()
