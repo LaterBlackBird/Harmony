@@ -14,6 +14,7 @@ function EditServerPage() {
   const [image, setImage] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [server_image, setImageUrl] = useState('')
+  const [allowSubmit, setAllowSubmit] = useState(false)
 
   const { id } = useParams()
   useEffect(() => {
@@ -93,6 +94,8 @@ function EditServerPage() {
       if(xhr.readyState === 4){
         if(xhr.status === 200 || xhr.status === 204){
           setImageUrl(url)
+          setAllowSubmit(true);
+          setImageLoading(false);
         }
         else{
           alert("Could not upload file.");
@@ -113,6 +116,7 @@ function EditServerPage() {
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    setImageLoading(true);
     getSignedRequest(data['0']);
     e.target.style.backgroundColor = 'green'
     e.target.innerHTML = 'Image Selected'
@@ -170,7 +174,7 @@ function EditServerPage() {
         </div>
 
         </div>
-        <button type="submit">Edit Server</button>
+        {allowSubmit && <button type="submit">Edit Server</button>}
         <button onClick={ () => history.push(`/servers/${serverId}/channels`)}>Cancel</button>
         {(imageLoading) && <p>Loading...</p>}
         </div>

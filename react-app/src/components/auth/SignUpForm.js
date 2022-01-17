@@ -16,6 +16,7 @@ const SignUpForm = () => {
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
   const[imageUrl, setImageUrl] = useState('')
+  const [allowSubmit, setAllowSubmit] = useState(false)
 
   const onSignUp = async (e) => {
     e.preventDefault();
@@ -24,7 +25,7 @@ const SignUpForm = () => {
 
     // let imageUrl = '';
 
-    setImageLoading(true);
+    // setImageLoading(true);
     if(image) {
       // const res = await fetch('/api/images', {
       //   method: "POST",
@@ -96,6 +97,8 @@ const SignUpForm = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200 || xhr.status === 204){
           setImageUrl(url)
+          setAllowSubmit(true);
+          setImageLoading(false);
         }
         else{
           alert("Could not upload file.");
@@ -132,6 +135,7 @@ const SignUpForm = () => {
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    setImageLoading(true);
     getSignedRequest(data['0']);
     e.target.style.backgroundColor = 'green'
     e.target.innerHTML = 'Image Selected'
@@ -220,7 +224,7 @@ const SignUpForm = () => {
             </div>
 
           </div>
-          <button type='submit'>Sign Up</button>
+          {allowSubmit && <button type='submit'>Sign Up</button>}
           {(imageLoading) && <p>Loading...</p>}
           <p className='login_signup_switch_text'><Link to='/login'>Already have an account?</Link></p>
 

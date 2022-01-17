@@ -15,6 +15,7 @@ function CreateServerPage() {
   // const [server_image, setServer_image] = useState("")
   const currentUser = session.user.id
   const[imageUrl, setImageUrl] = useState('')
+  const [allowSubmit, setAllowSubmit] = useState(false)
 
 
   const handleSubmit = async (e) => {
@@ -92,7 +93,9 @@ function CreateServerPage() {
     xhr.onreadystatechange = function() {
       if(xhr.readyState === 4){
         if(xhr.status === 200 || xhr.status === 204){
-          setImageUrl(url)
+          setImageUrl(url);
+          setAllowSubmit(true);
+          setImageLoading(false);
         }
         else{
           alert("Could not upload file.");
@@ -113,6 +116,7 @@ function CreateServerPage() {
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    setImageLoading(true);
     getSignedRequest(data['0']);
     e.target.style.backgroundColor = 'green'
     e.target.innerHTML = 'Image Selected'
@@ -165,7 +169,7 @@ function CreateServerPage() {
             Drag and Drop Profile Image Here
         </div>
         </div>
-        <button type="submit">Create Server</button>
+        {allowSubmit && <button type="submit">Create Server</button>}
         {(imageLoading) && <p>Loading...</p>}
         </div>
       </form>
