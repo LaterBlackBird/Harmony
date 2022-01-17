@@ -242,10 +242,12 @@ button {
 
 #login_form {
   height: auto;
+  padding: 10px;
 }
 
 #signup_form {
   height: auto;
+  padding: 10px;
 }
 
 .user_auth_main_section {
@@ -603,12 +605,13 @@ h1 {
   background-color: #36393f;
   border-radius: 5px;
   box-shadow: 2px 2px 10px black;
-  height: 40vh;
+  height: auto;
   width: 30vw;
   min-width: 330px;
   text-align: center;
   display: flex;
   flex-direction: row;
+  padding: 10px;
 }
 
 .edit_server_input {
@@ -668,12 +671,13 @@ h1 {
   background-color: #36393f;
   border-radius: 5px;
   box-shadow: 2px 2px 10px black;
-  height: 45vh;
+  height: auto;
   width: 30vw;
   min-width: 330px;
   text-align: center;
   display: flex;
   flex-direction: row;
+  padding: 10px;
 }
 
 .create_server_input {
@@ -715,12 +719,13 @@ h1 {
   background-color: #36393f;
   border-radius: 5px;
   box-shadow: 2px 2px 10px black;
-  height: 30vh;
+  height: auto;
   width: 25vw;
   min-width: 330px;
   text-align: center;
   display: flex;
   flex-direction: row;
+  padding: 10px;
 }
 
 .create_channel_input {
@@ -762,12 +767,13 @@ h1 {
   background-color: #36393f;
   border-radius: 5px;
   box-shadow: 2px 2px 10px black;
-  height: 30vh;
+  height: auto;
   width: 25vw;
   min-width: 330px;
   text-align: center;
   display: flex;
   flex-direction: row;
+  padding: 10px;
 }
 
 .edit_channel_input {
@@ -884,4 +890,8 @@ h3 {
   font-size: 17px;
 }
 
-
+pre {
+  color: red;
+  size: 10px;
+  padding: 5px;
+}

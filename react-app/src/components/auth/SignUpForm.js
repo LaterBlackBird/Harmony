@@ -50,7 +50,6 @@ const SignUpForm = () => {
     else {
       imageUrl = {'url': 'https://humbleimages.s3.amazonaws.com/68f2472108db4b15a928a7ca82035a9d.png'};
       setImageLoading(false);
-      history.push("/images");
       if (password === repeatPassword) {
         const data = await dispatch(signUp(username, email, password, imageUrl));
         if (data) {
@@ -136,6 +135,7 @@ const SignUpForm = () => {
               value={email}
             ></input>
           </div>
+          {password != repeatPassword && <pre>Passwords do not match</pre>}
           <div className='user_auth_input'>
             <label>Password</label>
             <input
