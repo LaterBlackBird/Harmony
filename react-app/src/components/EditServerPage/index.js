@@ -70,11 +70,21 @@ function EditServerPage() {
     let data = e.dataTransfer.files;
     console.log(data['0'])
     setImage(data['0']);
+    e.target.style.backgroundColor = 'green'
+    e.target.innerHTML = 'Image Selected'
   }
 
   function allowDrop(e) {
-    e.target.style.backgroundColor = 'blue';
+    e.stopPropagation();
     e.preventDefault();
+    e.target.style.backgroundColor = 'blue';
+
+  }
+
+  function revertDrop(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.target.style.backgroundColor = '#202225';
   }
 
 
@@ -103,33 +113,17 @@ function EditServerPage() {
         </label>
         </div>
         <div className='edit_server_input'>
-        <label>
-          Server Image
-          {/* <input
-            type="file"
-            accept="image/*"
-            name='server_image'
-            onChange={updateImage}
-            required
-          /> */}
-          <input
-            className='drop_zone'
-            type='file'
-            accept="image/*"
-            onDrop={dropHandler}
-            onDragOver={allowDrop}
-          />
-          </label>
-          <label>
-            Drag and Drop Image Zone
-          <input
-            className='drop_zone'
-            // type='file'
-            accept="image/*"
-            onDrop={dropHandler}
-            onDragOver={allowDrop}
-          />
-          </label>
+        
+        <div className='drop_zone'
+          className='drop_zone' 
+          // type='file' 
+          accept="image/*" 
+          onDrop={dropHandler} 
+          onDragOver={allowDrop}
+          onDragLeave={revertDrop}
+          >
+          Drag and Drop Profile Image Here
+        </div>
         </div>
         <button type="submit">Edit Server</button>
         {(imageLoading) && <p>Loading...</p>}
