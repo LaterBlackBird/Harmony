@@ -45,16 +45,13 @@ function Messages() {
             socket.disconnect()
         }
     }, [])
-    
+
     useEffect(() => {
 
         socket = io();
 
 
         socket.on('message', async (message) => {
-            console.log(message[0].channel_id)
-            console.log(channelId)
-            console.log(!message[0].conversation_id && message[0].channel_id == channelId)
             if (currentUser.id !== message.user_id) {
                 if(!message[0].conversation_id && message[0].channel_id == channelId) {
                     await dispatch(messageActions.updateMessages(message));
@@ -124,8 +121,8 @@ function Messages() {
     const showForm = (message) => {
         return (
             <>
+                {editId == message.id && <button className='delete_button' onClick={e => deleteMessage(message.id)}>Remove</button>}
                 {editId == message.id && <Message socket={socket} message={message} />}
-                {editId == message.id && <button onClick={e => deleteMessage(message.id)}>Delete</button>}
             </>
         )
     }
