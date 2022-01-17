@@ -124,8 +124,10 @@ function EditServerPage() {
           >
           Drag and Drop Profile Image Here
         </div>
+
         </div>
         <button type="submit">Edit Server</button>
+        <button onClick={ () => history.push(`/servers/${serverId}/channels`)}>Cancel</button>
         {(imageLoading) && <p>Loading...</p>}
         </div>
       </form>

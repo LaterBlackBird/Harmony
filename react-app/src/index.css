@@ -209,7 +209,7 @@ nav ul a {
   grid-area: members;
   background-color: #202225;
   margin: 30px;
-  
+
 }
 
 button {
@@ -608,6 +608,7 @@ h1 {
   height: auto;
   width: 30vw;
   min-width: 330px;
+  min-height: 450px;
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -770,6 +771,7 @@ h1 {
   height: auto;
   width: 25vw;
   min-width: 330px;
+  min-height: 330px;
   text-align: center;
   display: flex;
   flex-direction: row;
