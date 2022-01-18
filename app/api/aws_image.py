@@ -10,6 +10,7 @@ image_routes = Blueprint("images", __name__)
 
 @image_routes.route("", methods=["GET"])
 def upload_image():
+
   S3_BUCKET = os.environ.get('S3_BUCKET')
 
   file_name = request.args.get('file_name')
@@ -37,3 +38,4 @@ def upload_image():
     'data': presigned_post,
     'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
   })
+
