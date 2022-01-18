@@ -1,6 +1,17 @@
-# Flask React Project
+# Harmony
+https://harmony-aug21.herokuapp.com
 
-This is the starter for the Flask React project.
+## About Harmony
+
+Harmony is a discord clone with a simple UI. It focuses on instant delivery of messages between groups of people. In Harmony there are two main ways to interact with other users, directly and via group messaging. Two people can interact with each other through private conversations initiated by either party or in a server room where they can participate in discussions across multiple channels.
+
+Here is an example of a direct conversation:
+![dm](https://bl3302files.storage.live.com/y4mTPd3XoKTYlI4b7NzT6uSCKbhNBfF7Pc0NKz7bkIC1TkGWRlIytSFTCsQBZ11RWQa9CoZ5_R7MHv1JOPXqq8GEGj7F5zHpZspkiHjHlB13GSqhNrLwf0HshOhA7rzjmvBbuoAQAZFQ3CqziVTp0lKW6giyINnAYoyd87lYWVpaEQfPOe75XJhdIzkOcO6ErMq?width=1920&height=1056&cropmode=none)
+
+Here is an example of a channel conversation:
+![sm](https://bl3302files.storage.live.com/y4mvE_c9KzCopqbspXH0A2ryvQv-HVTPaaw4NVTxap-LcELX3IqpSUCB3kyRv7auYGcjYtY0KFQgmHp1CGVBcCqptGnc99HDXe1PA-OhSbpB0O2htDtytJ52BZOD-8K_3T2zF8grMxKx_2xdWOt-lfOjDE4J46tAXG_bvsKV_c7P7w8shSPklIvacv0eCXCOPzu?width=1920&height=1053&cropmode=none)
+
+This is the starter for the Harmony project if you wish to make a fork of the application.
 
 ## Getting started
 
@@ -132,3 +143,33 @@ of your Heroku app in the url and tag name:
    ```bash=3
    docker push registry.heroku.com/{NAME_OF_HEROKU_APP}/web
    ```
+        
+## Technical background
+
+Harmony uses several frontend and backend technologies to make the application run. For Harmony to work, it uses:
+
+### Frontend
+- React
+- Redux
+- JSX
+- CSS
+- socket.io
+- AWS S3 direct uploading
+
+### Backend
+- Python
+- Flask
+- SQLAlchemy
+- PostgreSQL
+- socket.io
+- Docker
+- Gunicorn
+- Eventlet
+
+## Implementation
+
+These technologies interact seamlessly together and with use of docker, deployment is easy and reliable. One of the more challenging decisions was how to implement the connection to the S3 server. The two options are direct and passthrough uploading. Direct was chosen because it takes work off of the backend and would allow for useres to upload larger files quicker, which will become more important as more mediums, such as video files and 3D models, can be shared in the future.
+
+## To-dos
+Messaging is the core feature in Harmony. As such there are still future improvements that can be made on the messaging experience. Allowing rich text editing and image attachements will enhance the users experiences and the level at which they can communicate with each other. In addition, other mediums of communication could be added to Harmony in the future as well, such as live audio communication between users. Currently, Harmony only allows for private servers and messages, adding the ability to create a public server would also enhance user experience by allowing them to more easily find communities to join.
+
