@@ -21,7 +21,7 @@ function Messages() {
     const [editMessage, setEditMessage] = useState(false);
     const history = useHistory();
 
-    console.log(channelId)
+     
     
     // useEffect(() => {
     //     const { serverId, channelName, channelId } = useParams();

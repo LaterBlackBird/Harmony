@@ -36,7 +36,7 @@ function CreateServerPage() {
 
       // if (res.ok) {
       //   const response = await res.json();
-      //   console.log(response)
+      //    
       //   imageUrl = response.url
       //   uploadFile(image, response.data, response.url);
       //   setImageLoading(false);
@@ -46,7 +46,7 @@ function CreateServerPage() {
       //   // a real app would probably use more advanced
       //   // error handling
       // }
-      console.log(imageUrl)
+       
       setErrors([])
       history.push('/servers')
       return dispatch(serverActions.createAServer( server_name, imageUrl, currentUser ))
@@ -77,8 +77,8 @@ function CreateServerPage() {
 
   function uploadFile(file, s3Data, url){
     var xhr = new XMLHttpRequest();
-    console.log(url)
-    console.log(file.type);
+     
+     
     xhr.open("POST", s3Data.url, {
       headers:{
         'Content-Type': file.type
@@ -114,7 +114,7 @@ function CreateServerPage() {
     e.preventDefault();
     e.stopPropagation();
     let data = e.dataTransfer.files;
-    console.log(data['0'])
+     
     setImage(data['0']);
     setImageLoading(true);
     getSignedRequest(data['0']);

@@ -35,7 +35,7 @@ const SignUpForm = () => {
       //   imageUrl = await res.json();
       //   setImageLoading(false);
         // history.push("/images");
-        console.log(imageUrl)
+         
         if (password === repeatPassword) {
           const data = await dispatch(signUp(username, email, password, imageUrl));
           if (data) {
@@ -80,8 +80,8 @@ const SignUpForm = () => {
 
   function uploadFile(file, s3Data, url){
     var xhr = new XMLHttpRequest();
-    console.log(url)
-    console.log(file.type);
+     
+     
     xhr.open("POST", s3Data.url, {
       headers:{
         'Content-Type': file.type
@@ -133,7 +133,7 @@ const SignUpForm = () => {
     e.preventDefault();
     e.stopPropagation();
     let data = e.dataTransfer.files;
-    console.log(data['0'])
+     
     setImage(data['0']);
     setImageLoading(true);
     getSignedRequest(data['0']);

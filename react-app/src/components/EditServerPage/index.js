@@ -77,8 +77,8 @@ function EditServerPage() {
 
   function uploadFile(file, s3Data, url){
     var xhr = new XMLHttpRequest();
-    console.log(url)
-    console.log(file.type);
+     
+     
     xhr.open("POST", s3Data.url, {
       headers:{
         'Content-Type': file.type
@@ -114,7 +114,7 @@ function EditServerPage() {
     e.preventDefault();
     e.stopPropagation();
     let data = e.dataTransfer.files;
-    console.log(data['0'])
+     
     setImage(data['0']);
     setImageLoading(true);
     getSignedRequest(data['0']);
