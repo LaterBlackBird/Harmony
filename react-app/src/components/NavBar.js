@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 
-const NavBar = ({socket}) => {
+const NavBar = () => {
   let userLinks;
   const user = useSelector(state => state.session.user);
   if (!user) {
@@ -17,10 +17,9 @@ const NavBar = ({socket}) => {
   } else {
     userLinks = (
       <>
-        {/* <NavLink to='/users' exact={true} activeClassName='active'>Users</NavLink> */}
         {!window.location.href.includes('servers') &&
         <NavLink to='/servers'>Home</NavLink> }
-        <LogoutButton socket={socket} />
+        <LogoutButton />
       </>
     )
   }

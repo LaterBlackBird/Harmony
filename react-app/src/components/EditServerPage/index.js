@@ -13,6 +13,8 @@ function EditServerPage() {
   const [serverId, setServerId] = useState(0)
   const [image, setImage] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const [server_image, setImageUrl] = useState('')
+  const [allowSubmit, setAllowSubmit] = useState(false)
 
   const { id } = useParams()
   useEffect(() => {
@@ -21,31 +23,29 @@ function EditServerPage() {
 
 
   const handleSubmit = async (e) => {
-    let server_image;
     e.preventDefault();
     if(server_name.length < 5 || server_name.length > 100){
       setErrors(['Server name must be between 5 and 100 characters'])
     }
     else{
-      const formData = new FormData();
-      formData.append("image", image);
-      setImageLoading(true);
-      const res = await fetch('/api/images', {
-        method: "POST",
-        body: formData,
-      });
+      // const formData = new FormData();
+      // formData.append("image", image);
+      // setImageLoading(true);
+      // const res = await fetch('/api/images', {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      if (res.ok) {
-        let response = await res.json();
-        server_image = response.url
-        setImageLoading(false);
-      }
-      else {
-        setImageLoading(false);
-        // a real app would probably use more advanced
-        // error handling
-        console.log("error");
-      }
+      // if (res.ok) {
+      //   let response = await res.json();
+      //   server_image = response.url
+      //   setImageLoading(false);
+      // }
+      // else {
+      //   setImageLoading(false);
+      //   // a real app would probably use more advanced
+      //   // error handling
+      // }
       setErrors([])
       await dispatch(serverActions.editOneServer({ serverId, server_name, server_image }))
         .catch(async (res) => {
@@ -58,6 +58,53 @@ function EditServerPage() {
     }
   }
 
+  function getSignedRequest(file){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/images?file_name="+file.name+"&file_type="+file.type);
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          var response = JSON.parse(xhr.responseText);
+          uploadFile(file, response.data, response.url);
+        }
+        else{
+          alert("Could not get signed URL.");
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function uploadFile(file, s3Data, url){
+    var xhr = new XMLHttpRequest();
+     
+     
+    xhr.open("POST", s3Data.url, {
+      headers:{
+        'Content-Type': file.type
+      }
+    });
+    var postData = new FormData();
+    for(let key in s3Data.fields){
+      postData.append(key, s3Data.fields[key]);
+    }
+    postData.append('file', file);
+  
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200 || xhr.status === 204){
+          setImageUrl(url)
+          setAllowSubmit(true);
+          setImageLoading(false);
+        }
+        else{
+          alert("Could not upload file.");
+        }
+     }
+    };
+    xhr.send(postData);
+  }
+
   const updateImage = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -66,15 +113,26 @@ function EditServerPage() {
   const dropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.dataTransfer)
     let data = e.dataTransfer.files;
-    console.log(data['0'])
+     
     setImage(data['0']);
+    setImageLoading(true);
+    getSignedRequest(data['0']);
+    e.target.style.backgroundColor = 'green'
+    e.target.innerHTML = 'Image Selected'
   }
 
   function allowDrop(e) {
-    e.target.style.backgroundColor = 'blue';
+    e.stopPropagation();
     e.preventDefault();
+    e.target.style.backgroundColor = 'blue';
+
+  }
+
+  function revertDrop(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.target.style.backgroundColor = '#202225';
   }
 
 
@@ -103,35 +161,20 @@ function EditServerPage() {
         </label>
         </div>
         <div className='edit_server_input'>
-        {/* <label>
-          Server Image
-          <input
-            type="file"
-            accept="image/*"
-            name='server_image'
-            onChange={updateImage}
-            required
-          />
-          <input
-            className='drop_zone'
-            type='file'
-            accept="image/*"
-            onDrop={dropHandler}
-            onDragOver={allowDrop}
-          />
-          </label> */}
-          <label>
-            Drag and Drop Image Zone
-          <input
-            className='drop_zone'
-            // type='file'
-            accept="image/*"
-            onDrop={dropHandler}
-            onDragOver={allowDrop}
-          />
-          </label>
+        
+        <div className='drop_zone'
+          className='drop_zone' 
+          // type='file' 
+          accept="image/*" 
+          onDrop={dropHandler} 
+          onDragOver={allowDrop}
+          onDragLeave={revertDrop}
+          >
+          Drag and Drop Profile Image Here
         </div>
-        <button type="submit">Edit Server</button>
+
+        </div>
+        {allowSubmit && <button type="submit">Edit Server</button>}
         <button onClick={ () => history.push(`/servers/${serverId}/channels`)}>Cancel</button>
         {(imageLoading) && <p>Loading...</p>}
         </div>

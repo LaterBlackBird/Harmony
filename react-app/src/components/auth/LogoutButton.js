@@ -8,7 +8,6 @@ const LogoutButton = ({socket}) => {
   const history = useHistory();
   const onLogout = async (e) => {
     await dispatch(logout());
-    socket.disconnect();
     history.push('/login');
 
   };

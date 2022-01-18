@@ -30,7 +30,6 @@ function ChannelsList() {
     async function fetchData() {
         const res = await fetch(`/api/users/members/${serverId}`)
         const responseData = await res.json()
-        console.log(responseData)
         setMembers(responseData.users)
     }
 
@@ -77,16 +76,13 @@ function ChannelsList() {
     }, [dispatch, serverId, history])
 
     useEffect(() => {
-        console.log(members, currentUser)
         if (serverId) {
             async function fetchData() {
                 let res = await fetch(`/api/users/${currentUser}/${serverId}/validate_admin`)
                 let responseData = await res.json();
                 if (responseData.admin) {
-                    console.log('hello')
                     setIsAdmin(responseData.admin)
                 } else setIsAdmin(false)
-                console.log(isAdmin)
             }
             fetchData()
         }
@@ -126,7 +122,6 @@ function ChannelsList() {
     const isMember = () => {
         const server = servers.filter(server => server.id === parseInt(serverId))
         const member = server[0]?.users.filter((user) => user.id === currentUser)
-        // console.log(member.length > 0 === true)
         if(member?.length > 0 === true){
             return true
         }
